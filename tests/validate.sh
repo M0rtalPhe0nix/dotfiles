@@ -30,11 +30,11 @@ gitEmail = "dotfiles@example.invalid"
 installClaude = true
 EOF
 for source in \
-	"$root/run_once_before_00-backup.sh.tmpl" \
-	"$root/run_once_before_10-packages.sh.tmpl" \
-	"$root/run_once_after_10-git-config.sh.tmpl" \
-	"$root/run_after_30-mise.sh.tmpl" \
-	"$root/run_once_after_40-vscode-extensions.sh.tmpl" \
+	"$root/.chezmoiscripts/run_once_before_00-backup.sh.tmpl" \
+	"$root/.chezmoiscripts/run_once_before_10-packages.sh.tmpl" \
+	"$root/.chezmoiscripts/run_once_after_10-git-config.sh" \
+	"$root/.chezmoiscripts/run_after_30-mise.sh" \
+	"$root/.chezmoiscripts/run_once_after_40-vscode-extensions.sh.tmpl" \
 	"$root/dot_local/bin/executable_dotfiles.tmpl"; do
 	output="$tmp/$(basename "$source" .tmpl)"
 	chezmoi --source "$root" --config "$tmp/chezmoi.toml" execute-template <"$source" >"$output"
@@ -49,7 +49,7 @@ gitEmail = "dotfiles@example.invalid"
 installClaude = false
 EOF
 chezmoi --source "$root" --config "$tmp/chezmoi-skip-claude.toml" execute-template \
-	<"$root/run_once_before_10-packages.sh.tmpl" >"$tmp/packages-without-claude.sh"
+	<"$root/.chezmoiscripts/run_once_before_10-packages.sh.tmpl" >"$tmp/packages-without-claude.sh"
 if rg -q 'claude\.ai/install' "$tmp/packages-without-claude.sh"; then
 	printf '%s\n' "Claude installer rendered when installation was disabled." >&2
 	exit 1

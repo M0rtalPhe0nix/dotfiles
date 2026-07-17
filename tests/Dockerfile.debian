@@ -12,7 +12,7 @@ RUN mkdir -p /tmp/home \
     && test -f /tmp/home/.zshrc \
     && test -f /tmp/home/.config/Code/User/settings.json \
     && test -x /tmp/home/.local/bin/dotfiles \
-    && chezmoi --source /source --config /tmp/chezmoi.toml execute-template </source/run_once_before_10-packages.sh.tmpl >/tmp/packages.sh \
+    && chezmoi --source /source --config /tmp/chezmoi.toml execute-template </source/.chezmoiscripts/run_once_before_10-packages.sh.tmpl >/tmp/packages.sh \
     && chezmoi --source /source --config /tmp/chezmoi.toml execute-template </source/dot_local/bin/executable_dotfiles.tmpl >/tmp/dotfiles \
     && sh -n /tmp/packages.sh /tmp/dotfiles \
     && test -z "$(chezmoi --source /source --destination /tmp/home --config /tmp/chezmoi.toml diff --exclude=scripts)"
