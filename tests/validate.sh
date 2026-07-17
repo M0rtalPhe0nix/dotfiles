@@ -103,13 +103,15 @@ cp "$root/dot_local/bin/executable_git-credential-gh-profile" "$tmp/bin/git-cred
 chmod +x "$tmp/bin/git-credential-gh-profile"
 git -C "$tmp/profile-repo" init -q
 PATH="$tmp/bin:$PATH" XDG_CONFIG_HOME="$tmp/config" \
-	sh "$root/dot_local/bin/executable_github-profile" add work "Work User" "work@example.invalid"
+	sh "$root/dot_local/bin/executable_github-profile" add work work-user "work@example.invalid" "Work User"
 PATH="$tmp/bin:$PATH" XDG_CONFIG_HOME="$tmp/config" \
 	sh -c 'cd "$1" && exec sh "$2" use work' sh "$tmp/profile-repo" "$root/dot_local/bin/executable_github-profile"
 test "$(git -C "$tmp/profile-repo" config --local --get user.email)" = "work@example.invalid"
+test "$(git -C "$tmp/profile-repo" config --local --get github.profile)" = work
+test "$(git -C "$tmp/profile-repo" config --local --get github.user)" = work-user
 credential="$(printf 'protocol=https\nhost=github.com\n\n' | PATH="$tmp/bin:$PATH" \
 	git -C "$tmp/profile-repo" credential fill)"
-printf '%s\n' "$credential" | rg -q '^username=work$'
+printf '%s\n' "$credential" | rg -q '^username=work-user$'
 printf '%s\n' "$credential" | rg -q '^password=test-token$'
 
 if rg -n --hidden --glob '!.git/**' --glob '!tests/validate.sh' \

@@ -24,11 +24,11 @@ Git author name and email are requested by Chezmoi during initialization and rem
 
 ## GitHub Profiles
 
-Authenticate and record each reusable profile once. The profile name must be the GitHub login:
+Authenticate and record each reusable profile once. The first value is a local alias; the second is the authenticated GitHub login. The optional final value overrides the Git author name, which otherwise defaults to the GitHub login:
 
 ```sh
-github-profile add personal "Your Name" "personal@example.com"
-github-profile add work "Your Name" "work@example.com"
+github-profile add personal M0rtalPhe0nix personal@example.com
+github-profile add work work-login work@example.com "Your Name"
 ```
 
 Then select a profile from inside each repository:
@@ -38,7 +38,7 @@ github-profile use work
 github-profile current
 ```
 
-The selection and Git author identity are stored in the repository's local Git config. Interactive `gh` commands and HTTPS Git credentials automatically use that account. Tokens remain in GitHub CLI's credential store; they are never written to the repository or profile files. Explicit `GH_TOKEN` or `GITHUB_TOKEN` values take precedence for `gh`.
+The alias selection, GitHub login, and Git author identity are stored in the repository's local Git config. Interactive `gh` commands and HTTPS Git credentials automatically use that account. Tokens remain in GitHub CLI's credential store; they are never written to the repository or profile files. Explicit `GH_TOKEN` or `GITHUB_TOKEN` values take precedence for `gh`.
 
 ## Operations
 
