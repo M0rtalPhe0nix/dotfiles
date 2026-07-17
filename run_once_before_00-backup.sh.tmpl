@@ -1,0 +1,42 @@
+#!/bin/sh
+set -eu
+
+state="${XDG_STATE_HOME:-$HOME/.local/state}/dotfiles"
+stamp="$(date +%Y%m%d-%H%M%S)"
+backup="$state/pre-bootstrap/$stamp"
+mkdir -p "$backup"
+cat >"$backup/targets" <<'EOF'
+.zshrc
+.zimrc
+.config/starship.toml
+.config/mise/config.toml
+.config/zsh/local.zsh
+.config/zsh/secrets.zsh
+.config/git/dotfiles.gitconfig
+.config/git/identity.gitconfig
+.config/opencode/opencode.json
+.claude/settings.json
+.claude/skills
+.config/ghostty/config
+{{ if eq .chezmoi.os "darwin" -}}
+Library/Application Support/Code/User/settings.json
+Library/Application Support/Code/User/keybindings.json
+{{ else -}}
+.config/Code/User/settings.json
+.config/Code/User/keybindings.json
+{{ end -}}
+EOF
+: >"$backup/existing"
+while IFS= read -r target; do
+	if [ -e "$HOME/$target" ] || [ -L "$HOME/$target" ]; then
+		printf '%s\n' "$target" >>"$backup/existing"
+	fi
+done <"$backup/targets"
+
+if [ -s "$backup/existing" ]; then
+	tar -C "$HOME" -cpf "$backup/files.tar" -T "$backup/existing"
+else
+	tar -C "$HOME" -cpf "$backup/files.tar" --files-from /dev/null
+fi
+ln -sfn "$backup" "$state/pre-bootstrap/latest"
+printf '%s\n' "Saved pre-bootstrap configuration to $backup"

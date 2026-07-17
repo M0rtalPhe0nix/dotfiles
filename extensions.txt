@@ -1,0 +1,9 @@
+anthropic.claude-code
+catppuccin.catppuccin-vsc
+catppuccin.catppuccin-vsc-icons
+charliermarsh.ruff
+eamodio.gitlens
+ms-python.python
+ms-python.vscode-pylance
+pkief.material-icon-theme
+pomdtr.excalidraw-editor

@@ -1,0 +1,10 @@
+build-essential
+ca-certificates
+curl
+file
+flatpak
+fontconfig
+git
+gnupg
+procps
+unzip

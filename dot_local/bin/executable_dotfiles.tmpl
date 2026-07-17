@@ -1,0 +1,139 @@
+#!/bin/sh
+set -eu
+
+source_dir="$(chezmoi source-path)"
+state="${XDG_STATE_HOME:-$HOME/.local/state}/dotfiles"
+
+usage() {
+	printf '%s\n' "usage: dotfiles {apply|diff|doctor|update|rollback}"
+}
+
+doctor() {
+	failed=0
+	for command in brew chezmoi mise gh rg fd fzf bat eza jq yq dust btm zoxide delta tldr shellcheck shfmt starship zsh; do
+		if command -v "$command" >/dev/null 2>&1; then
+			printf 'ok   %s\n' "$command"
+		else
+			printf 'FAIL %s is missing\n' "$command"
+			failed=1
+		fi
+	done
+	if ! command -v code >/dev/null 2>&1; then
+		printf '%s\n' "FAIL VS Code is missing"
+		failed=1
+	fi
+	{{ if eq .chezmoi.os "darwin" -}}
+	if ! command -v ghostty >/dev/null 2>&1; then
+		printf '%s\n' "FAIL Ghostty is missing"
+		failed=1
+	fi
+	{{ else -}}
+	flatpak info --user com.mitchellh.ghostty >/dev/null 2>&1 || {
+		printf '%s\n' "FAIL Ghostty Flatpak is missing"
+		failed=1
+	}
+	{{ end -}}
+	gh auth status >/dev/null 2>&1 || {
+		printf '%s\n' "FAIL GitHub authentication"
+		failed=1
+	}
+	if command -v claude >/dev/null 2>&1; then
+		claude auth status >/dev/null 2>&1 || {
+			printf '%s\n' "FAIL Claude authentication"
+			failed=1
+		}
+	else
+		printf '%s\n' "FAIL Claude Code is missing"
+		failed=1
+	fi
+	if command -v opencode >/dev/null 2>&1; then
+		opencode auth list 2>/dev/null | grep -q . || {
+			printf '%s\n' "FAIL OpenCode authentication"
+			failed=1
+		}
+	else
+		printf '%s\n' "FAIL OpenCode is missing"
+		failed=1
+	fi
+	[ -r "$HOME/.config/zsh/secrets.zsh" ] && [ "$(stat -f %Lp "$HOME/.config/zsh/secrets.zsh" 2>/dev/null || stat -c %a "$HOME/.config/zsh/secrets.zsh")" = 600 ] || {
+		printf '%s\n' "FAIL ~/.config/zsh/secrets.zsh must have mode 0600"
+		failed=1
+	}
+	{{ if eq .chezmoi.os "darwin" -}}
+	system_profiler SPFontsDataType 2>/dev/null | grep -qi 'MesloLGS Nerd Font' || {
+		printf '%s\n' "FAIL Meslo Nerd Font is not visible"
+		failed=1
+	}
+	{{ else -}}
+	fc-list 2>/dev/null | grep -qi 'MesloLGS Nerd Font' || {
+		printf '%s\n' "FAIL Meslo Nerd Font is not visible"
+		failed=1
+	}
+	{{ end -}}
+	zsh -lic exit || {
+		printf '%s\n' "FAIL interactive Zsh startup"
+		failed=1
+	}
+	chezmoi verify || {
+		printf '%s\n' "FAIL managed files differ"
+		failed=1
+	}
+	return "$failed"
+}
+
+update() {
+	chezmoi update --apply=false
+	brew update
+	for package in $(brew bundle list --formula --file "$source_dir/Brewfile"); do
+		brew upgrade "$package" 2>/dev/null || true
+	done
+	{{ if eq .chezmoi.os "darwin" -}}
+	for package in $(brew bundle list --cask --file "$source_dir/Brewfile"); do
+		brew upgrade --cask "$package" 2>/dev/null || true
+	done
+	{{ else -}}
+	sudo apt-get install --only-upgrade -y code
+	flatpak update --user -y com.mitchellh.ghostty
+	{{ end -}}
+	mise upgrade --yes
+	zim_home="${ZIM_HOME:-$HOME/.zim}"
+	ZIM_HOME="$zim_home" zsh "$zim_home/zimfw.zsh" update
+	ZIM_HOME="$zim_home" zsh "$zim_home/zimfw.zsh" install
+	if command -v code >/dev/null 2>&1; then
+		while IFS= read -r extension; do
+			code --install-extension "$extension" --force
+		done <"$source_dir/extensions.txt"
+	fi
+	chezmoi apply
+}
+
+rollback() {
+	backup="$state/pre-bootstrap/latest"
+	if [ ! -d "$backup" ]; then
+		printf '%s\n' "No pre-bootstrap backup is available." >&2
+		exit 1
+	fi
+	while IFS= read -r target; do
+		case "$target" in
+		"" | /* | *..*)
+			printf '%s\n' "Unsafe backup target: $target" >&2
+			exit 1
+			;;
+		esac
+		rm -rf -- "${HOME:?}/$target"
+	done <"$backup/targets"
+	tar -C "$HOME" -xpf "$backup/files.tar"
+	printf '%s\n' "Restored configuration from $backup; installed packages were retained."
+}
+
+case "${1:-}" in
+apply) chezmoi apply ;;
+diff) chezmoi diff ;;
+doctor) doctor ;;
+update) update ;;
+rollback) rollback ;;
+*)
+	usage
+	exit 2
+	;;
+esac

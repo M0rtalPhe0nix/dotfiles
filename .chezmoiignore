@@ -1,0 +1,19 @@
+README.md
+LICENSE
+bootstrap.sh
+Brewfile
+packages-debian.txt
+extensions.txt
+tests/**
+opencode.json
+create_dot_config
+create_dot_config/**
+create_private_dot_config
+create_private_dot_config/**
+symlink_dot_claude
+symlink_dot_claude/**
+{{ if eq .chezmoi.os "darwin" }}
+.config/Code/**
+{{ else }}
+Library/**
+{{ end }}

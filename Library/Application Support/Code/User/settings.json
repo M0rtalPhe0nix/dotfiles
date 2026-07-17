@@ -1,0 +1,16 @@
+{
+  "editor.fontFamily": "'MesloLGS Nerd Font', Menlo, monospace",
+  "editor.fontLigatures": true,
+  "editor.formatOnSave": true,
+  "editor.minimap.enabled": false,
+  "editor.rulers": [88, 120],
+  "extensions.ignoreRecommendations": true,
+  "files.insertFinalNewline": true,
+  "files.trimTrailingWhitespace": true,
+  "git.confirmSync": false,
+  "terminal.integrated.defaultProfile.osx": "zsh",
+  "terminal.integrated.defaultProfile.linux": "zsh",
+  "terminal.integrated.fontFamily": "MesloLGS Nerd Font",
+  "workbench.colorTheme": "Catppuccin Mocha",
+  "workbench.iconTheme": "catppuccin-mocha"
+}

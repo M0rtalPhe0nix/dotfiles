@@ -1,0 +1,51 @@
+export ZIM_HOME="${ZDOTDIR:-$HOME}/.zim"
+export PATH="$HOME/.local/bin:$HOME/.opencode/bin:$PATH"
+
+if [[ -s "$ZIM_HOME/init.zsh" ]]; then
+  source "$ZIM_HOME/init.zsh"
+fi
+
+export HISTFILE="${XDG_STATE_HOME:-$HOME/.local/state}/zsh/history"
+mkdir -p "${HISTFILE:h}"
+chmod 700 "${HISTFILE:h}"
+touch "$HISTFILE"
+chmod 600 "$HISTFILE"
+HISTSIZE=100000
+SAVEHIST=100000
+setopt append_history extended_history hist_expire_dups_first hist_find_no_dups
+setopt hist_ignore_all_dups hist_ignore_space hist_reduce_blanks inc_append_history share_history
+
+zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
+zstyle ':completion:*' menu select
+
+bindkey '^[[A' history-substring-search-up
+bindkey '^[[B' history-substring-search-down
+
+export EDITOR="${EDITOR:-code --wait}"
+export VISUAL="$EDITOR"
+export PAGER=less
+export LESS='-FRX'
+
+if [[ -x /opt/homebrew/bin/brew ]]; then
+  eval "$(/opt/homebrew/bin/brew shellenv)"
+elif [[ -x /home/linuxbrew/.linuxbrew/bin/brew ]]; then
+  eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+fi
+
+(( $+commands[mise] )) && eval "$(mise activate zsh)"
+(( $+commands[zoxide] )) && eval "$(zoxide init zsh)"
+(( $+commands[fzf] )) && source <(fzf --zsh)
+(( $+commands[starship] )) && eval "$(starship init zsh)"
+
+(( $+commands[eza] )) && alias ls='eza --icons=auto --group-directories-first'
+(( $+commands[eza] )) && alias ll='eza -lah --icons=auto --group-directories-first --git'
+(( $+commands[eza] )) && alias la='eza -a --icons=auto --group-directories-first'
+(( $+commands[bat] )) && alias cat='bat --paging=never'
+(( $+commands[bat] )) && alias less='bat --paging=always'
+alias gs='git status --short --branch'
+alias gl='git log --oneline --graph --decorate'
+alias ..='cd ..'
+alias ...='cd ../..'
+
+[[ -r "$HOME/.config/zsh/local.zsh" ]] && source "$HOME/.config/zsh/local.zsh"
+[[ -r "$HOME/.config/zsh/secrets.zsh" ]] && source "$HOME/.config/zsh/secrets.zsh"

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Spec Kit Diagrams"
+  short_description: "Visualize Spec Kit artifacts in Excalidraw"
+  default_prompt: "Use $speckit-diagrams to turn the current Spec Kit feature into editable diagrams."

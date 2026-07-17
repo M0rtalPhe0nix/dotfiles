@@ -1,0 +1,8 @@
+#!/bin/sh
+set -eu
+
+if command -v code >/dev/null 2>&1; then
+	while IFS= read -r extension; do
+		code --install-extension "$extension"
+	done <"{{ .chezmoi.sourceDir }}/extensions.txt"
+fi
