@@ -75,6 +75,7 @@ Put host-specific shell customization in `~/.config/zsh/local.zsh`. Put secrets 
 - Optional corporate CA trust for the operating system and CLI package managers, without committing the certificate or its host-local path.
 - Claude Code and OpenCode with high-autonomy permissions plus secret, destructive-command, and external-directory guardrails.
 - Canonical reusable skills under `~/.claude/skills`, discovered by Claude Code and OpenCode without duplication.
+- Haiku-powered Claude Code and Luna-powered OpenCode `feature-diagrammer` subagents for validated Excalidraw artifact production after feature discovery.
 - VS Code, a managed extension baseline, Ghostty, Catppuccin, and MesloLGS Nerd Font. Extensions outside the baseline are not removed.
 
 No global MCP servers or global AI coding instruction files are installed.

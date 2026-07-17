@@ -11,6 +11,9 @@ RUN mkdir -p /tmp/home \
     && chezmoi --source /source --destination /tmp/home --config /tmp/chezmoi.toml apply --exclude=scripts \
     && test -f /tmp/home/.zshrc \
     && test -f /tmp/home/.config/Code/User/settings.json \
+    && for skill_file in /source/.claude/skills/*/SKILL.md; do skill="$(basename "$(dirname "$skill_file")")"; test -f "/tmp/home/.claude/skills/$skill/SKILL.md"; done \
+    && test -f /tmp/home/.claude/agents/feature-diagrammer.md \
+    && test -f /tmp/home/.config/opencode/agent/feature-diagrammer.md \
     && test -x /tmp/home/.local/bin/dotfiles \
     && chezmoi --source /source --config /tmp/chezmoi.toml execute-template </source/.chezmoiscripts/run_once_before_10-packages.sh.tmpl >/tmp/packages.sh \
     && chezmoi --source /source --config /tmp/chezmoi.toml execute-template </source/dot_local/bin/executable_dotfiles.tmpl >/tmp/dotfiles \

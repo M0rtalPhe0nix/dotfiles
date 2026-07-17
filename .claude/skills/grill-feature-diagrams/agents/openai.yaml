@@ -1,0 +1,4 @@
+interface:
+  display_name: "Grill Feature Diagrams"
+  short_description: "Interview deeply, then diagram feature designs"
+  default_prompt: "Use $grill-feature-diagrams to clarify this feature thoroughly and produce detailed editable Excalidraw diagrams."

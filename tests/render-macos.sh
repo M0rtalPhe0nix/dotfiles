@@ -32,7 +32,12 @@ fi
 test -x "$tmp/home/.local/bin/dotfiles"
 test -x "$tmp/home/.local/bin/github-profile"
 test -x "$tmp/home/.local/bin/git-credential-gh-profile"
-test -f "$tmp/home/.claude/skills/excalidraw/SKILL.md"
+for skill_file in "$root"/.claude/skills/*/SKILL.md; do
+	skill="$(basename "$(dirname "$skill_file")")"
+	test -f "$tmp/home/.claude/skills/$skill/SKILL.md"
+done
+test -f "$tmp/home/.claude/agents/feature-diagrammer.md"
+test -f "$tmp/home/.config/opencode/agent/feature-diagrammer.md"
 test -f "$tmp/home/.config/zsh/local.zsh"
 test "$(stat -f %Lp "$tmp/home/.config/zsh/secrets.zsh")" = 600
 test ! -e "$tmp/home/create_dot_config"
