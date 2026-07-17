@@ -1,0 +1,4 @@
+interface:
+  display_name: "Compare Dotfiles"
+  short_description: "Find reusable ideas in public dotfiles repos"
+  default_prompt: "Use $compare-dotfiles to compare this repository with a public GitHub dotfiles repository and produce a ranked improvement backlog."
