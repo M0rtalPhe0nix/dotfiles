@@ -10,6 +10,7 @@ cat >"$tmp/chezmoi.toml" <<'EOF'
 [data]
 gitName = "Dotfiles Test"
 gitEmail = "dotfiles@example.invalid"
+infraTool = "none"
 installClaude = true
 EOF
 
@@ -23,6 +24,8 @@ fi
 
 test -f "$tmp/home/.zshrc"
 test -x "$tmp/home/.local/bin/dotfiles"
+test -x "$tmp/home/.local/bin/github-profile"
+test -x "$tmp/home/.local/bin/git-credential-gh-profile"
 test -f "$tmp/home/.claude/skills/excalidraw/SKILL.md"
 test -f "$tmp/home/.config/zsh/local.zsh"
 test "$(stat -f %Lp "$tmp/home/.config/zsh/secrets.zsh")" = 600

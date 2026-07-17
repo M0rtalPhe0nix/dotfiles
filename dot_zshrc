@@ -37,6 +37,23 @@ fi
 (( $+commands[fzf] )) && [[ -o interactive && -t 0 ]] && source <(fzf --zsh)
 (( $+commands[starship] )) && eval "$(starship init zsh)"
 
+if (( $+commands[gh] )); then
+  gh() {
+    if [[ -n "${GH_TOKEN:-}${GITHUB_TOKEN:-}" ]]; then
+      command gh "$@"
+      return
+    fi
+    local github_profile github_token
+    github_profile="$(git config --local --get github.user 2>/dev/null)" || github_profile=""
+    if [[ -n "$github_profile" ]]; then
+      github_token="$(command gh auth token --hostname github.com --user "$github_profile")" || return
+      GH_TOKEN="$github_token" command gh "$@"
+    else
+      command gh "$@"
+    fi
+  }
+fi
+
 (( $+commands[eza] )) && alias ls='eza --icons=auto --group-directories-first'
 (( $+commands[eza] )) && alias ll='eza -lah --icons=auto --group-directories-first --git'
 (( $+commands[eza] )) && alias la='eza -a --icons=auto --group-directories-first'

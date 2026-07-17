@@ -1,0 +1,14 @@
+{{- $infraTool := "none" -}}
+{{- if hasKey . "infraTool" -}}
+{{-   $infraTool = .infraTool -}}
+{{- end -}}
+[tools]
+node = "24"
+python = "3.14"
+{{ if eq $infraTool "terraform" -}}
+terraform = "1.5.7"
+{{ else if eq $infraTool "opentofu" -}}
+opentofu = "latest"
+{{ end }}
+[settings]
+idiomatic_version_file_enable_tools = ["node", "python"]

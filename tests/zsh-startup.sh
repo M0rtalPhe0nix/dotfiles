@@ -12,18 +12,19 @@ cat >"$tmp/chezmoi.toml" <<'EOF'
 [data]
 gitName = "Dotfiles Test"
 gitEmail = "dotfiles@example.invalid"
+infraTool = "none"
 installClaude = false
 EOF
 
 chezmoi --source "$root" --destination "$home" --config "$tmp/chezmoi.toml" apply --exclude=scripts
 curl -fsSL https://raw.githubusercontent.com/zimfw/zimfw/master/zimfw.zsh -o "$home/.zim/zimfw.zsh"
-HOME="$home" ZDOTDIR="$home" ZIM_HOME="$home/.zim" zsh "$home/.zim/zimfw.zsh" install >/dev/null
-HOME="$home" ZDOTDIR="$home" ZIM_HOME="$home/.zim" zsh -lic exit
+HOME="$home" XDG_CONFIG_HOME="$home/.config" ZDOTDIR="$home" ZIM_HOME="$home/.zim" zsh "$home/.zim/zimfw.zsh" install >/dev/null
+HOME="$home" XDG_CONFIG_HOME="$home/.config" ZDOTDIR="$home" ZIM_HOME="$home/.zim" zsh -lic exit
 
 total=0.0
 repeat 5; do
 	start=$EPOCHREALTIME
-	HOME="$home" ZDOTDIR="$home" ZIM_HOME="$home/.zim" zsh -lic exit
+	HOME="$home" XDG_CONFIG_HOME="$home/.config" ZDOTDIR="$home" ZIM_HOME="$home/.zim" zsh -lic exit
 	elapsed=$(( EPOCHREALTIME - start ))
 	total=$(( total + elapsed ))
 done

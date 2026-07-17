@@ -7,7 +7,7 @@ RUN apt-get update \
 
 COPY . /source
 RUN mkdir -p /tmp/home \
-    && printf '[data]\ngitName = "Dotfiles Test"\ngitEmail = "dotfiles@example.invalid"\ninstallClaude = true\n' >/tmp/chezmoi.toml \
+    && printf '[data]\ngitName = "Dotfiles Test"\ngitEmail = "dotfiles@example.invalid"\ninfraTool = "none"\ninstallClaude = true\n' >/tmp/chezmoi.toml \
     && chezmoi --source /source --destination /tmp/home --config /tmp/chezmoi.toml apply --exclude=scripts \
     && test -f /tmp/home/.zshrc \
     && test -f /tmp/home/.config/Code/User/settings.json \

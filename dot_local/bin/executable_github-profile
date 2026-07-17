@@ -1,0 +1,104 @@
+#!/bin/sh
+set -eu
+
+profiles_dir="${XDG_CONFIG_HOME:-$HOME/.config}/git/github-profiles"
+
+usage() {
+	printf '%s\n' "usage: github-profile {add <profile> [<name> <email>]|use <profile>|current|list}"
+}
+
+valid_profile() {
+	case "$1" in
+	"" | *[!A-Za-z0-9-]*) return 1 ;;
+	esac
+}
+
+require_repository() {
+	git rev-parse --git-dir >/dev/null 2>&1 || {
+		printf '%s\n' "This command must be run inside a Git repository." >&2
+		exit 1
+	}
+}
+
+case "${1:-}" in
+add)
+	profile="${2:-}"
+	valid_profile "$profile" || {
+		printf '%s\n' "Profile names may contain only letters, numbers, and hyphens." >&2
+		exit 2
+	}
+	if ! gh auth token --hostname github.com --user "$profile" >/dev/null 2>&1; then
+		printf 'Authenticate the GitHub account %s.\n' "$profile"
+		gh auth login --hostname github.com
+		gh auth token --hostname github.com --user "$profile" >/dev/null 2>&1 || {
+			printf 'GitHub account %s is not authenticated.\n' "$profile" >&2
+			exit 1
+		}
+	fi
+	name="${3:-}"
+	email="${4:-}"
+	if [ -z "$name" ]; then
+		printf 'Git author name for %s: ' "$profile"
+		IFS= read -r name
+	fi
+	if [ -z "$email" ]; then
+		printf 'Git author email for %s: ' "$profile"
+		IFS= read -r email
+	fi
+	[ -n "$name" ] && [ -n "$email" ] || {
+		printf '%s\n' "Git author name and email cannot be empty." >&2
+		exit 1
+	}
+	mkdir -p "$profiles_dir"
+	chmod 700 "$profiles_dir"
+	profile_file="$profiles_dir/$profile.gitconfig"
+	git config --file "$profile_file" user.name "$name"
+	git config --file "$profile_file" user.email "$email"
+	chmod 600 "$profile_file"
+	printf 'Added GitHub profile %s. Run github-profile use %s inside a repository.\n' "$profile" "$profile"
+	;;
+use)
+	profile="${2:-}"
+	valid_profile "$profile" || {
+		usage >&2
+		exit 2
+	}
+	require_repository
+	profile_file="$profiles_dir/$profile.gitconfig"
+	[ -f "$profile_file" ] || {
+		printf 'Unknown profile %s. Add it with github-profile add %s.\n' "$profile" "$profile" >&2
+		exit 1
+	}
+	name="$(git config --file "$profile_file" --get user.name)"
+	email="$(git config --file "$profile_file" --get user.email)"
+	git config --local user.name "$name"
+	git config --local user.email "$email"
+	git config --local github.user "$profile"
+	git config --local credential.https://github.com.username "$profile"
+	git config --local --unset-all credential.https://github.com.helper 2>/dev/null || true
+	git config --local --add credential.https://github.com.helper ""
+	git config --local --add credential.https://github.com.helper gh-profile
+	printf 'Using GitHub profile %s in %s.\n' "$profile" "$(git rev-parse --show-toplevel)"
+	;;
+current)
+	require_repository
+	profile="$(git config --local --get github.user 2>/dev/null || true)"
+	[ -n "$profile" ] || {
+		printf '%s\n' "No GitHub profile is selected for this repository." >&2
+		exit 1
+	}
+	printf '%s\n' "$profile"
+	;;
+list)
+	if [ -d "$profiles_dir" ]; then
+		for profile_file in "$profiles_dir"/*.gitconfig; do
+			[ -e "$profile_file" ] || continue
+			basename "$profile_file" .gitconfig
+		done
+	fi
+	;;
+*)
+	usage >&2
+	exit 2
+	;;
+esac

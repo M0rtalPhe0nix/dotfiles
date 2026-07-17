@@ -20,7 +20,25 @@ Claude Code installation is optional at the first-run prompt. To skip it without
 DOTFILES_SKIP_CLAUDE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/M0rtalPhe0nix/dotfiles/main/bootstrap.sh)"
 ```
 
-Git author name and email are requested by Chezmoi during initialization and remain in the host-local Chezmoi config. Authentication, signing, existing Git LFS settings, secrets, and other machine-specific values are not committed.
+Git author name and email are requested by Chezmoi during initialization and remain in the host-local Chezmoi config. The same prompt lets you install Terraform `1.5.7`, the latest OpenTofu, or neither through mise. Authentication, signing, existing Git LFS settings, secrets, and other machine-specific values are not committed.
+
+## GitHub Profiles
+
+Authenticate and record each reusable profile once. The profile name must be the GitHub login:
+
+```sh
+github-profile add personal "Your Name" "personal@example.com"
+github-profile add work "Your Name" "work@example.com"
+```
+
+Then select a profile from inside each repository:
+
+```sh
+github-profile use work
+github-profile current
+```
+
+The selection and Git author identity are stored in the repository's local Git config. Interactive `gh` commands and HTTPS Git credentials automatically use that account. Tokens remain in GitHub CLI's credential store; they are never written to the repository or profile files. Explicit `GH_TOKEN` or `GITHUB_TOKEN` values take precedence for `gh`.
 
 ## Operations
 
@@ -38,7 +56,7 @@ Put host-specific shell customization in `~/.config/zsh/local.zsh`. Put secrets 
 
 - Zsh, ZimFW, Starship, fzf, secure shared history, completions, autosuggestions, syntax highlighting, and history substring search.
 - Availability-guarded `eza`, `bat`, `zoxide`, mise, fzf, and Starship integrations.
-- Git policy in included fragments, preserving host-managed identity infrastructure, authentication, signing, and unrelated settings.
+- Git policy in included fragments, preserving host-managed identity infrastructure, authentication, signing, and unrelated settings, with optional per-repository GitHub profiles.
 - Claude Code and OpenCode with high-autonomy permissions plus secret, destructive-command, and external-directory guardrails.
 - Canonical reusable skills under `~/.claude/skills`, discovered by Claude Code and OpenCode without duplication.
 - VS Code, a managed extension baseline, Ghostty, Catppuccin, and MesloLGS Nerd Font. Extensions outside the baseline are not removed.

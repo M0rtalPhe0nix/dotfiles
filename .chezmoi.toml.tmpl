@@ -1,5 +1,6 @@
 {{- $name := promptStringOnce . "gitName" "Git author name" -}}
 {{- $email := promptStringOnce . "gitEmail" "Git author email" -}}
+{{- $infraTool := promptChoiceOnce . "infraTool" "Infrastructure tool" (list "terraform" "opentofu" "none") "none" -}}
 {{- $installClaude := true -}}
 {{- if eq (env "DOTFILES_SKIP_CLAUDE") "1" -}}
 {{-   $installClaude = false -}}
@@ -9,4 +10,5 @@
 [data]
     gitName = {{ $name | quote }}
     gitEmail = {{ $email | quote }}
+    infraTool = {{ $infraTool | quote }}
     installClaude = {{ $installClaude }}
