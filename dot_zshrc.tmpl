@@ -1,5 +1,17 @@
 export ZIM_HOME="${ZDOTDIR:-$HOME}/.zim"
 export PATH="$HOME/.local/bin:$HOME/.opencode/bin:$PATH"
+{{- if and (hasKey . "useCorporateCA") .useCorporateCA }}
+export DOTFILES_CORPORATE_CA="${XDG_DATA_HOME:-$HOME/.local/share}/dotfiles/corporate-ca.pem"
+export SSL_CERT_FILE="${XDG_DATA_HOME:-$HOME/.local/share}/dotfiles/ca-bundle.pem"
+export CURL_CA_BUNDLE="$SSL_CERT_FILE"
+export GIT_SSL_CAINFO="$SSL_CERT_FILE"
+export REQUESTS_CA_BUNDLE="$SSL_CERT_FILE"
+export PIP_CERT="$SSL_CERT_FILE"
+export CARGO_HTTP_CAINFO="$SSL_CERT_FILE"
+export NPM_CONFIG_CAFILE="$SSL_CERT_FILE"
+export NODE_EXTRA_CA_CERTS="$DOTFILES_CORPORATE_CA"
+export UV_NATIVE_TLS=true
+{{- end }}
 
 if [[ -s "$ZIM_HOME/init.zsh" ]]; then
   source "$ZIM_HOME/init.zsh"

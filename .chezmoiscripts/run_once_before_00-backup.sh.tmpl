@@ -18,6 +18,8 @@ cat >"$backup/targets" <<'EOF'
 .claude/settings.json
 .claude/skills
 .config/ghostty/config
+.local/share/dotfiles/corporate-ca.pem
+.local/share/dotfiles/ca-bundle.pem
 {{ if eq .chezmoi.os "darwin" -}}
 Library/Application Support/Code/User/settings.json
 Library/Application Support/Code/User/keybindings.json

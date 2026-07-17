@@ -2,6 +2,10 @@
 {{- if hasKey . "infraTool" -}}
 {{-   $infraTool = .infraTool -}}
 {{- end -}}
+{{- $useCorporateCA := false -}}
+{{- if hasKey . "useCorporateCA" -}}
+{{-   $useCorporateCA = .useCorporateCA -}}
+{{- end -}}
 #!/bin/sh
 set -eu
 
@@ -37,6 +41,14 @@ doctor() {
 		printf '%s\n' "FAIL VS Code is missing"
 		failed=1
 	fi
+	{{ if $useCorporateCA -}}
+	corporate_ca="${XDG_DATA_HOME:-$HOME/.local/share}/dotfiles/corporate-ca.pem"
+	ca_bundle="${XDG_DATA_HOME:-$HOME/.local/share}/dotfiles/ca-bundle.pem"
+	if [ ! -r "$corporate_ca" ] || [ ! -r "$ca_bundle" ] || ! openssl x509 -in "$corporate_ca" -noout >/dev/null 2>&1; then
+		printf '%s\n' "FAIL corporate CA trust files are missing or invalid"
+		failed=1
+	fi
+	{{ end -}}
 	{{ if eq .chezmoi.os "darwin" -}}
 	if [ ! -d /Applications/Ghostty.app ] && [ ! -d "$HOME/Applications/Ghostty.app" ]; then
 		printf '%s\n' "FAIL Ghostty is missing"

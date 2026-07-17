@@ -1,6 +1,15 @@
 {{- $name := promptStringOnce . "gitName" "Git author name" -}}
 {{- $email := promptStringOnce . "gitEmail" "Git author email" -}}
 {{- $infraTool := promptChoiceOnce . "infraTool" "Infrastructure tool" (list "terraform" "opentofu" "none") "none" -}}
+{{- $corporateCAPath := env "DOTFILES_CORPORATE_CA_PATH" -}}
+{{- $corporateCAChoice := env "DOTFILES_CONFIGURE_CORPORATE_CA" -}}
+{{- $useCorporateCA := or (eq $corporateCAChoice "1") (ne $corporateCAPath "") -}}
+{{- if and (eq $corporateCAChoice "") (eq $corporateCAPath "") -}}
+{{-   $useCorporateCA = promptBoolOnce . "useCorporateCA" "Configure a corporate CA certificate" false -}}
+{{-   if $useCorporateCA -}}
+{{-     $corporateCAPath = promptStringOnce . "corporateCAPath" "Absolute path to the corporate CA PEM file" -}}
+{{-   end -}}
+{{- end -}}
 {{- $installClaude := true -}}
 {{- if eq (env "DOTFILES_SKIP_CLAUDE") "1" -}}
 {{-   $installClaude = false -}}
@@ -11,4 +20,6 @@
     gitName = {{ $name | quote }}
     gitEmail = {{ $email | quote }}
     infraTool = {{ $infraTool | quote }}
+    useCorporateCA = {{ $useCorporateCA }}
+    corporateCAPath = {{ $corporateCAPath | quote }}
     installClaude = {{ $installClaude }}

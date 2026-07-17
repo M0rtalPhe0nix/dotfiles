@@ -28,10 +28,13 @@ cat >"$tmp/chezmoi.toml" <<'EOF'
 gitName = "Dotfiles Test"
 gitEmail = "dotfiles@example.invalid"
 infraTool = "terraform"
+useCorporateCA = false
+corporateCAPath = ""
 installClaude = true
 EOF
 for source in \
 	"$root/.chezmoiscripts/run_once_before_00-backup.sh.tmpl" \
+	"$root/.chezmoiscripts/run_before_05-corporate-ca.sh.tmpl" \
 	"$root/.chezmoiscripts/run_once_before_10-packages.sh.tmpl" \
 	"$root/.chezmoiscripts/run_once_after_10-git-config.sh" \
 	"$root/.chezmoiscripts/run_after_30-mise.sh" \
@@ -50,6 +53,8 @@ cat >"$tmp/chezmoi-skip-claude.toml" <<'EOF'
 gitName = "Dotfiles Test"
 gitEmail = "dotfiles@example.invalid"
 infraTool = "none"
+useCorporateCA = false
+corporateCAPath = ""
 installClaude = false
 EOF
 chezmoi --source "$root" --config "$tmp/chezmoi-skip-claude.toml" execute-template \
@@ -79,6 +84,8 @@ cat >"$tmp/chezmoi-opentofu.toml" <<'EOF'
 gitName = "Dotfiles Test"
 gitEmail = "dotfiles@example.invalid"
 infraTool = "opentofu"
+useCorporateCA = false
+corporateCAPath = ""
 installClaude = false
 EOF
 chezmoi --source "$root" --config "$tmp/chezmoi-opentofu.toml" execute-template \
@@ -88,6 +95,28 @@ if rg -q '^terraform =' "$tmp/mise-opentofu.toml"; then
 	printf '%s\n' "Terraform rendered for the OpenTofu selection." >&2
 	exit 1
 fi
+
+cat >"$tmp/chezmoi-corporate-ca.toml" <<'EOF'
+[data]
+gitName = "Dotfiles Test"
+gitEmail = "dotfiles@example.invalid"
+infraTool = "none"
+useCorporateCA = true
+corporateCAPath = "/tmp/Corporate CA.pem"
+installClaude = false
+EOF
+chezmoi --source "$root" --config "$tmp/chezmoi-corporate-ca.toml" execute-template \
+	<"$root/.chezmoiscripts/run_before_05-corporate-ca.sh.tmpl" >"$tmp/corporate-ca.sh"
+shellcheck "$tmp/corporate-ca.sh"
+shfmt -d "$tmp/corporate-ca.sh"
+rg -q 'dotfiles-corporate-ca\.crt' "$tmp/corporate-ca.sh"
+chezmoi --source "$root" --config "$tmp/chezmoi-corporate-ca.toml" execute-template \
+	<"$root/dot_zshrc.tmpl" >"$tmp/zshrc-corporate-ca"
+rg -q '^export PIP_CERT=' "$tmp/zshrc-corporate-ca"
+rg -q '^export UV_NATIVE_TLS=true$' "$tmp/zshrc-corporate-ca"
+rg -q '^export GIT_SSL_CAINFO=' "$tmp/zshrc-corporate-ca"
+rg -q '^export NPM_CONFIG_CAFILE=' "$tmp/zshrc-corporate-ca"
+rg -q '^export CARGO_HTTP_CAINFO=' "$tmp/zshrc-corporate-ca"
 
 mkdir -p "$tmp/bin" "$tmp/profile-repo"
 cat >"$tmp/bin/gh" <<'EOF'

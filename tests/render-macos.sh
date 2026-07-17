@@ -11,6 +11,8 @@ cat >"$tmp/chezmoi.toml" <<'EOF'
 gitName = "Dotfiles Test"
 gitEmail = "dotfiles@example.invalid"
 infraTool = "none"
+useCorporateCA = false
+corporateCAPath = ""
 installClaude = true
 EOF
 
@@ -23,6 +25,10 @@ if [ -n "$(chezmoi --source "$root" --destination "$tmp/home" --config "$tmp/che
 fi
 
 test -f "$tmp/home/.zshrc"
+if rg -q 'CORPORATE_CA|CA_BUNDLE|CAINFO|PIP_CERT|UV_NATIVE_TLS' "$tmp/home/.zshrc"; then
+	printf '%s\n' "Corporate CA environment rendered when it was disabled." >&2
+	exit 1
+fi
 test -x "$tmp/home/.local/bin/dotfiles"
 test -x "$tmp/home/.local/bin/github-profile"
 test -x "$tmp/home/.local/bin/git-credential-gh-profile"

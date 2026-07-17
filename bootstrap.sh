@@ -2,16 +2,84 @@
 set -eu
 
 REPO="M0rtalPhe0nix/dotfiles"
+corporate_ca_path="${DOTFILES_CORPORATE_CA_PATH:-}"
+corporate_ca_choice="${DOTFILES_CONFIGURE_CORPORATE_CA:-}"
+apt_ca_bundle=""
+existing_source=false
+
+for chezmoi_command in "$(command -v chezmoi 2>/dev/null || true)" /opt/homebrew/bin/chezmoi /home/linuxbrew/.linuxbrew/bin/chezmoi; do
+	if [ -x "$chezmoi_command" ] && [ -d "$($chezmoi_command source-path 2>/dev/null)/.git" ]; then
+		existing_source=true
+		break
+	fi
+done
+
+if [ -z "$corporate_ca_path" ] && [ -z "$corporate_ca_choice" ] && [ "$existing_source" = false ] && [ -t 0 ]; then
+	printf '%s' "Configure a corporate CA certificate? [y/N] "
+	read -r configure_corporate_ca
+	case "$configure_corporate_ca" in
+	[yY] | [yY][eE][sS])
+		printf '%s' "Absolute path to the corporate CA PEM file: "
+		read -r corporate_ca_path
+		DOTFILES_CONFIGURE_CORPORATE_CA=1
+		DOTFILES_CORPORATE_CA_PATH="$corporate_ca_path"
+		export DOTFILES_CONFIGURE_CORPORATE_CA DOTFILES_CORPORATE_CA_PATH
+		;;
+	*)
+		DOTFILES_CONFIGURE_CORPORATE_CA=0
+		export DOTFILES_CONFIGURE_CORPORATE_CA
+		;;
+	esac
+fi
+
+if [ -n "$corporate_ca_path" ]; then
+	case "$corporate_ca_path" in
+	/*) ;;
+	*)
+		printf '%s\n' "DOTFILES_CORPORATE_CA_PATH must be an absolute path." >&2
+		exit 1
+		;;
+	esac
+	if [ ! -r "$corporate_ca_path" ]; then
+		printf '%s\n' "Corporate CA is not readable: $corporate_ca_path" >&2
+		exit 1
+	fi
+	if grep -q -- 'PRIVATE KEY' "$corporate_ca_path" || ! grep -q -- '-----BEGIN CERTIFICATE-----' "$corporate_ca_path"; then
+		printf '%s\n' "Corporate CA must be a PEM certificate without a private key." >&2
+		exit 1
+	fi
+fi
+
+apt_get() {
+	if [ -n "$apt_ca_bundle" ]; then
+		sudo apt-get -o "Acquire::https::CaInfo=$apt_ca_bundle" "$@"
+	else
+		sudo apt-get "$@"
+	fi
+}
 
 case "$(uname -s)" in
-Darwin) ;;
+Darwin)
+	if [ -n "$corporate_ca_path" ]; then
+		sudo security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain "$corporate_ca_path"
+	fi
+	;;
 Linux)
 	if ! command -v apt-get >/dev/null 2>&1; then
 		printf '%s\n' "Only Debian and Ubuntu Linux are supported." >&2
 		exit 1
 	fi
-	sudo apt-get update
-	sudo apt-get install -y build-essential ca-certificates curl file git procps unzip
+	if [ -n "$corporate_ca_path" ] && [ -r /etc/ssl/certs/ca-certificates.crt ]; then
+		apt_ca_bundle="$(mktemp)"
+		trap 'rm -f "$apt_ca_bundle"' EXIT INT TERM
+		cat /etc/ssl/certs/ca-certificates.crt "$corporate_ca_path" >"$apt_ca_bundle"
+	fi
+	apt_get update
+	apt_get install -y build-essential ca-certificates curl file git procps unzip
+	if [ -n "$corporate_ca_path" ]; then
+		sudo install -m 0644 "$corporate_ca_path" /usr/local/share/ca-certificates/dotfiles-corporate-ca.crt
+		sudo update-ca-certificates
+	fi
 	;;
 *)
 	printf '%s\n' "Unsupported operating system: $(uname -s)" >&2

@@ -10,7 +10,7 @@ Review `bootstrap.sh`, then run:
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/M0rtalPhe0nix/dotfiles/main/bootstrap.sh)"
 ```
 
-The bootstrap installs platform prerequisites, Homebrew when needed, and Chezmoi. Before the first apply, existing managed files are archived under `~/.local/state/dotfiles/pre-bootstrap/`. Interactive runs pause for GitHub, Claude Code, and OpenCode authentication when required.
+The bootstrap first asks whether the host needs a corporate CA certificate, then installs platform prerequisites, Homebrew when needed, and Chezmoi. Before the first apply, existing managed files are archived under `~/.local/state/dotfiles/pre-bootstrap/`. Interactive runs pause for GitHub, Claude Code, and OpenCode authentication when required.
 
 Rerunning bootstrap fast-forwards an existing Chezmoi source clone, regenerates local initialization data, and applies the current configuration. It does not overwrite divergent source changes.
 
@@ -21,6 +21,21 @@ DOTFILES_SKIP_CLAUDE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.
 ```
 
 Git author name and email are requested by Chezmoi during initialization and remain in the host-local Chezmoi config. The same prompt lets you install Terraform `1.5.7`, the latest OpenTofu, or neither through mise. Authentication, signing, existing Git LFS settings, secrets, and other machine-specific values are not committed.
+
+### Corporate CA Certificates
+
+Bootstrap asks whether to configure a corporate CA before installing packages. If selected, it accepts the absolute path to a PEM-encoded certificate. The certificate must contain no private key and remains outside this public repository. Chezmoi copies it to `~/.local/share/dotfiles/`, installs it in the macOS or Debian/Ubuntu system trust store, and creates a combined CA bundle.
+
+The managed shell environment configures OpenSSL-compatible applications, Git, curl, Python, pip, Poetry, uv, npm/Node.js, Cargo, and rustup. Docker uses the host system trust for daemon and registry connections. Images and containers have separate trust stores, so Dockerfiles that access the corporate network must install the CA in the image explicitly.
+
+If the CA is required before Homebrew or Chezmoi can be downloaded, provide it to both the initial curl command and bootstrap:
+
+```sh
+export DOTFILES_CORPORATE_CA_PATH=/absolute/path/to/corporate-ca.pem
+/bin/bash -c "$(curl --cacert "$DOTFILES_CORPORATE_CA_PATH" -fsSL https://raw.githubusercontent.com/M0rtalPhe0nix/dotfiles/main/bootstrap.sh)"
+```
+
+The path and opt-in are stored only in the host-local Chezmoi config. Keep the source PEM at that path so future applies can detect certificate rotation. Restart Docker Desktop and graphical applications after initially installing or rotating the CA.
 
 ## GitHub Profiles
 
@@ -57,6 +72,7 @@ Put host-specific shell customization in `~/.config/zsh/local.zsh`. Put secrets 
 - Zsh, ZimFW, Starship, fzf, secure shared history, completions, autosuggestions, syntax highlighting, and history substring search.
 - Availability-guarded `eza`, `bat`, `zoxide`, mise, fzf, and Starship integrations.
 - Git policy in included fragments, preserving host-managed identity infrastructure, authentication, signing, and unrelated settings, with optional per-repository GitHub profiles.
+- Optional corporate CA trust for the operating system and CLI package managers, without committing the certificate or its host-local path.
 - Claude Code and OpenCode with high-autonomy permissions plus secret, destructive-command, and external-directory guardrails.
 - Canonical reusable skills under `~/.claude/skills`, discovered by Claude Code and OpenCode without duplication.
 - VS Code, a managed extension baseline, Ghostty, Catppuccin, and MesloLGS Nerd Font. Extensions outside the baseline are not removed.

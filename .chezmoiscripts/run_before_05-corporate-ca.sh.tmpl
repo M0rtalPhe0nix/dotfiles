@@ -1,0 +1,65 @@
+{{- $useCorporateCA := false -}}
+{{- if hasKey . "useCorporateCA" -}}
+{{-   $useCorporateCA = .useCorporateCA -}}
+{{- end -}}
+#!/bin/sh
+set -eu
+
+{{ if $useCorporateCA -}}
+source_ca="$(printf '%s' {{ .corporateCAPath | b64enc | quote }} | base64 --decode)"
+user_dir="${XDG_DATA_HOME:-$HOME/.local/share}/dotfiles"
+user_ca="$user_dir/corporate-ca.pem"
+ca_bundle="$user_dir/ca-bundle.pem"
+
+case "$source_ca" in
+/*) ;;
+*)
+	printf '%s\n' "Corporate CA path must be absolute: $source_ca" >&2
+	exit 1
+	;;
+esac
+if [ ! -r "$source_ca" ]; then
+	printf '%s\n' "Corporate CA is not readable: $source_ca" >&2
+	exit 1
+fi
+if grep -q -- 'PRIVATE KEY' "$source_ca" || ! grep -q -- '-----BEGIN CERTIFICATE-----' "$source_ca"; then
+	printf '%s\n' "Corporate CA must be a PEM certificate without a private key: $source_ca" >&2
+	exit 1
+fi
+openssl x509 -in "$source_ca" -noout >/dev/null
+
+mkdir -p "$user_dir"
+chmod 700 "$user_dir"
+changed=true
+if [ -f "$user_ca" ] && cmp -s "$source_ca" "$user_ca"; then
+	changed=false
+else
+	install -m 0644 "$source_ca" "$user_ca"
+fi
+
+if [ "$changed" = true ]; then
+{{ if eq .chezmoi.os "darwin" }}
+	sudo security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain "$user_ca"
+{{ else }}
+	sudo install -m 0644 "$user_ca" /usr/local/share/ca-certificates/dotfiles-corporate-ca.crt
+	sudo update-ca-certificates
+{{ end }}
+fi
+
+tmp_bundle="$ca_bundle.tmp"
+trap 'rm -f "$tmp_bundle"' EXIT INT TERM
+{{ if eq .chezmoi.os "darwin" -}}
+cat /etc/ssl/cert.pem "$user_ca" >"$tmp_bundle"
+{{ else -}}
+cat /etc/ssl/certs/ca-certificates.crt >"$tmp_bundle"
+{{ end -}}
+chmod 0644 "$tmp_bundle"
+if [ ! -f "$ca_bundle" ] || ! cmp -s "$tmp_bundle" "$ca_bundle"; then
+	mv "$tmp_bundle" "$ca_bundle"
+else
+	rm -f "$tmp_bundle"
+fi
+printf '%s\n' "Corporate CA trust is configured."
+{{ else -}}
+:
+{{ end -}}
