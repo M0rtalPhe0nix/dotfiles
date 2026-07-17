@@ -23,7 +23,7 @@ doctor() {
 		failed=1
 	fi
 	{{ if eq .chezmoi.os "darwin" -}}
-	if ! command -v ghostty >/dev/null 2>&1; then
+	if [ ! -d /Applications/Ghostty.app ] && [ ! -d "$HOME/Applications/Ghostty.app" ]; then
 		printf '%s\n' "FAIL Ghostty is missing"
 		failed=1
 	fi
@@ -76,7 +76,7 @@ doctor() {
 		printf '%s\n' "FAIL interactive Zsh startup"
 		failed=1
 	}
-	chezmoi verify || {
+	chezmoi verify --exclude=scripts || {
 		printf '%s\n' "FAIL managed files differ"
 		failed=1
 	}

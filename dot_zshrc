@@ -34,7 +34,7 @@ fi
 
 (( $+commands[mise] )) && eval "$(mise activate zsh)"
 (( $+commands[zoxide] )) && eval "$(zoxide init zsh)"
-(( $+commands[fzf] )) && source <(fzf --zsh)
+(( $+commands[fzf] )) && [[ -o interactive && -t 0 ]] && source <(fzf --zsh)
 (( $+commands[starship] )) && eval "$(starship init zsh)"
 
 (( $+commands[eza] )) && alias ls='eza --icons=auto --group-directories-first'

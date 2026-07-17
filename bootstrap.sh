@@ -29,11 +29,23 @@ if ! command -v brew >/dev/null 2>&1; then
 fi
 
 brew install chezmoi
-chezmoi init --apply "https://github.com/${REPO}.git"
+source_dir="$(chezmoi source-path)"
+if [ -d "$source_dir/.git" ]; then
+	git -C "$source_dir" pull --ff-only origin main
+	chezmoi init
+	chezmoi apply
+else
+	chezmoi init --apply "https://github.com/${REPO}.git"
+fi
 
 if [ -t 0 ]; then
 	gh auth status >/dev/null 2>&1 || gh auth login
-	if [ "$(chezmoi execute-template '{{ .installClaude }}')" = true ]; then
+	if [ "${DOTFILES_SKIP_CLAUDE:-0}" = 1 ]; then
+		install_claude=false
+	else
+		install_claude="$(chezmoi data --format=json | jq -r '.installClaude // true')"
+	fi
+	if [ "$install_claude" = true ]; then
 		claude auth status >/dev/null 2>&1 || claude auth login
 	fi
 	opencode auth list 2>/dev/null | grep -q . || opencode auth login

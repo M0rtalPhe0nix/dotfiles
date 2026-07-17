@@ -12,6 +12,8 @@ Review `bootstrap.sh`, then run:
 
 The bootstrap installs platform prerequisites, Homebrew when needed, and Chezmoi. Before the first apply, existing managed files are archived under `~/.local/state/dotfiles/pre-bootstrap/`. Interactive runs pause for GitHub, Claude Code, and OpenCode authentication when required.
 
+Rerunning bootstrap fast-forwards an existing Chezmoi source clone, regenerates local initialization data, and applies the current configuration. It does not overwrite divergent source changes.
+
 Claude Code installation is optional at the first-run prompt. To skip it without a prompt:
 
 ```sh
