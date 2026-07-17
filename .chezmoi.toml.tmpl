@@ -1,5 +1,12 @@
 {{- $name := promptStringOnce . "gitName" "Git author name" -}}
 {{- $email := promptStringOnce . "gitEmail" "Git author email" -}}
+{{- $installClaude := true -}}
+{{- if eq (env "DOTFILES_SKIP_CLAUDE") "1" -}}
+{{-   $installClaude = false -}}
+{{- else -}}
+{{-   $installClaude = promptBoolOnce . "installClaude" "Install Claude Code" true -}}
+{{- end -}}
 [data]
     gitName = {{ $name | quote }}
     gitEmail = {{ $email | quote }}
+    installClaude = {{ $installClaude }}

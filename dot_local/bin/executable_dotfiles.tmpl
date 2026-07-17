@@ -37,6 +37,7 @@ doctor() {
 		printf '%s\n' "FAIL GitHub authentication"
 		failed=1
 	}
+	{{ if .installClaude -}}
 	if command -v claude >/dev/null 2>&1; then
 		claude auth status >/dev/null 2>&1 || {
 			printf '%s\n' "FAIL Claude authentication"
@@ -46,6 +47,7 @@ doctor() {
 		printf '%s\n' "FAIL Claude Code is missing"
 		failed=1
 	fi
+	{{ end -}}
 	if command -v opencode >/dev/null 2>&1; then
 		opencode auth list 2>/dev/null | grep -q . || {
 			printf '%s\n' "FAIL OpenCode authentication"

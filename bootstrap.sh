@@ -33,7 +33,9 @@ chezmoi init --apply "https://github.com/${REPO}.git"
 
 if [ -t 0 ]; then
 	gh auth status >/dev/null 2>&1 || gh auth login
-	claude auth status >/dev/null 2>&1 || claude auth login
+	if [ "$(chezmoi execute-template '{{ .installClaude }}')" = true ]; then
+		claude auth status >/dev/null 2>&1 || claude auth login
+	fi
 	opencode auth list 2>/dev/null | grep -q . || opencode auth login
 fi
 

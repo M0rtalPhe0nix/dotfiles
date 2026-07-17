@@ -12,6 +12,7 @@ cat >"$tmp/chezmoi.toml" <<'EOF'
 [data]
 gitName = "Dotfiles Test"
 gitEmail = "dotfiles@example.invalid"
+installClaude = false
 EOF
 
 chezmoi --source "$root" --destination "$home" --config "$tmp/chezmoi.toml" apply --exclude=scripts

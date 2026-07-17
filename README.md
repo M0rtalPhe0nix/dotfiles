@@ -12,6 +12,12 @@ Review `bootstrap.sh`, then run:
 
 The bootstrap installs platform prerequisites, Homebrew when needed, and Chezmoi. Before the first apply, existing managed files are archived under `~/.local/state/dotfiles/pre-bootstrap/`. Interactive runs pause for GitHub, Claude Code, and OpenCode authentication when required.
 
+Claude Code installation is optional at the first-run prompt. To skip it without a prompt:
+
+```sh
+DOTFILES_SKIP_CLAUDE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/M0rtalPhe0nix/dotfiles/main/bootstrap.sh)"
+```
+
 Git author name and email are requested by Chezmoi during initialization and remain in the host-local Chezmoi config. Authentication, signing, existing Git LFS settings, secrets, and other machine-specific values are not committed.
 
 ## Operations
