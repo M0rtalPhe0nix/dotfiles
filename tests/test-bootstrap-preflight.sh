@@ -36,6 +36,7 @@ rg -Fq 'branch: macOS Homebrew, Ghostty cask, VS Code application settings' "$tm
 rg -Fq 'chezmoi source: initialized' "$tmp/output"
 rg -Fq 'managed VS Code target: Library/Application Support/Code/User' "$tmp/output"
 rg -Fq 'pre-bootstrap backup targets:' "$tmp/output"
+rg -Fq '.config/git/ignore' "$tmp/output"
 rg -Fq 'phases:' "$tmp/output"
 test "$(cat "$tmp/commands")" = "chezmoi source-path
 chezmoi data --format=json"
