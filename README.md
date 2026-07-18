@@ -1,4 +1,4 @@
-# Mohamed's dotfiles
+# Dotfiles
 
 An opinionated, public workstation setup for Apple Silicon macOS and Debian or Ubuntu desktops. It sets up a capable terminal, editor, developer tools, and AI coding tools while keeping credentials and machine-specific configuration out of Git.
 
