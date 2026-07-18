@@ -37,6 +37,8 @@ for skill_file in "$root"/.claude/skills/*/SKILL.md; do
 	test -f "$tmp/home/.claude/skills/$skill/SKILL.md"
 done
 test -f "$tmp/home/.claude/agents/feature-diagrammer.md"
+test -x "$tmp/home/.claude/hooks/post-edit-fmt.sh"
+jq -e '.hooks.PostToolUse[0].matcher == "Write|Edit|MultiEdit"' "$tmp/home/.claude/settings.json" >/dev/null
 test -f "$tmp/home/.config/opencode/agent/feature-diagrammer.md"
 test -f "$tmp/home/.config/zsh/local.zsh"
 test "$(stat -f %Lp "$tmp/home/.config/zsh/secrets.zsh")" = 600

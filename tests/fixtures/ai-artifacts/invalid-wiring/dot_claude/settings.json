@@ -1,0 +1,20 @@
+{
+  "permissions": {
+    "allow": [],
+    "ask": [],
+    "deny": []
+  },
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/tmp/not-managed.sh"
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -10,6 +10,12 @@ Review `bootstrap.sh`, then run:
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/M0rtalPhe0nix/dotfiles/main/bootstrap.sh)"
 ```
 
+Inspect the platform branch, prerequisites, managed scope, backup targets, and configured choices without changing the host:
+
+```sh
+curl -fsSL https://raw.githubusercontent.com/M0rtalPhe0nix/dotfiles/main/bootstrap.sh | /bin/sh -s -- --preflight
+```
+
 The bootstrap first asks whether the host needs a corporate CA certificate, then installs platform prerequisites, Homebrew when needed, and Chezmoi. Before the first apply, existing managed files are archived under `~/.local/state/dotfiles/pre-bootstrap/`. Interactive runs pause for GitHub, Claude Code, and OpenCode authentication when required.
 
 Rerunning bootstrap fast-forwards an existing Chezmoi source clone, regenerates local initialization data, and applies the current configuration. It does not overwrite divergent source changes.
@@ -21,6 +27,8 @@ DOTFILES_SKIP_CLAUDE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.
 ```
 
 Git author name and email are requested by Chezmoi during initialization and remain in the host-local Chezmoi config. The same prompt lets you install Terraform `1.5.7`, the latest OpenTofu, or neither through mise. Authentication, signing, existing Git LFS settings, secrets, and other machine-specific values are not committed.
+
+The developer baseline always provisions Node, Python, `uv`, `pnpm`, and Ruff through mise. Python, TypeScript, Markdown, and Terraform language servers are optional first-run choices; selected language servers are also mise-managed.
 
 ### Corporate CA Certificates
 
@@ -61,6 +69,8 @@ The alias selection, GitHub login, and Git author identity are stored in the rep
 dotfiles diff       # Preview managed configuration changes
 dotfiles apply      # Converge configuration without upgrading software
 dotfiles doctor     # Check tools, auth, fonts, permissions, and managed state
+dotfiles extensions # Merge installed VS Code extensions into the managed baseline
+dotfiles extensions --overwrite # Replace the managed baseline with installed extensions
 dotfiles update     # Update only managed packages, runtimes, extensions, and Zim modules
 dotfiles rollback   # Restore pre-bootstrap files without uninstalling packages
 ```
@@ -74,6 +84,7 @@ Put host-specific shell customization in `~/.config/zsh/local.zsh`. Put secrets 
 - Git policy in included fragments, preserving host-managed identity infrastructure, authentication, signing, and unrelated settings, with optional per-repository GitHub profiles.
 - Optional corporate CA trust for the operating system and CLI package managers, without committing the certificate or its host-local path.
 - Claude Code and OpenCode with high-autonomy permissions plus secret, destructive-command, and external-directory guardrails.
+- A guarded Claude post-edit Python formatter that uses mise-managed Ruff when available.
 - Canonical reusable skills under `~/.claude/skills`, discovered by Claude Code and OpenCode without duplication.
 - A read-only dotfiles comparison skill that mines one public GitHub repository for evidence-backed improvement ideas and a ranked backlog.
 - Haiku-powered Claude Code and Luna-powered OpenCode `feature-diagrammer` subagents for validated Excalidraw artifact production after feature discovery.
@@ -91,6 +102,6 @@ tests/debian-smoke.sh
 tests/zsh-startup.sh
 ```
 
-`tests/validate.sh` checks shell formatting and lint, JSON, OpenCode configuration, common secret signatures, temporary-home rendering, and a clean second apply. The Docker test renders on Debian without running package or authentication scripts. The startup test requires a warm average below 200 ms.
+`tests/validate.sh` checks shell formatting and lint, rendered JSON, Claude skills/agents/hooks, OpenCode configuration, common secret signatures, temporary-home rendering, and a clean second apply. The Docker test renders and checks package scripts with mocked package commands on Debian and Ubuntu; it does not authenticate or install packages. The startup test requires a warm average below 200 ms.
 
 GitHub Actions are intentionally deferred; version 1 validation is local only.

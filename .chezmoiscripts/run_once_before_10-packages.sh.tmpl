@@ -2,14 +2,50 @@
 set -eu
 
 {{ if eq .chezmoi.os "linux" -}}
+install_debian_packages() {
+	set --
+	while IFS= read -r line || [ -n "$line" ]; do
+		package="$(printf '%s\n' "$line" | sed 's/[[:space:]]*#.*$//; s/^[[:space:]]*//; s/[[:space:]]*$//')"
+		[ -n "$package" ] && set -- "$@" "$package"
+	done <"{{ .chezmoi.sourceDir }}/packages-debian.txt"
+
+	[ "$#" -gt 0 ] && sudo apt-get install -y --no-upgrade "$@"
+}
+
+install_vscode_repository() {
+	work_dir="$(mktemp -d)"
+	keyring_stage=""
+	source_stage=""
+	cleanup_vscode_repository() {
+		rm -rf "$work_dir"
+		[ -z "$keyring_stage" ] || sudo rm -f "$keyring_stage"
+		[ -z "$source_stage" ] || sudo rm -f "$source_stage"
+	}
+	trap cleanup_vscode_repository EXIT INT TERM
+
+	curl -fsSL https://packages.microsoft.com/keys/microsoft.asc -o "$work_dir/microsoft.asc"
+	gpg --dearmor --output "$work_dir/packages.microsoft.gpg" "$work_dir/microsoft.asc"
+	printf '%s\n' "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/packages.microsoft.gpg] https://packages.microsoft.com/repos/code stable main" >"$work_dir/vscode.list"
+
+	sudo install -d -m 0755 /etc/apt/keyrings
+	keyring_stage="$(sudo mktemp /etc/apt/keyrings/.packages.microsoft.gpg.XXXXXX)"
+	sudo install -m 0644 "$work_dir/packages.microsoft.gpg" "$keyring_stage"
+	sudo mv -f "$keyring_stage" /etc/apt/keyrings/packages.microsoft.gpg
+	keyring_stage=""
+
+	source_stage="$(sudo mktemp /etc/apt/sources.list.d/.vscode.list.XXXXXX)"
+	sudo install -m 0644 "$work_dir/vscode.list" "$source_stage"
+	sudo mv -f "$source_stage" /etc/apt/sources.list.d/vscode.list
+	source_stage=""
+}
+
 sudo apt-get update
-sudo apt-get install -y $(tr '\n' ' ' <"{{ .chezmoi.sourceDir }}/packages-debian.txt")
+install_debian_packages
 
 if ! command -v code >/dev/null 2>&1; then
-	curl -fsSL https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor | sudo tee /etc/apt/keyrings/packages.microsoft.gpg >/dev/null
-	printf '%s\n' "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/packages.microsoft.gpg] https://packages.microsoft.com/repos/code stable main" | sudo tee /etc/apt/sources.list.d/vscode.list >/dev/null
+	install_vscode_repository
 	sudo apt-get update
-	sudo apt-get install -y code
+	sudo apt-get install -y --no-upgrade code
 fi
 
 if ! flatpak info --user com.mitchellh.ghostty >/dev/null 2>&1; then
@@ -22,12 +58,12 @@ brew bundle --file "{{ .chezmoi.sourceDir }}/Brewfile"
 {{ if eq .chezmoi.os "linux" -}}
 font_dir="$HOME/.local/share/fonts/MesloLGS-NF"
 if ! fc-list | grep -qi 'MesloLGS Nerd Font'; then
-  mkdir -p "$font_dir"
-  archive="$(mktemp)"
-  curl -fsSL https://github.com/ryanoasis/nerd-fonts/releases/latest/download/Meslo.zip -o "$archive"
-  unzip -oq "$archive" -d "$font_dir"
-  rm -f "$archive"
-  fc-cache -f "$font_dir"
+	mkdir -p "$font_dir"
+	archive="$(mktemp)"
+	curl -fsSL https://github.com/ryanoasis/nerd-fonts/releases/latest/download/Meslo.zip -o "$archive"
+	unzip -oq "$archive" -d "$font_dir"
+	rm -f "$archive"
+	fc-cache -f "$font_dir"
 fi
 {{ end -}}
 

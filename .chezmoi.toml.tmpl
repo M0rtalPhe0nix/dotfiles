@@ -16,6 +16,10 @@
 {{- else -}}
 {{-   $installClaude = promptBoolOnce . "installClaude" "Install Claude Code" true -}}
 {{- end -}}
+{{- $installPythonLsp := promptBoolOnce . "installPythonLsp" "Install Python language server" false -}}
+{{- $installTypeScriptLsp := promptBoolOnce . "installTypeScriptLsp" "Install TypeScript language server" false -}}
+{{- $installMarkdownLsp := promptBoolOnce . "installMarkdownLsp" "Install Markdown language server" false -}}
+{{- $installTerraformLsp := promptBoolOnce . "installTerraformLsp" "Install Terraform language server" false -}}
 [data]
     gitName = {{ $name | quote }}
     gitEmail = {{ $email | quote }}
@@ -23,3 +27,7 @@
     useCorporateCA = {{ $useCorporateCA }}
     corporateCAPath = {{ $corporateCAPath | quote }}
     installClaude = {{ $installClaude }}
+    installPythonLsp = {{ $installPythonLsp }}
+    installTypeScriptLsp = {{ $installTypeScriptLsp }}
+    installMarkdownLsp = {{ $installMarkdownLsp }}
+    installTerraformLsp = {{ $installTerraformLsp }}

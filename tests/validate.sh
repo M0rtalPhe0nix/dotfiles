@@ -5,12 +5,33 @@ root="$(CDPATH='' cd -- "$(dirname "$0")/.." && pwd)"
 tmp="$(mktemp -d)"
 trap 'rm -rf "$tmp"' EXIT INT TERM
 
-shellcheck "$root/bootstrap.sh" "$root/tests/render-macos.sh" "$root/tests/debian-smoke.sh" "$root/tests/validate.sh"
-shfmt -d "$root/bootstrap.sh" "$root/tests/render-macos.sh" "$root/tests/debian-smoke.sh" "$root/tests/validate.sh"
+shellcheck \
+	"$root/bootstrap.sh" \
+	"$root/dot_claude/hooks/executable_post-edit-fmt.sh" \
+	"$root/tests/render-macos.sh" \
+	"$root/tests/debian-smoke.sh" \
+	"$root/tests/test-bootstrap-preflight.sh" \
+	"$root/tests/test-claude-post-edit-hook.sh" \
+	"$root/tests/test-debian-packages.sh" \
+	"$root/tests/test-validate-ai-artifacts.sh" \
+	"$root/tests/test-vscode-extensions.sh" \
+	"$root/tests/validate-ai-artifacts.sh" \
+	"$root/tests/validate.sh"
+shfmt -d \
+	"$root/bootstrap.sh" \
+	"$root/dot_claude/hooks/executable_post-edit-fmt.sh" \
+	"$root/tests/render-macos.sh" \
+	"$root/tests/debian-smoke.sh" \
+	"$root/tests/test-bootstrap-preflight.sh" \
+	"$root/tests/test-claude-post-edit-hook.sh" \
+	"$root/tests/test-debian-packages.sh" \
+	"$root/tests/test-validate-ai-artifacts.sh" \
+	"$root/tests/test-vscode-extensions.sh" \
+	"$root/tests/validate-ai-artifacts.sh" \
+	"$root/tests/validate.sh"
 
 for file in \
 	"$root/opencode.json" \
-	"$root/dot_claude/settings.json" \
 	"$root/dot_config/opencode/opencode.json" \
 	"$root/Library/Application Support/Code/User/settings.json" \
 	"$root/Library/Application Support/Code/User/keybindings.json" \
@@ -47,6 +68,12 @@ for source in \
 	shellcheck "$output"
 	shfmt -d "$output"
 done
+
+sh "$root/tests/test-claude-post-edit-hook.sh"
+sh "$root/tests/test-bootstrap-preflight.sh"
+sh "$root/tests/test-vscode-extensions.sh"
+sh "$root/tests/test-debian-packages.sh"
+sh "$root/tests/test-validate-ai-artifacts.sh"
 
 cat >"$tmp/chezmoi-skip-claude.toml" <<'EOF'
 [data]
@@ -95,6 +122,38 @@ if rg -q '^terraform =' "$tmp/mise-opentofu.toml"; then
 	printf '%s\n' "Terraform rendered for the OpenTofu selection." >&2
 	exit 1
 fi
+
+cat >"$tmp/chezmoi-all-lsps.toml" <<'EOF'
+[data]
+gitName = "Dotfiles Test"
+gitEmail = "dotfiles@example.invalid"
+infraTool = "none"
+useCorporateCA = false
+corporateCAPath = ""
+installClaude = true
+installPythonLsp = true
+installTypeScriptLsp = true
+installMarkdownLsp = true
+installTerraformLsp = true
+EOF
+chezmoi --source "$root" --config "$tmp/chezmoi-all-lsps.toml" execute-template \
+	<"$root/dot_config/mise/config.toml.tmpl" >"$tmp/mise-all-lsps.toml"
+rg -q '^uv = "latest"$' "$tmp/mise-all-lsps.toml"
+rg -q '^pnpm = "latest"$' "$tmp/mise-all-lsps.toml"
+rg -q '^ruff = "latest"$' "$tmp/mise-all-lsps.toml"
+rg -q '^"npm:pyright" = "latest"$' "$tmp/mise-all-lsps.toml"
+rg -q '^"npm:typescript-language-server" = "latest"$' "$tmp/mise-all-lsps.toml"
+rg -q '^"aqua:artempyanykh/marksman" = "latest"$' "$tmp/mise-all-lsps.toml"
+rg -q '^"aqua:hashicorp/terraform-ls" = "latest"$' "$tmp/mise-all-lsps.toml"
+chezmoi --source "$root" --config "$tmp/chezmoi-all-lsps.toml" execute-template \
+	<"$root/dot_local/bin/executable_dotfiles.tmpl" >"$tmp/dotfiles-all-lsps"
+rg -q 'pyright-langserver' "$tmp/dotfiles-all-lsps"
+rg -q 'typescript-language-server' "$tmp/dotfiles-all-lsps"
+rg -q 'marksman' "$tmp/dotfiles-all-lsps"
+rg -q 'terraform-ls' "$tmp/dotfiles-all-lsps"
+chezmoi --source "$root" --config "$tmp/chezmoi-all-lsps.toml" execute-template \
+	<"$root/dot_claude/settings.json.tmpl" >"$tmp/claude-settings-all-lsps.json"
+jq -e '.enabledPlugins["pyright-lsp@claude-plugins-official"] and .enabledPlugins["typescript-lsp@claude-plugins-official"]' "$tmp/claude-settings-all-lsps.json" >/dev/null
 
 cat >"$tmp/chezmoi-corporate-ca.toml" <<'EOF'
 [data]

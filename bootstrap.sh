@@ -6,6 +6,131 @@ corporate_ca_path="${DOTFILES_CORPORATE_CA_PATH:-}"
 corporate_ca_choice="${DOTFILES_CONFIGURE_CORPORATE_CA:-}"
 apt_ca_bundle=""
 existing_source=false
+chezmoi_command=""
+
+usage() {
+	printf '%s\n' "usage: bootstrap.sh [--preflight]"
+}
+
+preflight() {
+	os="$(uname -s)"
+	arch="$(uname -m)"
+	supported=true
+
+	printf '%s\n' "dotfiles bootstrap preflight"
+	case "$os" in
+	Darwin)
+		printf '%s\n' "platform: macOS ($arch)"
+		if [ "$arch" != arm64 ]; then
+			printf '%s\n' "status: unsupported; Apple Silicon macOS is required"
+			supported=false
+		else
+			printf '%s\n' "branch: macOS Homebrew, Ghostty cask, VS Code application settings"
+		fi
+		vscode_target="Library/Application Support/Code/User"
+		;;
+	Linux)
+		linux_id="unknown"
+		if [ -r /etc/os-release ]; then
+			linux_id="$(sed -n 's/^ID=//p' /etc/os-release | tr -d '"' | sed -n '1p')"
+		fi
+		printf '%s\n' "platform: Linux ($linux_id, $arch)"
+		case "$linux_id" in
+		debian | ubuntu) printf '%s\n' "branch: APT prerequisites, Homebrew, Flatpak Ghostty, VS Code user settings" ;;
+		*)
+			printf '%s\n' "status: unsupported; Debian or Ubuntu is required"
+			supported=false
+			;;
+		esac
+		vscode_target=".config/Code/User"
+		;;
+	*)
+		printf '%s\n' "platform: $os ($arch)"
+		printf '%s\n' "status: unsupported operating system"
+		supported=false
+		vscode_target="unavailable"
+		;;
+	esac
+
+	printf '%s\n' "commands:"
+	for command in curl git brew chezmoi jq sudo; do
+		if command -v "$command" >/dev/null 2>&1; then
+			printf 'ok   %s\n' "$command"
+		else
+			printf 'MISS %s\n' "$command"
+		fi
+	done
+	if [ "$os" = Linux ]; then
+		if command -v apt-get >/dev/null 2>&1; then
+			printf '%s\n' "ok   apt-get"
+		else
+			printf '%s\n' "MISS apt-get"
+		fi
+	fi
+
+	if [ "$existing_source" = true ]; then
+		printf '%s\n' "chezmoi source: initialized"
+		if command -v jq >/dev/null 2>&1; then
+			data="$($chezmoi_command data --format=json 2>/dev/null || true)"
+			if [ -n "$data" ]; then
+				printf '%s\n' "configuration:"
+				for key in infraTool useCorporateCA installClaude installPythonLsp installTypeScriptLsp installMarkdownLsp installTerraformLsp; do
+					value="$(printf '%s' "$data" | jq -r --arg key "$key" '.[$key] // "unset"' 2>/dev/null || true)"
+					printf '%s: %s\n' "$key" "${value:-unset}"
+				done
+			fi
+		fi
+	else
+		printf '%s\n' "chezmoi source: not initialized"
+		printf '%s\n' "configuration: unavailable until Chezmoi initialization"
+	fi
+
+	printf '%s\n' "managed VS Code target: $vscode_target"
+	printf '%s\n' "pre-bootstrap backup targets:"
+	cat <<EOF
+.zshrc
+.zimrc
+.config/starship.toml
+.config/mise/config.toml
+.config/zsh/local.zsh
+.config/zsh/secrets.zsh
+.config/git/dotfiles.gitconfig
+.config/git/identity.gitconfig
+.config/opencode/opencode.json
+.claude/settings.json
+.claude/skills
+.config/ghostty/config
+.local/share/dotfiles/corporate-ca.pem
+.local/share/dotfiles/ca-bundle.pem
+$vscode_target/settings.json
+$vscode_target/keybindings.json
+EOF
+	printf '%s\n' "phases:"
+	printf '%s\n' "1. Detect platform and validate the optional corporate CA."
+	printf '%s\n' "2. Install platform prerequisites and Homebrew when absent."
+	printf '%s\n' "3. Initialize or fast-forward the Chezmoi source, then apply it."
+	printf '%s\n' "4. Back up managed conflicts before corporate CA, packages, runtimes, and extensions phases."
+	printf '%s\n' "5. Authenticate interactively only after apply."
+
+	[ "$supported" = true ] || return 2
+}
+
+case "$#" in
+0) ;;
+1)
+	case "$1" in
+	--preflight) preflight_requested=true ;;
+	*)
+		usage >&2
+		exit 2
+		;;
+	esac
+	;;
+*)
+	usage >&2
+	exit 2
+	;;
+esac
 
 for chezmoi_command in "$(command -v chezmoi 2>/dev/null || true)" /opt/homebrew/bin/chezmoi /home/linuxbrew/.linuxbrew/bin/chezmoi; do
 	if [ -x "$chezmoi_command" ] && [ -d "$($chezmoi_command source-path 2>/dev/null)/.git" ]; then
@@ -13,6 +138,11 @@ for chezmoi_command in "$(command -v chezmoi 2>/dev/null || true)" /opt/homebrew
 		break
 	fi
 done
+
+if [ "${preflight_requested:-false}" = true ]; then
+	preflight
+	exit $?
+fi
 
 if [ -z "$corporate_ca_path" ] && [ -z "$corporate_ca_choice" ] && [ "$existing_source" = false ] && [ -t 0 ]; then
 	printf '%s' "Configure a corporate CA certificate? [y/N] "

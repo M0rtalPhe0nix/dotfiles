@@ -6,6 +6,22 @@
 {{- if hasKey . "useCorporateCA" -}}
 {{-   $useCorporateCA = .useCorporateCA -}}
 {{- end -}}
+{{- $installPythonLsp := false -}}
+{{- if hasKey . "installPythonLsp" -}}
+{{-   $installPythonLsp = .installPythonLsp -}}
+{{- end -}}
+{{- $installTypeScriptLsp := false -}}
+{{- if hasKey . "installTypeScriptLsp" -}}
+{{-   $installTypeScriptLsp = .installTypeScriptLsp -}}
+{{- end -}}
+{{- $installMarkdownLsp := false -}}
+{{- if hasKey . "installMarkdownLsp" -}}
+{{-   $installMarkdownLsp = .installMarkdownLsp -}}
+{{- end -}}
+{{- $installTerraformLsp := false -}}
+{{- if hasKey . "installTerraformLsp" -}}
+{{-   $installTerraformLsp = .installTerraformLsp -}}
+{{- end -}}
 #!/bin/sh
 set -eu
 
@@ -13,12 +29,12 @@ source_dir="$(chezmoi source-path)"
 state="${XDG_STATE_HOME:-$HOME/.local/state}/dotfiles"
 
 usage() {
-	printf '%s\n' "usage: dotfiles {apply|diff|doctor|update|rollback}"
+	printf '%s\n' "usage: dotfiles {apply|diff|doctor|extensions|update|rollback}"
 }
 
 doctor() {
 	failed=0
-	for command in brew chezmoi mise gh rg fd fzf bat eza jq yq dust btm zoxide delta tldr shellcheck shfmt starship zsh; do
+	for command in brew chezmoi mise gh rg fd fzf bat eza jq yq dust btm zoxide delta tldr shellcheck shfmt starship zsh pnpm ruff uv; do
 		if command -v "$command" >/dev/null 2>&1; then
 			printf 'ok   %s\n' "$command"
 		else
@@ -34,6 +50,30 @@ doctor() {
 	{{ else if eq $infraTool "opentofu" -}}
 	command -v tofu >/dev/null 2>&1 || {
 		printf '%s\n' "FAIL OpenTofu is missing"
+		failed=1
+	}
+	{{ end -}}
+	{{ if $installPythonLsp -}}
+	command -v pyright-langserver >/dev/null 2>&1 || {
+		printf '%s\n' "FAIL Python language server is missing"
+		failed=1
+	}
+	{{ end -}}
+	{{ if $installTypeScriptLsp -}}
+	command -v typescript-language-server >/dev/null 2>&1 || {
+		printf '%s\n' "FAIL TypeScript language server is missing"
+		failed=1
+	}
+	{{ end -}}
+	{{ if $installMarkdownLsp -}}
+	command -v marksman >/dev/null 2>&1 || {
+		printf '%s\n' "FAIL Markdown language server is missing"
+		failed=1
+	}
+	{{ end -}}
+	{{ if $installTerraformLsp -}}
+	command -v terraform-ls >/dev/null 2>&1 || {
+		printf '%s\n' "FAIL Terraform language server is missing"
 		failed=1
 	}
 	{{ end -}}
@@ -84,10 +124,10 @@ doctor() {
 		printf '%s\n' "FAIL OpenCode is missing"
 		failed=1
 	fi
-	[ -r "$HOME/.config/zsh/secrets.zsh" ] && [ "$(stat -f %Lp "$HOME/.config/zsh/secrets.zsh" 2>/dev/null || stat -c %a "$HOME/.config/zsh/secrets.zsh")" = 600 ] || {
+	if [ ! -r "$HOME/.config/zsh/secrets.zsh" ] || [ "$(stat -f %Lp "$HOME/.config/zsh/secrets.zsh" 2>/dev/null || stat -c %a "$HOME/.config/zsh/secrets.zsh" 2>/dev/null || true)" != 600 ]; then
 		printf '%s\n' "FAIL ~/.config/zsh/secrets.zsh must have mode 0600"
 		failed=1
-	}
+	fi
 	{{ if eq .chezmoi.os "darwin" -}}
 	system_profiler SPFontsDataType 2>/dev/null | grep -qi 'MesloLGS Nerd Font' || {
 		printf '%s\n' "FAIL Meslo Nerd Font is not visible"
@@ -130,10 +170,55 @@ update() {
 	ZIM_HOME="$zim_home" zsh "$zim_home/zimfw.zsh" install
 	if command -v code >/dev/null 2>&1; then
 		while IFS= read -r extension; do
-			code --install-extension "$extension" --force
+			extension="$(printf '%s\n' "$extension" | sed 's/^[[:space:]]*//; s/[[:space:]]*$//')"
+			[ -n "$extension" ] && code --install-extension "$extension" --force
 		done <"$source_dir/extensions.txt"
 	fi
 	chezmoi apply
+}
+
+save_extensions() {
+	mode="merge"
+	case "${1:-}" in
+	"") ;;
+	--overwrite) mode="overwrite" ;;
+	*)
+		usage >&2
+		return 2
+		;;
+	esac
+
+	if ! command -v code >/dev/null 2>&1; then
+		printf '%s\n' "VS Code command-line launcher is missing." >&2
+		return 1
+	fi
+
+	extensions_file="$source_dir/extensions.txt"
+	extensions_dir="$(dirname "$extensions_file")"
+	installed="$(mktemp)"
+	output=""
+	cleanup_extensions() {
+		rm -f "$installed" "$output"
+	}
+	trap cleanup_extensions EXIT INT TERM
+	output="$(mktemp "$extensions_dir/.extensions.txt.XXXXXX")"
+
+	if ! code --list-extensions >"$installed"; then
+		printf '%s\n' "Unable to list installed VS Code extensions." >&2
+		return 1
+	fi
+
+	if [ "$mode" = "merge" ]; then
+		{
+			[ ! -f "$extensions_file" ] || cat "$extensions_file"
+			cat "$installed"
+		} | sed 's/^[[:space:]]*//; s/[[:space:]]*$//' | sed '/^$/d' | LC_ALL=C sort -u >"$output"
+	else
+		sed 's/^[[:space:]]*//; s/[[:space:]]*$//' "$installed" | sed '/^$/d' | LC_ALL=C sort -u >"$output"
+	fi
+
+	mv -f "$output" "$extensions_file"
+	printf '%s\n' "Saved VS Code extensions to $extensions_file"
 }
 
 rollback() {
@@ -159,6 +244,10 @@ case "${1:-}" in
 apply) chezmoi apply ;;
 diff) chezmoi diff ;;
 doctor) doctor ;;
+extensions)
+	shift
+	save_extensions "$@"
+	;;
 update) update ;;
 rollback) rollback ;;
 *)

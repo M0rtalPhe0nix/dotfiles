@@ -3,6 +3,7 @@ set -eu
 
 if command -v code >/dev/null 2>&1; then
 	while IFS= read -r extension; do
-		code --install-extension "$extension"
+		extension="$(printf '%s\n' "$extension" | sed 's/^[[:space:]]*//; s/[[:space:]]*$//')"
+		[ -n "$extension" ] && code --install-extension "$extension"
 	done <"{{ .chezmoi.sourceDir }}/extensions.txt"
 fi

@@ -1,7 +1,8 @@
-FROM debian:bookworm-slim
+ARG BASE_IMAGE=debian:bookworm-slim
+FROM ${BASE_IMAGE}
 
 RUN apt-get update \
-    && apt-get install -y --no-install-recommends ca-certificates curl git zsh \
+    && apt-get install -y --no-install-recommends ca-certificates curl git ripgrep shellcheck shfmt zsh \
     && rm -rf /var/lib/apt/lists/* \
     && sh -c "$(curl -fsLS get.chezmoi.io)" -- -b /usr/local/bin
 
@@ -13,9 +14,13 @@ RUN mkdir -p /tmp/home \
     && test -f /tmp/home/.config/Code/User/settings.json \
     && for skill_file in /source/.claude/skills/*/SKILL.md; do skill="$(basename "$(dirname "$skill_file")")"; test -f "/tmp/home/.claude/skills/$skill/SKILL.md"; done \
     && test -f /tmp/home/.claude/agents/feature-diagrammer.md \
+    && test -x /tmp/home/.claude/hooks/post-edit-fmt.sh \
     && test -f /tmp/home/.config/opencode/agent/feature-diagrammer.md \
     && test -x /tmp/home/.local/bin/dotfiles \
     && chezmoi --source /source --config /tmp/chezmoi.toml execute-template </source/.chezmoiscripts/run_once_before_10-packages.sh.tmpl >/tmp/packages.sh \
     && chezmoi --source /source --config /tmp/chezmoi.toml execute-template </source/dot_local/bin/executable_dotfiles.tmpl >/tmp/dotfiles \
-    && sh -n /tmp/packages.sh /tmp/dotfiles \
+    && shellcheck /tmp/packages.sh /tmp/dotfiles \
+    && shfmt -d /tmp/packages.sh /tmp/dotfiles \
+    && sh /source/tests/test-debian-packages.sh \
+    && HOME=/tmp/preflight sh /source/bootstrap.sh --preflight >/tmp/preflight.out \
     && test -z "$(chezmoi --source /source --destination /tmp/home --config /tmp/chezmoi.toml diff --exclude=scripts)"

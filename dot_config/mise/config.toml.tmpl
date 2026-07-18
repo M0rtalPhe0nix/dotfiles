@@ -2,13 +2,45 @@
 {{- if hasKey . "infraTool" -}}
 {{-   $infraTool = .infraTool -}}
 {{- end -}}
+{{- $installPythonLsp := false -}}
+{{- if hasKey . "installPythonLsp" -}}
+{{-   $installPythonLsp = .installPythonLsp -}}
+{{- end -}}
+{{- $installTypeScriptLsp := false -}}
+{{- if hasKey . "installTypeScriptLsp" -}}
+{{-   $installTypeScriptLsp = .installTypeScriptLsp -}}
+{{- end -}}
+{{- $installMarkdownLsp := false -}}
+{{- if hasKey . "installMarkdownLsp" -}}
+{{-   $installMarkdownLsp = .installMarkdownLsp -}}
+{{- end -}}
+{{- $installTerraformLsp := false -}}
+{{- if hasKey . "installTerraformLsp" -}}
+{{-   $installTerraformLsp = .installTerraformLsp -}}
+{{- end -}}
 [tools]
 node = "24"
 python = "3.14"
+pnpm = "latest"
+ruff = "latest"
+uv = "latest"
 {{ if eq $infraTool "terraform" -}}
 terraform = "1.5.7"
 {{ else if eq $infraTool "opentofu" -}}
 opentofu = "latest"
 {{ end }}
+{{ if $installPythonLsp -}}
+"npm:pyright" = "latest"
+{{ end -}}
+{{ if $installTypeScriptLsp -}}
+"npm:typescript" = "latest"
+"npm:typescript-language-server" = "latest"
+{{ end -}}
+{{ if $installMarkdownLsp -}}
+"aqua:artempyanykh/marksman" = "latest"
+{{ end -}}
+{{ if $installTerraformLsp -}}
+"aqua:hashicorp/terraform-ls" = "latest"
+{{ end -}}
 [settings]
 idiomatic_version_file_enable_tools = ["node", "python"]

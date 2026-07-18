@@ -1,10 +1,13 @@
+# Base tools required before Homebrew is available.
 build-essential
 ca-certificates
 curl
 file
+
+# Desktop and package repository support.
 flatpak
 fontconfig
 git
 gnupg
 procps
-unzip
+unzip # Nerd Font archive extraction
