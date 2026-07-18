@@ -1,102 +1,122 @@
-# dotfiles
+# Mohamed's dotfiles
 
-Public MIT-licensed dotfiles for Apple Silicon macOS and Debian/Ubuntu desktops. Chezmoi manages configuration and platform differences, Homebrew manages shared tools, and mise manages Node 24 and Python 3.14.
+An opinionated, public workstation setup for Apple Silicon macOS and Debian or Ubuntu desktops. It sets up a capable terminal, editor, developer tools, and AI coding tools while keeping credentials and machine-specific configuration out of Git.
 
-## Bootstrap
+This is the configuration I use. Fork it and make it yours rather than expecting it to suit every workstation unchanged.
 
-Review `bootstrap.sh`, then run:
+## What You Get
 
-```sh
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/M0rtalPhe0nix/dotfiles/main/bootstrap.sh)"
-```
+- Zsh with ZimFW, Starship, fzf, zoxide, completions, and private shared history.
+- Homebrew-managed command-line tools including `gh`, `mise`, `ripgrep`, `fd`, `bat`, `eza`, `delta`, and shell tooling.
+- Node, Python, `uv`, `pnpm`, and Ruff through mise, with optional language servers and Terraform or OpenTofu.
+- VS Code, Ghostty, MesloLGS Nerd Font, Catppuccin styling, and a baseline of extensions. Existing extensions are retained.
+- Git defaults that leave authentication, signing, and unrelated host configuration alone, plus optional per-repository GitHub profiles.
+- Claude Code and OpenCode with shared skills and practical safety guardrails. No global MCP servers or global AI instruction files are installed.
 
-Inspect the platform branch, prerequisites, managed scope, backup targets, and configured choices without changing the host:
+Chezmoi owns configuration and platform differences. Homebrew supplies shared tools on both platforms; apt installs Linux prerequisites and VS Code.
+
+## Supported Platforms
+
+- Apple Silicon macOS.
+- Debian and Ubuntu desktops.
+
+Ghostty is installed as a Homebrew cask on macOS. On Linux, its package installer supports Ubuntu 24.04+ and Debian Trixie; install Ghostty manually on older Debian releases before bootstrapping.
+
+## Install
+
+Read the bootstrap script before granting it access to your machine. The preflight command reports the platform branch, available prerequisites, managed paths, and bootstrap phases without making changes:
 
 ```sh
 curl -fsSL https://raw.githubusercontent.com/M0rtalPhe0nix/dotfiles/main/bootstrap.sh | /bin/sh -s -- --preflight
 ```
 
-The bootstrap first asks whether the host needs a corporate CA certificate, then installs platform prerequisites, Homebrew when needed, and Chezmoi. Before the first apply, existing managed files are archived under `~/.local/state/dotfiles/pre-bootstrap/`. Interactive runs pause for GitHub, Claude Code, and OpenCode authentication when required.
+When ready, run the installer:
 
-Rerunning bootstrap fast-forwards an existing Chezmoi source clone, regenerates local initialization data, and applies the current configuration. It does not overwrite divergent source changes.
+```sh
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/M0rtalPhe0nix/dotfiles/main/bootstrap.sh)"
+```
 
-Claude Code installation is optional at the first-run prompt. To skip it without a prompt:
+On first use, it:
+
+1. Asks for Git author details and optional developer tooling choices.
+2. Installs platform prerequisites, Homebrew, and Chezmoi when needed.
+3. Saves any files that conflict with managed paths under `~/.local/state/dotfiles/pre-bootstrap/`.
+4. Applies configuration, packages, runtimes, fonts, and the VS Code extension baseline.
+5. Offers interactive GitHub, Claude Code, and OpenCode authentication.
+
+Restart the terminal after bootstrap, then confirm the result:
+
+```sh
+dotfiles doctor
+```
+
+Rerunning bootstrap is safe: it fast-forwards the existing Chezmoi source and reapplies configuration. It refuses to discard divergent source changes.
+
+### Skip Claude Code
+
+Claude Code is an optional first-run choice. Skip its installation and authentication non-interactively with:
 
 ```sh
 DOTFILES_SKIP_CLAUDE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/M0rtalPhe0nix/dotfiles/main/bootstrap.sh)"
 ```
 
-Git author name and email are requested by Chezmoi during initialization and remain in the host-local Chezmoi config. The same prompt lets you install Terraform `1.5.7`, the latest OpenTofu, or neither through mise. Authentication, signing, existing Git LFS settings, secrets, and other machine-specific values are not committed.
-
-The developer baseline always provisions Node, Python, `uv`, `pnpm`, and Ruff through mise. Python, TypeScript, Markdown, and Terraform language servers are optional first-run choices; selected language servers are also mise-managed.
-
-### Corporate CA Certificates
-
-Bootstrap asks whether to configure a corporate CA before installing packages. If selected, it accepts the absolute path to a PEM-encoded certificate. The certificate must contain no private key and remains outside this public repository. Chezmoi copies it to `~/.local/share/dotfiles/`, installs it in the macOS or Debian/Ubuntu system trust store, and creates a combined CA bundle.
-
-The managed shell environment configures OpenSSL-compatible applications, Git, curl, Python, pip, Poetry, uv, npm/Node.js, Cargo, and rustup. Docker uses the host system trust for daemon and registry connections. Images and containers have separate trust stores, so Dockerfiles that access the corporate network must install the CA in the image explicitly.
-
-If the CA is required before Homebrew or Chezmoi can be downloaded, provide it to both the initial curl command and bootstrap:
+## Daily Use
 
 ```sh
-export DOTFILES_CORPORATE_CA_PATH=/absolute/path/to/corporate-ca.pem
-/bin/bash -c "$(curl --cacert "$DOTFILES_CORPORATE_CA_PATH" -fsSL https://raw.githubusercontent.com/M0rtalPhe0nix/dotfiles/main/bootstrap.sh)"
+dotfiles diff                   # Preview managed-file changes
+dotfiles apply                  # Apply configuration only; does not upgrade software
+dotfiles doctor                 # Check tools, authentication, fonts, permissions, and drift
+dotfiles update                 # Update managed packages, runtimes, extensions, and Zim modules
+dotfiles rollback               # Restore pre-bootstrap files; keeps installed software
+dotfiles extensions             # Merge installed VS Code extensions into the baseline
+dotfiles extensions --overwrite # Replace the baseline with installed extensions
 ```
 
-The path and opt-in are stored only in the host-local Chezmoi config. Keep the source PEM at that path so future applies can detect certificate rotation. Restart Docker Desktop and graphical applications after initially installing or rotating the CA.
+`dotfiles apply` deliberately does not update software. Use `dotfiles update` when you intend to upgrade packages and runtimes.
+
+## Local Configuration
+
+Keep personal changes out of this repository:
+
+- Put machine-specific Zsh customizations in `~/.config/zsh/local.zsh`.
+- Put secrets in `~/.config/zsh/secrets.zsh`. Chezmoi creates this file with mode `0600` and never tracks its contents.
+- Git identity choices are stored in local Chezmoi data. GitHub tokens remain in the GitHub CLI credential store.
 
 ## GitHub Profiles
 
-Authenticate and record each reusable profile once. The first value is a local alias; the second is the authenticated GitHub login. The optional final value overrides the Git author name, which otherwise defaults to the GitHub login:
+Use profiles when different repositories need different Git authors and GitHub accounts. Authenticate each account once, then add a local profile:
 
 ```sh
 github-profile add personal M0rtalPhe0nix personal@example.com
 github-profile add work work-login work@example.com "Your Name"
 ```
 
-Then select a profile from inside each repository:
+Select a profile from within a repository:
 
 ```sh
 github-profile use work
 github-profile current
+github-profile list
 ```
 
-The alias selection, GitHub login, and Git author identity are stored in the repository's local Git config. Interactive `gh` commands and HTTPS Git credentials automatically use that account. Tokens remain in GitHub CLI's credential store; they are never written to the repository or profile files. Explicit `GH_TOKEN` or `GITHUB_TOKEN` values take precedence for `gh`.
+The selected identity and GitHub account are saved in that repository's local Git config. Profile definitions are local files with restricted permissions; tokens are never written to them.
 
-## Operations
+## Corporate CA Certificates
+
+Bootstrap can install a PEM-encoded corporate CA into the system and common CLI trust stores. The certificate and its path remain local, never in this public repository.
+
+If the CA is required to download Homebrew or Chezmoi, provide it before bootstrap:
 
 ```sh
-dotfiles diff       # Preview managed configuration changes
-dotfiles apply      # Converge configuration without upgrading software
-dotfiles doctor     # Check tools, auth, fonts, permissions, and managed state
-dotfiles extensions # Merge installed VS Code extensions into the managed baseline
-dotfiles extensions --overwrite # Replace the managed baseline with installed extensions
-dotfiles update     # Update only managed packages, runtimes, extensions, and Zim modules
-dotfiles rollback   # Restore pre-bootstrap files without uninstalling packages
+export DOTFILES_CORPORATE_CA_PATH=/absolute/path/to/corporate-ca.pem
+/bin/bash -c "$(curl --cacert "$DOTFILES_CORPORATE_CA_PATH" -fsSL https://raw.githubusercontent.com/M0rtalPhe0nix/dotfiles/main/bootstrap.sh)"
 ```
 
-Put host-specific shell customization in `~/.config/zsh/local.zsh`. Put secrets in `~/.config/zsh/secrets.zsh`; Chezmoi creates it with mode `0600` and never records its contents.
+The certificate must not contain a private key. Keep the source PEM at that path so later applies can detect rotations. Restart graphical applications and Docker Desktop after an initial installation or rotation; containers require their own CA setup.
 
-## Managed Environment
+## Repository Development
 
-- Zsh, ZimFW, Starship, fzf, secure shared history, completions, autosuggestions, syntax highlighting, and history substring search.
-- Availability-guarded `eza`, `bat`, `zoxide`, mise, fzf, and Starship integrations.
-- Git policy in included fragments, preserving host-managed identity infrastructure, authentication, signing, and unrelated settings, with optional per-repository GitHub profiles.
-- Optional corporate CA trust for the operating system and CLI package managers, without committing the certificate or its host-local path.
-- Claude Code and OpenCode with high-autonomy permissions plus secret, destructive-command, and external-directory guardrails.
-- A guarded Claude post-edit Python formatter that uses mise-managed Ruff when available.
-- Canonical reusable skills under `~/.claude/skills`, discovered by Claude Code and OpenCode without duplication.
-- A read-only dotfiles comparison skill that mines one public GitHub repository for evidence-backed improvement ideas and a ranked backlog.
-- Haiku-powered Claude Code and Luna-powered OpenCode `feature-diagrammer` subagents for validated Excalidraw artifact production after feature discovery.
-- VS Code, a managed extension baseline, Ghostty, Catppuccin, and MesloLGS Nerd Font. Extensions outside the baseline are not removed.
-
-On Linux, Ghostty uses the community Ubuntu package installer documented by Ghostty. It supports Ubuntu 24.04+ and Debian Trixie; older Debian releases must install Ghostty manually.
-
-No global MCP servers or global AI coding instruction files are installed.
-
-## Validation
-
-Install the validation tools from the Brewfile, then run:
+Run the local checks after changing managed configuration or bootstrap behavior:
 
 ```sh
 tests/validate.sh
@@ -104,6 +124,8 @@ tests/debian-smoke.sh
 tests/zsh-startup.sh
 ```
 
-`tests/validate.sh` checks shell formatting and lint, rendered JSON, Claude skills/agents/hooks, OpenCode configuration, common secret signatures, temporary-home rendering, and a clean second apply. The Docker test renders and checks package scripts with mocked package commands on Debian and Ubuntu; it does not authenticate or install packages. The startup test requires a warm average below 200 ms.
+The checks cover shell formatting and linting, rendered configuration and JSON, OpenCode configuration, secret signatures, Chezmoi rendering and a second clean apply, Debian/Ubuntu package-script smoke tests, and Zsh startup time. Validation is intentionally local; this repository has no GitHub Actions workflow.
 
-GitHub Actions are intentionally deferred; version 1 validation is local only.
+## License
+
+[MIT](LICENSE)
