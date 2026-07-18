@@ -1,0 +1,8 @@
+# Match completion candidates without regard to case and display file types.
+set completion-ignore-case on
+set visible-stats on
+set show-all-if-ambiguous on
+
+# Recall commands matching the text entered before the cursor.
+"\e[A": history-search-backward
+"\e[B": history-search-forward

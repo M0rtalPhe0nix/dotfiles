@@ -2,6 +2,7 @@
 set -eu
 
 REPO="M0rtalPhe0nix/dotfiles"
+repo_ref="${DOTFILES_REF:-main}"
 corporate_ca_path="${DOTFILES_CORPORATE_CA_PATH:-}"
 corporate_ca_choice="${DOTFILES_CONFIGURE_CORPORATE_CA:-}"
 apt_ca_bundle=""
@@ -95,6 +96,7 @@ preflight() {
 .config/zsh/local.zsh
 .config/zsh/secrets.zsh
 .config/git/dotfiles.gitconfig
+.config/git/ignore
 .config/git/identity.gitconfig
 .config/opencode/opencode.json
 .claude/settings.json
@@ -229,11 +231,11 @@ fi
 brew install chezmoi
 source_dir="$(chezmoi source-path)"
 if [ -d "$source_dir/.git" ]; then
-	git -C "$source_dir" pull --ff-only origin main
+	git -C "$source_dir" pull --ff-only origin "$repo_ref"
 	chezmoi init
 	chezmoi apply
 else
-	chezmoi init --apply "https://github.com/${REPO}.git"
+	chezmoi init --apply --branch "$repo_ref" "https://github.com/${REPO}.git"
 fi
 
 if [ -t 0 ]; then

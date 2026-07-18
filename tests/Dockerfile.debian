@@ -11,6 +11,7 @@ RUN mkdir -p /tmp/home \
     && printf '[data]\ngitName = "Dotfiles Test"\ngitEmail = "dotfiles@example.invalid"\ninfraTool = "none"\nuseCorporateCA = false\ncorporateCAPath = ""\ninstallClaude = true\n' >/tmp/chezmoi.toml \
     && chezmoi --source /source --destination /tmp/home --config /tmp/chezmoi.toml apply --exclude=scripts \
     && test -f /tmp/home/.zshrc \
+    && test -f /tmp/home/.inputrc \
     && test -f /tmp/home/.config/Code/User/settings.json \
     && for skill_file in /source/.claude/skills/*/SKILL.md; do skill="$(basename "$(dirname "$skill_file")")"; test -f "/tmp/home/.claude/skills/$skill/SKILL.md"; done \
     && test -f /tmp/home/.claude/agents/feature-diagrammer.md \

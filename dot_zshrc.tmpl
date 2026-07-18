@@ -76,5 +76,26 @@ alias gl='git log --oneline --graph --decorate'
 alias ..='cd ..'
 alias ...='cd ../..'
 
+if (( ! $+commands[o] )); then
+  o() {
+    local opener
+
+    if (( $+commands[open] )); then
+      opener=open
+    elif (( $+commands[xdg-open] )); then
+      opener=xdg-open
+    else
+      print -u2 'o: no supported opener available (expected open or xdg-open).'
+      return 127
+    fi
+
+    if (( $# )); then
+      command "$opener" "$@"
+    else
+      command "$opener" .
+    fi
+  }
+fi
+
 [[ -r "$HOME/.config/zsh/local.zsh" ]] && source "$HOME/.config/zsh/local.zsh"
 [[ -r "$HOME/.config/zsh/secrets.zsh" ]] && source "$HOME/.config/zsh/secrets.zsh"

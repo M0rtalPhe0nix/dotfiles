@@ -7,6 +7,7 @@ This is the configuration I use. Fork it and make it yours rather than expecting
 ## What You Get
 
 - Zsh with ZimFW, Starship, fzf, zoxide, completions, and private shared history.
+- A portable `o` helper that opens paths with `open` on macOS or `xdg-open` on Linux.
 - Homebrew-managed command-line tools including `gh`, `mise`, `ripgrep`, `fd`, `bat`, `eza`, `delta`, and shell tooling.
 - Node, Python, `uv`, `pnpm`, and Ruff through mise, with optional language servers and Terraform or OpenTofu.
 - VS Code, Ghostty, MesloLGS Nerd Font, Catppuccin styling, and a baseline of extensions. Existing extensions are retained.
@@ -52,6 +53,16 @@ dotfiles doctor
 
 Rerunning bootstrap is safe: it fast-forwards the existing Chezmoi source and reapplies configuration. It refuses to discard divergent source changes.
 
+### Release Candidate Testing
+
+On a disposable test machine, set `DOTFILES_REF` to install a release-candidate branch instead of `main`:
+
+```sh
+curl -fsSL https://raw.githubusercontent.com/M0rtalPhe0nix/dotfiles/integration/stable-release/bootstrap.sh | DOTFILES_REF=integration/stable-release /bin/sh
+```
+
+The override applies to both first installation and repeat bootstrap runs. See [the release testing guide](docs/release-testing.md) for the complete test matrix and host smoke test.
+
 ### Skip Claude Code
 
 Claude Code is an optional first-run choice. Skip its installation and authentication non-interactively with:
@@ -70,9 +81,22 @@ dotfiles update                 # Update managed packages, runtimes, extensions,
 dotfiles rollback               # Restore pre-bootstrap files; keeps installed software
 dotfiles extensions             # Merge installed VS Code extensions into the baseline
 dotfiles extensions --overwrite # Replace the baseline with installed extensions
+dotfiles preferences            # Confirm and apply curated macOS preferences
 ```
 
 `dotfiles apply` deliberately does not update software. Use `dotfiles update` when you intend to upgrade packages and runtimes.
+
+### macOS Preferences
+
+`dotfiles preferences` is an opt-in Darwin-only command. It never runs during bootstrap or `dotfiles apply`, and asks for confirmation before changing anything. Entering anything other than `y`, `Y`, `yes`, or `YES` leaves preferences unchanged.
+
+The command has a deliberately small, developer-focused scope. It applies only these reversible user preferences:
+
+- Disables automatic capitalization, dash, period, quote, and spelling substitutions (`NSAutomaticCapitalizationEnabled`, `NSAutomaticDashSubstitutionEnabled`, `NSAutomaticPeriodSubstitutionEnabled`, `NSAutomaticQuoteSubstitutionEnabled`, and `NSAutomaticSpellingCorrectionEnabled`) to avoid code being altered while typing.
+- Shows Finder filename extensions, the path bar, and the status bar (`AppleShowAllExtensions`, `ShowPathbar`, and `ShowStatusBar`). Relaunch Finder to see these visibility settings.
+- Sets the initial keyboard repeat delay to `15` and repeat rate to `2` (`InitialKeyRepeat` and `KeyRepeat`).
+
+It does not manage other macOS, locale, host, or application preferences. Running the command again safely writes the same values.
 
 ## Local Configuration
 

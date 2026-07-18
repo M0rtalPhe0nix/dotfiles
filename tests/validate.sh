@@ -10,9 +10,12 @@ shellcheck \
 	"$root/dot_claude/hooks/executable_post-edit-fmt.sh" \
 	"$root/tests/render-macos.sh" \
 	"$root/tests/debian-smoke.sh" \
+	"$root/tests/release-host-smoke.sh" \
 	"$root/tests/test-bootstrap-preflight.sh" \
+	"$root/tests/test-bootstrap-ref.sh" \
 	"$root/tests/test-claude-post-edit-hook.sh" \
 	"$root/tests/test-debian-packages.sh" \
+	"$root/tests/test-macos-preferences.sh" \
 	"$root/tests/test-validate-ai-artifacts.sh" \
 	"$root/tests/test-vscode-extensions.sh" \
 	"$root/tests/validate-ai-artifacts.sh" \
@@ -22,9 +25,12 @@ shfmt -d \
 	"$root/dot_claude/hooks/executable_post-edit-fmt.sh" \
 	"$root/tests/render-macos.sh" \
 	"$root/tests/debian-smoke.sh" \
+	"$root/tests/release-host-smoke.sh" \
 	"$root/tests/test-bootstrap-preflight.sh" \
+	"$root/tests/test-bootstrap-ref.sh" \
 	"$root/tests/test-claude-post-edit-hook.sh" \
 	"$root/tests/test-debian-packages.sh" \
+	"$root/tests/test-macos-preferences.sh" \
 	"$root/tests/test-validate-ai-artifacts.sh" \
 	"$root/tests/test-vscode-extensions.sh" \
 	"$root/tests/validate-ai-artifacts.sh" \
@@ -73,9 +79,12 @@ done
 
 sh "$root/tests/test-claude-post-edit-hook.sh"
 sh "$root/tests/test-bootstrap-preflight.sh"
+sh "$root/tests/test-bootstrap-ref.sh"
 sh "$root/tests/test-vscode-extensions.sh"
 sh "$root/tests/test-debian-packages.sh"
+sh "$root/tests/test-macos-preferences.sh"
 sh "$root/tests/test-validate-ai-artifacts.sh"
+zsh -f "$root/tests/test-zsh-open-helper.sh"
 
 cat >"$tmp/chezmoi-skip-claude.toml" <<'EOF'
 [data]
