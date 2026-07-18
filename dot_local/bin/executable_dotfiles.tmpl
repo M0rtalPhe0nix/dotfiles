@@ -48,7 +48,7 @@ update_ghostty() {
 {{ end -}}
 
 usage() {
-	printf '%s\n' "usage: dotfiles {apply|diff|doctor|extensions|update|rollback}"
+	printf '%s\n' "usage: dotfiles {apply|diff|doctor|extensions|preferences|update|rollback}"
 }
 
 doctor() {
@@ -240,6 +240,36 @@ save_extensions() {
 	printf '%s\n' "Saved VS Code extensions to $extensions_file"
 }
 
+preferences() {
+	if [ "$(uname -s)" != "Darwin" ]; then
+		printf '%s\n' "macOS preferences are only available on Darwin." >&2
+		return 1
+	fi
+
+	printf '%s\n' "This changes macOS text substitutions, Finder visibility, and keyboard repeat settings."
+	printf '%s' "Apply these preferences? [y/N] "
+	IFS= read -r confirmation || return 1
+	case "$confirmation" in
+	y | Y | yes | YES) ;;
+	*)
+		printf '%s\n' "No macOS preferences were changed."
+		return 0
+		;;
+	esac
+
+	defaults write -g NSAutomaticCapitalizationEnabled -bool false
+	defaults write -g NSAutomaticDashSubstitutionEnabled -bool false
+	defaults write -g NSAutomaticPeriodSubstitutionEnabled -bool false
+	defaults write -g NSAutomaticQuoteSubstitutionEnabled -bool false
+	defaults write -g NSAutomaticSpellingCorrectionEnabled -bool false
+	defaults write com.apple.finder AppleShowAllExtensions -bool true
+	defaults write com.apple.finder ShowPathbar -bool true
+	defaults write com.apple.finder ShowStatusBar -bool true
+	defaults write -g InitialKeyRepeat -int 15
+	defaults write -g KeyRepeat -int 2
+	printf '%s\n' "macOS preferences applied. Relaunch Finder to see its updated visibility settings."
+}
+
 rollback() {
 	backup="$state/pre-bootstrap/latest"
 	if [ ! -d "$backup" ]; then
@@ -267,6 +297,7 @@ extensions)
 	shift
 	save_extensions "$@"
 	;;
+preferences) preferences ;;
 update) update ;;
 rollback) rollback ;;
 *)

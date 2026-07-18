@@ -70,9 +70,22 @@ dotfiles update                 # Update managed packages, runtimes, extensions,
 dotfiles rollback               # Restore pre-bootstrap files; keeps installed software
 dotfiles extensions             # Merge installed VS Code extensions into the baseline
 dotfiles extensions --overwrite # Replace the baseline with installed extensions
+dotfiles preferences            # Confirm and apply curated macOS preferences
 ```
 
 `dotfiles apply` deliberately does not update software. Use `dotfiles update` when you intend to upgrade packages and runtimes.
+
+### macOS Preferences
+
+`dotfiles preferences` is an opt-in Darwin-only command. It never runs during bootstrap or `dotfiles apply`, and asks for confirmation before changing anything. Entering anything other than `y`, `Y`, `yes`, or `YES` leaves preferences unchanged.
+
+The command has a deliberately small, developer-focused scope. It applies only these reversible user preferences:
+
+- Disables automatic capitalization, dash, period, quote, and spelling substitutions (`NSAutomaticCapitalizationEnabled`, `NSAutomaticDashSubstitutionEnabled`, `NSAutomaticPeriodSubstitutionEnabled`, `NSAutomaticQuoteSubstitutionEnabled`, and `NSAutomaticSpellingCorrectionEnabled`) to avoid code being altered while typing.
+- Shows Finder filename extensions, the path bar, and the status bar (`AppleShowAllExtensions`, `ShowPathbar`, and `ShowStatusBar`). Relaunch Finder to see these visibility settings.
+- Sets the initial keyboard repeat delay to `15` and repeat rate to `2` (`InitialKeyRepeat` and `KeyRepeat`).
+
+It does not manage other macOS, locale, host, or application preferences. Running the command again safely writes the same values.
 
 ## Local Configuration
 
