@@ -25,6 +25,12 @@ if [ -n "$(chezmoi --source "$root" --destination "$tmp/home" --config "$tmp/che
 fi
 
 test -f "$tmp/home/.zshrc"
+test -f "$tmp/home/.inputrc"
+rg -qx 'set completion-ignore-case on' "$tmp/home/.inputrc"
+rg -qx 'set visible-stats on' "$tmp/home/.inputrc"
+rg -qx 'set show-all-if-ambiguous on' "$tmp/home/.inputrc"
+rg -qx '"\\e\[A": history-search-backward' "$tmp/home/.inputrc"
+rg -qx '"\\e\[B": history-search-forward' "$tmp/home/.inputrc"
 if rg -q 'CORPORATE_CA|CA_BUNDLE|CAINFO|PIP_CERT|UV_NATIVE_TLS' "$tmp/home/.zshrc"; then
 	printf '%s\n' "Corporate CA environment rendered when it was disabled." >&2
 	exit 1
