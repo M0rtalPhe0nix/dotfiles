@@ -7,6 +7,7 @@ This is the configuration I use. Fork it and make it yours rather than expecting
 ## What You Get
 
 - Zsh with ZimFW, Starship, fzf, zoxide, completions, and private shared history.
+- A portable `o` helper that opens paths with `open` on macOS or `xdg-open` on Linux.
 - Homebrew-managed command-line tools including `gh`, `mise`, `ripgrep`, `fd`, `bat`, `eza`, `delta`, and shell tooling.
 - Node, Python, `uv`, `pnpm`, and Ruff through mise, with optional language servers and Terraform or OpenTofu.
 - VS Code, Ghostty, MesloLGS Nerd Font, Catppuccin styling, and a baseline of extensions. Existing extensions are retained.

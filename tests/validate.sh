@@ -76,6 +76,7 @@ sh "$root/tests/test-bootstrap-preflight.sh"
 sh "$root/tests/test-vscode-extensions.sh"
 sh "$root/tests/test-debian-packages.sh"
 sh "$root/tests/test-validate-ai-artifacts.sh"
+zsh -f "$root/tests/test-zsh-open-helper.sh"
 
 cat >"$tmp/chezmoi-skip-claude.toml" <<'EOF'
 [data]
