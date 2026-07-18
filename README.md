@@ -53,6 +53,16 @@ dotfiles doctor
 
 Rerunning bootstrap is safe: it fast-forwards the existing Chezmoi source and reapplies configuration. It refuses to discard divergent source changes.
 
+### Release Candidate Testing
+
+On a disposable test machine, set `DOTFILES_REF` to install a release-candidate branch instead of `main`:
+
+```sh
+curl -fsSL https://raw.githubusercontent.com/M0rtalPhe0nix/dotfiles/integration/stable-release/bootstrap.sh | DOTFILES_REF=integration/stable-release /bin/sh
+```
+
+The override applies to both first installation and repeat bootstrap runs. See [the release testing guide](docs/release-testing.md) for the complete test matrix and host smoke test.
+
 ### Skip Claude Code
 
 Claude Code is an optional first-run choice. Skip its installation and authentication non-interactively with:
