@@ -49,6 +49,12 @@ jq -e '.hooks.PostToolUse[0].matcher == "Write|Edit|MultiEdit"' "$tmp/home/.clau
 test -f "$tmp/home/.config/opencode/agent/feature-diagrammer.md"
 test -f "$tmp/home/.config/zsh/local.zsh"
 test "$(stat -f %Lp "$tmp/home/.config/zsh/secrets.zsh")" = 600
+test -f "$tmp/home/.config/git/ignore"
+test "$(git config --file "$tmp/home/.config/git/dotfiles.gitconfig" --get core.excludesFile)" = \~/.config/git/ignore
+for pattern in .DS_Store Desktop.ini Thumbs.db '._*' .Spotlight-V100 .Trashes; do
+	rg -Fxq "$pattern" "$tmp/home/.config/git/ignore"
+done
+test "$(wc -l <"$tmp/home/.config/git/ignore")" -eq 6
 test ! -e "$tmp/home/create_dot_config"
 test ! -e "$tmp/home/create_private_dot_config"
 printf '%s\n' "macOS render and idempotence passed"

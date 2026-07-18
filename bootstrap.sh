@@ -95,6 +95,7 @@ preflight() {
 .config/zsh/local.zsh
 .config/zsh/secrets.zsh
 .config/git/dotfiles.gitconfig
+.config/git/ignore
 .config/git/identity.gitconfig
 .config/opencode/opencode.json
 .claude/settings.json
