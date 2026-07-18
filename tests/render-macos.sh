@@ -32,6 +32,7 @@ fi
 test -x "$tmp/home/.local/bin/dotfiles"
 test -x "$tmp/home/.local/bin/github-profile"
 test -x "$tmp/home/.local/bin/git-credential-gh-profile"
+test "$(git config --file "$tmp/home/.config/git/dotfiles.gitconfig" --get core.untrackedCache)" = true
 for skill_file in "$root"/.claude/skills/*/SKILL.md; do
 	skill="$(basename "$(dirname "$skill_file")")"
 	test -f "$tmp/home/.claude/skills/$skill/SKILL.md"
