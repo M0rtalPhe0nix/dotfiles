@@ -2,6 +2,7 @@
 	defaultBranch = main
 [core]
 	pager = delta
+	untrackedCache = true
 [interactive]
 	diffFilter = delta --color-only
 [delta]
