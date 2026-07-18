@@ -30,6 +30,8 @@ shfmt -d \
 	"$root/tests/validate-ai-artifacts.sh" \
 	"$root/tests/validate.sh"
 
+test "$(sed -n '1p' "$root/.chezmoiscripts/run_once_after_20-zimfw.sh")" = '#!/usr/bin/env zsh'
+
 for file in \
 	"$root/opencode.json" \
 	"$root/dot_config/opencode/opencode.json" \
