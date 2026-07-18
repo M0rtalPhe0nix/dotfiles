@@ -5,7 +5,6 @@ curl
 file
 
 # Desktop and package repository support.
-flatpak
 fontconfig
 git
 gnupg

@@ -20,6 +20,11 @@ installClaude = false
 EOF
 chezmoi --source "$root" --config "$tmp/chezmoi.toml" execute-template \
 	<"$root/.chezmoiscripts/run_once_before_10-packages.sh.tmpl" >"$tmp/packages.sh"
+rg -Fq 'https://raw.githubusercontent.com/mkasberg/ghostty-ubuntu/HEAD/install.sh' "$tmp/packages.sh"
+if rg -q 'flatpak|flathub' "$tmp/packages.sh"; then
+	printf '%s\n' "Linux package script still references the unavailable Flatpak package." >&2
+	exit 1
+fi
 
 cat >"$tmp/bin/sudo" <<'EOF'
 #!/bin/sh
@@ -32,7 +37,7 @@ cat >"$tmp/bin/code" <<'EOF'
 #!/bin/sh
 exit 0
 EOF
-cat >"$tmp/bin/flatpak" <<'EOF'
+cat >"$tmp/bin/ghostty" <<'EOF'
 #!/bin/sh
 exit 0
 EOF
@@ -44,10 +49,10 @@ cat >"$tmp/bin/fc-list" <<'EOF'
 #!/bin/sh
 printf '%s\n' "MesloLGS Nerd Font"
 EOF
-chmod +x "$tmp/bin/sudo" "$tmp/bin/code" "$tmp/bin/flatpak" "$tmp/bin/brew" "$tmp/bin/fc-list"
+chmod +x "$tmp/bin/sudo" "$tmp/bin/code" "$tmp/bin/ghostty" "$tmp/bin/brew" "$tmp/bin/fc-list"
 
 TEST_LOG="$tmp/log" TEST_TMP="$tmp" PATH="$tmp/bin:$PATH" sh "$tmp/packages.sh"
-rg -Fxq 'apt-get install -y --no-upgrade build-essential ca-certificates curl file flatpak fontconfig git gnupg procps unzip' "$tmp/log"
+rg -Fxq 'apt-get install -y --no-upgrade build-essential ca-certificates curl file fontconfig git gnupg procps unzip' "$tmp/log"
 if rg -q '#|  ' "$tmp/log"; then
 	printf '%s\n' "Package comments or empty arguments reached APT." >&2
 	exit 1

@@ -43,7 +43,7 @@ This is the public MIT-licensed `M0rtalPhe0nix/dotfiles` repository. It targets 
 - Linux support is limited to Debian and Ubuntu desktops.
 - Homebrew installs shared CLI tools on both platforms.
 - apt installs Linux prerequisites and VS Code.
-- Ghostty is a Homebrew cask on macOS and a user Flatpak on Linux.
+- Ghostty is a Homebrew cask on macOS and uses Ghostty's documented Ubuntu package installer on supported Linux releases.
 - MesloLGS Nerd Font must be provisioned and used consistently by Ghostty, VS Code, and Starship.
 - Keep macOS and Linux VS Code target paths separate.
 

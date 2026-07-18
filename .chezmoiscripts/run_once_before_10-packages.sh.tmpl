@@ -48,9 +48,21 @@ if ! command -v code >/dev/null 2>&1; then
 	sudo apt-get install -y --no-upgrade code
 fi
 
-if ! flatpak info --user com.mitchellh.ghostty >/dev/null 2>&1; then
-	flatpak remote-add --user --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
-	flatpak install --user -y flathub com.mitchellh.ghostty
+if ! command -v ghostty >/dev/null 2>&1; then
+	if ! grep -Eq '^ID=(ubuntu|debian)$' /etc/os-release; then
+		printf '%s\n' "Ghostty's documented package installer currently supports Ubuntu 24.04+ and Debian Trixie; install Ghostty manually on this Debian release." >&2
+		exit 1
+	fi
+	ghostty_installer="$(mktemp)"
+	if ! curl -fsSL https://raw.githubusercontent.com/mkasberg/ghostty-ubuntu/HEAD/install.sh -o "$ghostty_installer"; then
+		rm -f "$ghostty_installer"
+		exit 1
+	fi
+	if ! bash "$ghostty_installer"; then
+		rm -f "$ghostty_installer"
+		exit 1
+	fi
+	rm -f "$ghostty_installer"
 fi
 {{ end -}}
 brew bundle --file "{{ .chezmoi.sourceDir }}/Brewfile"

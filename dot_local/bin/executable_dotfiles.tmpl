@@ -28,6 +28,25 @@ set -eu
 source_dir="$(chezmoi source-path)"
 state="${XDG_STATE_HOME:-$HOME/.local/state}/dotfiles"
 
+{{ if ne .chezmoi.os "darwin" -}}
+update_ghostty() {
+	if ! grep -Eq '^ID=(ubuntu|debian)$' /etc/os-release; then
+		printf '%s\n' "Ghostty updates are unavailable on this Debian release." >&2
+		return 1
+	fi
+	ghostty_installer="$(mktemp)"
+	if ! curl -fsSL https://raw.githubusercontent.com/mkasberg/ghostty-ubuntu/HEAD/install.sh -o "$ghostty_installer"; then
+		rm -f "$ghostty_installer"
+		return 1
+	fi
+	if ! bash "$ghostty_installer"; then
+		rm -f "$ghostty_installer"
+		return 1
+	fi
+	rm -f "$ghostty_installer"
+}
+{{ end -}}
+
 usage() {
 	printf '%s\n' "usage: dotfiles {apply|diff|doctor|extensions|update|rollback}"
 }
@@ -95,8 +114,8 @@ doctor() {
 		failed=1
 	fi
 	{{ else -}}
-	flatpak info --user com.mitchellh.ghostty >/dev/null 2>&1 || {
-		printf '%s\n' "FAIL Ghostty Flatpak is missing"
+	command -v ghostty >/dev/null 2>&1 || {
+		printf '%s\n' "FAIL Ghostty is missing"
 		failed=1
 	}
 	{{ end -}}
@@ -162,7 +181,7 @@ update() {
 	done
 	{{ else -}}
 	sudo apt-get install --only-upgrade -y code
-	flatpak update --user -y com.mitchellh.ghostty
+	update_ghostty
 	{{ end -}}
 	mise upgrade --yes
 	zim_home="${ZIM_HOME:-$HOME/.zim}"

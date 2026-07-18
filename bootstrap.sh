@@ -36,7 +36,7 @@ preflight() {
 		fi
 		printf '%s\n' "platform: Linux ($linux_id, $arch)"
 		case "$linux_id" in
-		debian | ubuntu) printf '%s\n' "branch: APT prerequisites, Homebrew, Flatpak Ghostty, VS Code user settings" ;;
+		debian | ubuntu) printf '%s\n' "branch: APT prerequisites, Homebrew, documented Ghostty package, VS Code user settings" ;;
 		*)
 			printf '%s\n' "status: unsupported; Debian or Ubuntu is required"
 			supported=false

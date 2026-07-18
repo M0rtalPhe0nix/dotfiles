@@ -90,6 +90,8 @@ Put host-specific shell customization in `~/.config/zsh/local.zsh`. Put secrets 
 - Haiku-powered Claude Code and Luna-powered OpenCode `feature-diagrammer` subagents for validated Excalidraw artifact production after feature discovery.
 - VS Code, a managed extension baseline, Ghostty, Catppuccin, and MesloLGS Nerd Font. Extensions outside the baseline are not removed.
 
+On Linux, Ghostty uses the community Ubuntu package installer documented by Ghostty. It supports Ubuntu 24.04+ and Debian Trixie; older Debian releases must install Ghostty manually.
+
 No global MCP servers or global AI coding instruction files are installed.
 
 ## Validation
