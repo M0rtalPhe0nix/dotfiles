@@ -1,0 +1,32 @@
+{{- $installPythonLsp := false -}}
+{{- if hasKey . "installPythonLsp" -}}
+{{-   $installPythonLsp = .installPythonLsp -}}
+{{- end -}}
+{{- $installTypeScriptLsp := false -}}
+{{- if hasKey . "installTypeScriptLsp" -}}
+{{-   $installTypeScriptLsp = .installTypeScriptLsp -}}
+{{- end -}}
+#!/bin/sh
+set -eu
+
+install_python_lsp={{ $installPythonLsp }}
+install_typescript_lsp={{ $installTypeScriptLsp }}
+
+command -v claude >/dev/null 2>&1 || exit 0
+command -v jq >/dev/null 2>&1 || exit 0
+
+installed="$(claude plugin list --json)"
+
+install_plugin() {
+	plugin="$1"
+	if ! printf '%s\n' "$installed" | jq -e --arg plugin "$plugin" 'any(.[]; .id == $plugin)' >/dev/null; then
+		claude plugin install "$plugin" --scope user
+	fi
+}
+
+if [ "$install_python_lsp" = true ]; then
+	install_plugin pyright-lsp@claude-plugins-official
+fi
+if [ "$install_typescript_lsp" = true ]; then
+	install_plugin typescript-lsp@claude-plugins-official
+fi

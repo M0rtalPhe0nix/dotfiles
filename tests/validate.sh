@@ -47,6 +47,12 @@ for file in \
 	"$root/dot_config/Code/User/keybindings.json"; do
 	jq empty "$file"
 done
+jq -e '
+	.lsp.pyright.command == ["pyright-langserver", "--stdio"] and
+	.lsp.typescript.command == ["typescript-language-server", "--stdio"] and
+	.lsp.marksman.command == ["marksman", "server"] and
+	.lsp.terraform.command == ["terraform-ls", "serve"]
+' "$root/dot_config/opencode/opencode.json" >/dev/null
 
 if command -v opencode >/dev/null 2>&1; then
 	OPENCODE_CONFIG="$root/dot_config/opencode/opencode.json" OPENCODE_DISABLE_PROJECT_CONFIG=1 opencode debug config >/dev/null
@@ -67,6 +73,7 @@ for source in \
 	"$root/.chezmoiscripts/run_once_before_10-packages.sh.tmpl" \
 	"$root/.chezmoiscripts/run_once_after_10-git-config.sh" \
 	"$root/.chezmoiscripts/run_after_30-mise.sh" \
+	"$root/.chezmoiscripts/run_after_35-claude-plugins.sh.tmpl" \
 	"$root/.chezmoiscripts/run_once_after_40-vscode-extensions.sh.tmpl" \
 	"$root/dot_local/bin/executable_dotfiles.tmpl" \
 	"$root/dot_local/bin/executable_github-profile" \
@@ -165,6 +172,11 @@ rg -q 'terraform-ls' "$tmp/dotfiles-all-lsps"
 chezmoi --source "$root" --config "$tmp/chezmoi-all-lsps.toml" execute-template \
 	<"$root/dot_claude/settings.json.tmpl" >"$tmp/claude-settings-all-lsps.json"
 jq -e '.enabledPlugins["pyright-lsp@claude-plugins-official"] and .enabledPlugins["typescript-lsp@claude-plugins-official"]' "$tmp/claude-settings-all-lsps.json" >/dev/null
+jq -e '.extraKnownMarketplaces["claude-plugins-official"].source.repo == "anthropics/claude-plugins-official"' "$tmp/claude-settings-all-lsps.json" >/dev/null
+chezmoi --source "$root" --config "$tmp/chezmoi-all-lsps.toml" execute-template \
+	<"$root/.chezmoiscripts/run_after_35-claude-plugins.sh.tmpl" >"$tmp/claude-plugins-all-lsps"
+rg -q 'install_plugin pyright-lsp@claude-plugins-official' "$tmp/claude-plugins-all-lsps"
+rg -q 'install_plugin typescript-lsp@claude-plugins-official' "$tmp/claude-plugins-all-lsps"
 all_lsp_managed="$(chezmoi --source "$root" --config "$tmp/chezmoi-all-lsps.toml" managed)"
 printf '%s\n' "$all_lsp_managed" | rg -qx '\.claude/skills/marksman-lsp/\.claude-plugin/plugin\.json'
 printf '%s\n' "$all_lsp_managed" | rg -qx '\.claude/skills/terraform-lsp/\.claude-plugin/plugin\.json'
