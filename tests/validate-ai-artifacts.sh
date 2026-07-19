@@ -105,6 +105,23 @@ $skills
 EOF
 }
 
+validate_lsp_plugin() {
+	manifest="$1"
+	relative="${manifest#"$root"/}"
+	plugin_name="$(basename "$(dirname "$(dirname "$manifest")")")"
+	if ! jq -e --arg name "$plugin_name" '
+		.name == $name and
+		(.lspServers | type == "object" and length > 0) and
+		(.lspServers | all(
+			.command | type == "string" and length > 0
+		) and all(
+			.extensionToLanguage | type == "object" and length > 0
+		))
+	' "$manifest" >/dev/null 2>&1; then
+		error "$relative: invalid LSP plugin manifest"
+	fi
+}
+
 validate_settings_file() {
 	settings="$1"
 	relative="${settings#"$root"/}"
@@ -161,6 +178,8 @@ validate_settings() {
 [data]
 installPythonLsp = $([ "$mode" = all-lsps ] && printf true || printf false)
 installTypeScriptLsp = $([ "$mode" = all-lsps ] && printf true || printf false)
+installMarkdownLsp = $([ "$mode" = all-lsps ] && printf true || printf false)
+installTerraformLsp = $([ "$mode" = all-lsps ] && printf true || printf false)
 EOF
 			if ! chezmoi --source "$root" --config "$config" execute-template <"$settings_template" >"$output" || ! jq empty "$output"; then
 				error "${settings_template#"$root"/}: does not render valid JSON for $mode"
@@ -183,6 +202,11 @@ done
 for agent in "$root"/dot_claude/agents/*.md; do
 	[ -f "$agent" ] || continue
 	validate_agent "$agent"
+done
+
+for manifest in "$root"/dot_claude/skills/*/dot_claude-plugin/plugin.json; do
+	[ -f "$manifest" ] || continue
+	validate_lsp_plugin "$manifest"
 done
 
 validate_settings

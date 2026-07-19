@@ -165,6 +165,13 @@ rg -q 'terraform-ls' "$tmp/dotfiles-all-lsps"
 chezmoi --source "$root" --config "$tmp/chezmoi-all-lsps.toml" execute-template \
 	<"$root/dot_claude/settings.json.tmpl" >"$tmp/claude-settings-all-lsps.json"
 jq -e '.enabledPlugins["pyright-lsp@claude-plugins-official"] and .enabledPlugins["typescript-lsp@claude-plugins-official"]' "$tmp/claude-settings-all-lsps.json" >/dev/null
+all_lsp_managed="$(chezmoi --source "$root" --config "$tmp/chezmoi-all-lsps.toml" managed)"
+printf '%s\n' "$all_lsp_managed" | rg -qx '\.claude/skills/marksman-lsp/\.claude-plugin/plugin\.json'
+printf '%s\n' "$all_lsp_managed" | rg -qx '\.claude/skills/terraform-lsp/\.claude-plugin/plugin\.json'
+jq -e '.lspServers.marksman.command == "marksman" and .lspServers.marksman.args == ["server"]' \
+	"$root/dot_claude/skills/marksman-lsp/dot_claude-plugin/plugin.json" >/dev/null
+jq -e '.lspServers["terraform-ls"].command == "terraform-ls" and .lspServers["terraform-ls"].args == ["serve"]' \
+	"$root/dot_claude/skills/terraform-lsp/dot_claude-plugin/plugin.json" >/dev/null
 
 cat >"$tmp/chezmoi-corporate-ca.toml" <<'EOF'
 [data]

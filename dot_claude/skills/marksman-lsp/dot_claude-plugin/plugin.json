@@ -1,0 +1,16 @@
+{
+  "name": "marksman-lsp",
+  "description": "Markdown code intelligence using the mise-managed Marksman language server",
+  "lspServers": {
+    "marksman": {
+      "command": "marksman",
+      "args": [
+        "server"
+      ],
+      "extensionToLanguage": {
+        ".md": "markdown",
+        ".markdown": "markdown"
+      }
+    }
+  }
+}

@@ -12,7 +12,7 @@ This is the configuration I use. Fork it and make it yours rather than expecting
 - Node, Python, `uv`, `pnpm`, and Ruff through mise, with optional language servers and Terraform or OpenTofu.
 - VS Code, Ghostty, MesloLGS Nerd Font, Catppuccin styling, and a baseline of extensions. Existing extensions are retained.
 - Git defaults that leave authentication, signing, and unrelated host configuration alone, plus optional per-repository GitHub profiles.
-- Claude Code and OpenCode with shared skills and practical safety guardrails. No global MCP servers or global AI instruction files are installed.
+- Claude Code and OpenCode with shared skills and practical safety guardrails. Claude uses matching plugins for optional mise-managed language servers; no global MCP servers or global AI instruction files are installed.
 
 Chezmoi owns configuration and platform differences. Homebrew supplies shared tools on both platforms; apt installs Linux prerequisites and VS Code.
 

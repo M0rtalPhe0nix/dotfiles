@@ -1,3 +1,11 @@
+{{- $installMarkdownLsp := false -}}
+{{- if hasKey . "installMarkdownLsp" -}}
+{{-   $installMarkdownLsp = .installMarkdownLsp -}}
+{{- end -}}
+{{- $installTerraformLsp := false -}}
+{{- if hasKey . "installTerraformLsp" -}}
+{{-   $installTerraformLsp = .installTerraformLsp -}}
+{{- end -}}
 README.md
 docs/**
 AGENTS.md
@@ -15,6 +23,12 @@ create_private_dot_config
 create_private_dot_config/**
 symlink_dot_claude
 symlink_dot_claude/**
+{{ if not $installMarkdownLsp }}
+.claude/skills/marksman-lsp/**
+{{ end }}
+{{ if not $installTerraformLsp }}
+.claude/skills/terraform-lsp/**
+{{ end }}
 {{ if eq .chezmoi.os "darwin" }}
 .config/Code/**
 {{ else }}
