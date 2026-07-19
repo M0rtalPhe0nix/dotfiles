@@ -30,6 +30,7 @@
     ]
   },
   "enabledPlugins": {
+    "claude-md-management@claude-plugins-official": true{{ if or $installPythonLsp $installTypeScriptLsp }},{{ end }}
     {{- if $installPythonLsp }}
     "pyright-lsp@claude-plugins-official": true{{ if $installTypeScriptLsp }},{{ end }}
     {{- end }}

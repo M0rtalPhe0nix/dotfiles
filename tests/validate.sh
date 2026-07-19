@@ -53,6 +53,7 @@ jq -e '
 	.lsp.marksman.command == ["marksman", "server"] and
 	.lsp.terraform.command == ["terraform-ls", "serve"]
 ' "$root/dot_config/opencode/opencode.json" >/dev/null
+test -f "$root/dot_config/opencode/command/revise-claude-md.md"
 
 if command -v opencode >/dev/null 2>&1; then
 	OPENCODE_CONFIG="$root/dot_config/opencode/opencode.json" OPENCODE_DISABLE_PROJECT_CONFIG=1 opencode debug config >/dev/null
@@ -171,15 +172,17 @@ rg -q 'marksman' "$tmp/dotfiles-all-lsps"
 rg -q 'terraform-ls' "$tmp/dotfiles-all-lsps"
 chezmoi --source "$root" --config "$tmp/chezmoi-all-lsps.toml" execute-template \
 	<"$root/dot_claude/settings.json.tmpl" >"$tmp/claude-settings-all-lsps.json"
-jq -e '.enabledPlugins["pyright-lsp@claude-plugins-official"] and .enabledPlugins["typescript-lsp@claude-plugins-official"]' "$tmp/claude-settings-all-lsps.json" >/dev/null
+jq -e '.enabledPlugins["claude-md-management@claude-plugins-official"] and .enabledPlugins["pyright-lsp@claude-plugins-official"] and .enabledPlugins["typescript-lsp@claude-plugins-official"]' "$tmp/claude-settings-all-lsps.json" >/dev/null
 jq -e '.extraKnownMarketplaces["claude-plugins-official"].source.repo == "anthropics/claude-plugins-official"' "$tmp/claude-settings-all-lsps.json" >/dev/null
 chezmoi --source "$root" --config "$tmp/chezmoi-all-lsps.toml" execute-template \
 	<"$root/.chezmoiscripts/run_after_35-claude-plugins.sh.tmpl" >"$tmp/claude-plugins-all-lsps"
+rg -q 'install_plugin claude-md-management@claude-plugins-official' "$tmp/claude-plugins-all-lsps"
 rg -q 'install_plugin pyright-lsp@claude-plugins-official' "$tmp/claude-plugins-all-lsps"
 rg -q 'install_plugin typescript-lsp@claude-plugins-official' "$tmp/claude-plugins-all-lsps"
 all_lsp_managed="$(chezmoi --source "$root" --config "$tmp/chezmoi-all-lsps.toml" managed)"
 printf '%s\n' "$all_lsp_managed" | rg -qx '\.claude/skills/marksman-lsp/\.claude-plugin/plugin\.json'
 printf '%s\n' "$all_lsp_managed" | rg -qx '\.claude/skills/terraform-lsp/\.claude-plugin/plugin\.json'
+printf '%s\n' "$all_lsp_managed" | rg -qx '\.claude/skills/claude-md-improver'
 jq -e '.lspServers.marksman.command == "marksman" and .lspServers.marksman.args == ["server"]' \
 	"$root/dot_claude/skills/marksman-lsp/dot_claude-plugin/plugin.json" >/dev/null
 jq -e '.lspServers["terraform-ls"].command == "terraform-ls" and .lspServers["terraform-ls"].args == ["serve"]' \
