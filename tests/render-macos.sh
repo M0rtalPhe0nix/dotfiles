@@ -49,6 +49,8 @@ test ! -e "$tmp/home/.claude/skills/marksman-lsp"
 test ! -e "$tmp/home/.claude/skills/terraform-lsp"
 jq -e '.hooks.PostToolUse[0].matcher == "Write|Edit|MultiEdit"' "$tmp/home/.claude/settings.json" >/dev/null
 test -f "$tmp/home/.config/opencode/agent/feature-diagrammer.md"
+test -f "$tmp/home/.config/opencode/clear-tui.ts"
+test "$(jq -r '.plugin[]' "$tmp/home/.config/opencode/tui.json")" = "./clear-tui.ts"
 test -f "$tmp/home/.config/zsh/local.zsh"
 test "$(stat -f %Lp "$tmp/home/.config/zsh/secrets.zsh")" = 600
 test -f "$tmp/home/.config/git/ignore"

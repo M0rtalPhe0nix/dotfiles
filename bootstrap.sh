@@ -99,6 +99,8 @@ preflight() {
 .config/git/ignore
 .config/git/identity.gitconfig
 .config/opencode/opencode.json
+.config/opencode/tui.json
+.config/opencode/clear-tui.ts
 .claude/settings.json
 .claude/skills
 .config/ghostty/config

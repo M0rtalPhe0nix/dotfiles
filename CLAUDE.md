@@ -50,7 +50,7 @@ This is the public MIT-licensed `M0rtalPhe0nix/dotfiles` repository. It targets 
 ## AI Configuration
 
 - Claude Code settings live in `dot_claude/settings.json`.
-- OpenCode settings live in `dot_config/opencode/opencode.json`.
+- OpenCode server settings live in `dot_config/opencode/opencode.json`; TUI settings and plugins live alongside them in `dot_config/opencode/tui.json`.
 - Both tools should have high autonomy with explicit guardrails for secrets, destructive commands, and external directories.
 - Validate OpenCode configuration against its published schema; unknown keys can prevent startup.
 - Do not duplicate shared skills into tool-specific directories.

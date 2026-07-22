@@ -41,6 +41,7 @@ test "$(sed -n '1p' "$root/.chezmoiscripts/run_once_after_20-zimfw.sh")" = '#!/u
 for file in \
 	"$root/opencode.json" \
 	"$root/dot_config/opencode/opencode.json" \
+	"$root/dot_config/opencode/tui.json" \
 	"$root/Library/Application Support/Code/User/settings.json" \
 	"$root/Library/Application Support/Code/User/keybindings.json" \
 	"$root/dot_config/Code/User/settings.json" \
@@ -53,6 +54,8 @@ jq -e '
 	.lsp.marksman.command == ["marksman", "server"] and
 	.lsp.terraform.command == ["terraform-ls", "serve"]
 ' "$root/dot_config/opencode/opencode.json" >/dev/null
+test "$(jq -r '.plugin[]' "$root/dot_config/opencode/tui.json")" = "./clear-tui.ts"
+rg -Fq 'api.keymap.dispatchCommand("session.new")' "$root/dot_config/opencode/clear-tui.ts"
 test -f "$root/dot_config/opencode/command/revise-claude-md.md"
 
 if command -v opencode >/dev/null 2>&1; then
