@@ -85,3 +85,13 @@ Use `git diff --check` before committing. Do not publish changes that have not p
 - Update README documentation when commands, bootstrap behavior, managed tools, or user-facing choices change.
 - Add regression coverage for fixed bootstrap, template, path-encoding, or platform bugs.
 - Do not create GitHub Actions workflows; version 1 intentionally uses local tests only.
+
+## Agent skills
+
+### Issue tracker
+
+Issues and PRDs are tracked in GitHub Issues for `M0rtalPhe0nix/dotfiles`. See `docs/agents/issue-tracker.md`.
+
+### Domain docs
+
+This repository uses a single-context domain-doc layout. See `docs/agents/domain.md`.
