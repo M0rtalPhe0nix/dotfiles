@@ -1,7 +1,7 @@
 palette = "catppuccin_mocha"
 add_newline = true
 
-format = "$directory$git_branch$git_status$fill$nodejs$python$cmd_duration$line_break$character"
+format = "$directory$git_branch$git_status${custom.github_profile}$fill$nodejs$python$cmd_duration$line_break$character"
 
 [directory]
 style = "bold lavender"
@@ -14,6 +14,12 @@ style = "bold mauve"
 
 [git_status]
 style = "bold peach"
+
+[custom.github_profile]
+command = "git config --local --get github.profile"
+format = "[ $symbol$output]($style)"
+symbol = "gh:"
+style = "bold sapphire"
 
 [fill]
 symbol = " "

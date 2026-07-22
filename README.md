@@ -123,7 +123,7 @@ github-profile current
 github-profile list
 ```
 
-The selected identity and GitHub account are saved in that repository's local Git config. Profile definitions are local files with restricted permissions; tokens are never written to them.
+The selected identity and GitHub account are saved in that repository's local Git config. `github-profile list` marks the repository's selected profile with `*`, and the shell prompt displays it as `gh:<profile>`. Profile definitions are local files with restricted permissions; tokens are never written to them.
 
 ## Corporate CA Certificates
 

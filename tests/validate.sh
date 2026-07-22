@@ -226,10 +226,16 @@ git -C "$tmp/profile-repo" init -q
 PATH="$tmp/bin:$PATH" XDG_CONFIG_HOME="$tmp/config" \
 	sh "$root/dot_local/bin/executable_github-profile" add work work-user "work@example.invalid" "Work User"
 PATH="$tmp/bin:$PATH" XDG_CONFIG_HOME="$tmp/config" \
+	sh "$root/dot_local/bin/executable_github-profile" add personal personal-user "personal@example.invalid" "Personal User"
+PATH="$tmp/bin:$PATH" XDG_CONFIG_HOME="$tmp/config" \
 	sh -c 'cd "$1" && exec sh "$2" use work' sh "$tmp/profile-repo" "$root/dot_local/bin/executable_github-profile"
 test "$(git -C "$tmp/profile-repo" config --local --get user.email)" = "work@example.invalid"
 test "$(git -C "$tmp/profile-repo" config --local --get github.profile)" = work
 test "$(git -C "$tmp/profile-repo" config --local --get github.user)" = work-user
+profile_list="$(PATH="$tmp/bin:$PATH" XDG_CONFIG_HOME="$tmp/config" \
+	sh -c 'cd "$1" && exec sh "$2" list' sh "$tmp/profile-repo" "$root/dot_local/bin/executable_github-profile")"
+printf '%s\n' "$profile_list" | rg -q '^  personal$'
+printf '%s\n' "$profile_list" | rg -q '^\* work$'
 credential="$(printf 'protocol=https\nhost=github.com\n\n' | PATH="$tmp/bin:$PATH" \
 	git -C "$tmp/profile-repo" credential fill)"
 printf '%s\n' "$credential" | rg -q '^username=work-user$'

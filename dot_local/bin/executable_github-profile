@@ -94,10 +94,16 @@ current)
 	printf '%s\n' "$profile"
 	;;
 list)
+	current_profile="$(git config --local --get github.profile 2>/dev/null || true)"
 	if [ -d "$profiles_dir" ]; then
 		for profile_file in "$profiles_dir"/*.gitconfig; do
 			[ -e "$profile_file" ] || continue
-			basename "$profile_file" .gitconfig
+			profile="$(basename "$profile_file" .gitconfig)"
+			if [ "$profile" = "$current_profile" ]; then
+				printf '* %s\n' "$profile"
+			else
+				printf '  %s\n' "$profile"
+			fi
 		done
 	fi
 	;;
