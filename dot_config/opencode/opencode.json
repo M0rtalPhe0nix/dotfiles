@@ -4,20 +4,51 @@
   "autoupdate": false,
   "lsp": {
     "pyright": {
-      "command": ["pyright-langserver", "--stdio"],
-      "extensions": [".py", ".pyi"]
+      "command": [
+        "pyright-langserver",
+        "--stdio"
+      ],
+      "extensions": [
+        ".py",
+        ".pyi"
+      ]
     },
     "typescript": {
-      "command": ["typescript-language-server", "--stdio"],
-      "extensions": [".ts", ".tsx", ".js", ".jsx", ".mjs", ".cjs", ".mts", ".cts"]
+      "command": [
+        "typescript-language-server",
+        "--stdio"
+      ],
+      "extensions": [
+        ".ts",
+        ".tsx",
+        ".js",
+        ".jsx",
+        ".mjs",
+        ".cjs",
+        ".mts",
+        ".cts"
+      ]
     },
     "marksman": {
-      "command": ["marksman", "server"],
-      "extensions": [".md", ".markdown"]
+      "command": [
+        "marksman",
+        "server"
+      ],
+      "extensions": [
+        ".md",
+        ".markdown"
+      ]
     },
     "terraform": {
-      "command": ["terraform-ls", "serve"],
-      "extensions": [".tf", ".tfvars", ".hcl"]
+      "command": [
+        "terraform-ls",
+        "serve"
+      ],
+      "extensions": [
+        ".tf",
+        ".tfvars",
+        ".hcl"
+      ]
     }
   },
   "permission": {
@@ -42,5 +73,8 @@
     },
     "webfetch": "allow",
     "task": "allow"
-  }
+  },
+  "plugin": [
+    "@dietrichgebert/ponytail"
+  ]
 }
