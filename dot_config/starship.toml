@@ -17,7 +17,9 @@ style = "bold peach"
 
 [custom.github_profile]
 command = "git config --local --get github.profile"
-when = "git config --local --get github.profile >/dev/null 2>&1"
+when = true
+require_repo = true
+ignore_timeout = true
 format = "[ $symbol$output]($style)"
 symbol = "gh:"
 style = "bold sapphire"

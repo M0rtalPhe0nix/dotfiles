@@ -13,9 +13,17 @@ export NODE_EXTRA_CA_CERTS="$DOTFILES_CORPORATE_CA"
 export UV_NATIVE_TLS=true
 {{- end }}
 
+_dotfiles_zcompdump="${XDG_CACHE_HOME:-$HOME/.cache}/zsh/zcompdump"
+mkdir -p "${_dotfiles_zcompdump:h}"
+if [[ -e "$_dotfiles_zcompdump" && -e "$_dotfiles_zcompdump.zwc" && ! "$_dotfiles_zcompdump.zwc" -nt "$_dotfiles_zcompdump" ]]; then
+  rm -f "$_dotfiles_zcompdump.zwc"
+fi
+zstyle ':zim:completion' dumpfile "$_dotfiles_zcompdump"
+
 if [[ -s "$ZIM_HOME/init.zsh" ]]; then
   source "$ZIM_HOME/init.zsh"
 fi
+unset _dotfiles_zcompdump
 
 export HISTFILE="${XDG_STATE_HOME:-$HOME/.local/state}/zsh/history"
 mkdir -p "${HISTFILE:h}"

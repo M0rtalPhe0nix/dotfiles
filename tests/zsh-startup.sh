@@ -21,6 +21,17 @@ curl -fsSL https://raw.githubusercontent.com/zimfw/zimfw/master/zimfw.zsh -o "$h
 HOME="$home" XDG_CONFIG_HOME="$home/.config" ZDOTDIR="$home" ZIM_HOME="$home/.zim" zsh "$home/.zim/zimfw.zsh" install >/dev/null
 HOME="$home" XDG_CONFIG_HOME="$home/.config" ZDOTDIR="$home" ZIM_HOME="$home/.zim" zsh -lic exit
 
+zcompdump="$home/.cache/zsh/zcompdump"
+test -f "$zcompdump"
+test -f "$zcompdump.zwc"
+touch -r "$zcompdump" "$zcompdump.zwc"
+chmod 444 "$zcompdump.zwc"
+startup_output="$(HOME="$home" XDG_CONFIG_HOME="$home/.config" ZDOTDIR="$home" ZIM_HOME="$home/.zim" zsh -lic exit 2>&1)"
+if [[ "$startup_output" == *"can't write zwc file"* ]]; then
+	print -u2 -r -- "$startup_output"
+	exit 1
+fi
+
 total=0.0
 repeat 5; do
 	start=$EPOCHREALTIME
