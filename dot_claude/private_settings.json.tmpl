@@ -16,35 +16,18 @@
       "WebFetch(*)",
       "WebSearch(*)"
     ],
-    "ask": [
-      "Bash(git push --force*)",
-      "Bash(rm -rf:*)",
-      "Bash(sudo:*)"
-    ],
     "deny": [
       "Read(./.env)",
       "Read(./.env.*)",
       "Read(~/.aws/**)",
       "Read(~/.ssh/**)",
       "Read(~/.config/zsh/secrets.zsh)"
+    ],
+    "ask": [
+      "Bash(git push --force*)",
+      "Bash(rm -rf:*)",
+      "Bash(sudo:*)"
     ]
-  },
-  "enabledPlugins": {
-    "claude-md-management@claude-plugins-official": true{{ if or $installPythonLsp $installTypeScriptLsp }},{{ end }}
-    {{- if $installPythonLsp }}
-    "pyright-lsp@claude-plugins-official": true{{ if $installTypeScriptLsp }},{{ end }}
-    {{- end }}
-    {{- if $installTypeScriptLsp }}
-    "typescript-lsp@claude-plugins-official": true
-    {{- end }}
-  },
-  "extraKnownMarketplaces": {
-    "claude-plugins-official": {
-      "source": {
-        "source": "github",
-        "repo": "anthropics/claude-plugins-official"
-      }
-    }
   },
   "hooks": {
     "PostToolUse": [
@@ -58,6 +41,41 @@
           }
         ]
       }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "rtk hook claude"
+          }
+        ]
+      }
     ]
+  },
+  "enabledPlugins": {
+    "ponytail@ponytail": true,
+    "claude-md-management@claude-plugins-official": true{{ if or $installPythonLsp $installTypeScriptLsp }},{{ end }}
+    {{- if $installPythonLsp }}
+    "pyright-lsp@claude-plugins-official": true{{ if $installTypeScriptLsp }},{{ end }}
+    {{- end }}
+    {{- if $installTypeScriptLsp }}
+    "typescript-lsp@claude-plugins-official": true
+    {{- end }}
+  },
+  "extraKnownMarketplaces": {
+    "ponytail": {
+      "source": {
+        "source": "github",
+        "repo": "DietrichGebert/ponytail"
+      }
+    },
+    "claude-plugins-official": {
+      "source": {
+        "source": "github",
+        "repo": "anthropics/claude-plugins-official"
+      }
+    }
   }
 }

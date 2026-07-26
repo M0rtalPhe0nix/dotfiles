@@ -8,11 +8,11 @@ This is the configuration I use. Fork it and make it yours rather than expecting
 
 - Zsh with ZimFW, Starship, fzf, zoxide, completions, and private shared history.
 - A portable `o` helper that opens paths with `open` on macOS or `xdg-open` on Linux.
-- Homebrew-managed command-line tools including `gh`, `mise`, `ripgrep`, `fd`, `bat`, `eza`, `delta`, and shell tooling.
-- Node, Python, `uv`, `pnpm`, and Ruff through mise, with optional language servers and Terraform or OpenTofu.
+- Homebrew-managed command-line tools including `gh`, `mise`, `ripgrep`, `rtk`, `fd`, `bat`, `eza`, `delta`, and shell tooling.
+- Node, Python, `uv`, `pnpm`, and Ruff through mise, plus an isolated Python 3.13 Headroom installation managed by `uv tool`, optional language servers, and Terraform or OpenTofu.
 - VS Code, Ghostty, MesloLGS Nerd Font, Catppuccin styling, and a baseline of extensions. Existing extensions are retained.
 - Git defaults that leave authentication, signing, and unrelated host configuration alone, plus optional per-repository GitHub profiles.
-- Claude Code and OpenCode with shared skills and practical safety guardrails. Both include CLAUDE.md maintenance tools, OpenCode includes a visible `/clear` alias for starting a new session, and Claude uses matching plugins for optional mise-managed language servers; no global MCP servers or global AI instruction files are installed.
+- Claude Code and OpenCode with shared skills and practical safety guardrails. Both include Ponytail, Headroom MCP, and RTK command-output compression; OpenCode also includes Serena and a visible `/clear` alias, while Claude uses matching plugins for optional mise-managed language servers.
 
 Chezmoi owns configuration and platform differences. Homebrew supplies shared tools on both platforms; apt installs Linux prerequisites and VS Code.
 

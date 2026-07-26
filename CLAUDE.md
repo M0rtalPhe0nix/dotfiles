@@ -9,7 +9,7 @@ This is the public MIT-licensed `M0rtalPhe0nix/dotfiles` repository. It targets 
 - Never commit secrets, credentials, tokens, private keys, machine identifiers, or host-specific values.
 - Keep Git authentication, signing, and unrelated host settings unmanaged.
 - Preserve `~/.config/zsh/local.zsh` and mode-`0600` `~/.config/zsh/secrets.zsh` as host-local files.
-- Do not add global MCP servers or global AI coding instructions unless the project requirements explicitly change.
+- Do not add global MCP servers beyond the managed Headroom and Serena integrations or add global AI coding instructions unless the project requirements explicitly change.
 - Do not make bootstrap uninstall packages or make rollback uninstall packages.
 - Do not make `dotfiles apply` upgrade software. Upgrades belong exclusively in `dotfiles update`.
 - Preserve extra VS Code extensions; manage only the extension baseline.

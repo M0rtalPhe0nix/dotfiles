@@ -53,7 +53,7 @@ usage() {
 
 doctor() {
 	failed=0
-	for command in brew chezmoi mise gh rg fd fzf bat eza jq yq dust btm zoxide delta tldr shellcheck shfmt starship zsh pnpm ruff uv; do
+	for command in brew chezmoi mise gh rg fd fzf bat eza jq yq dust btm zoxide delta tldr shellcheck shfmt starship zsh pnpm ruff uv headroom rtk; do
 		if command -v "$command" >/dev/null 2>&1; then
 			printf 'ok   %s\n' "$command"
 		else
@@ -184,6 +184,7 @@ update() {
 	update_ghostty
 	{{ end -}}
 	mise upgrade --yes
+	uv tool upgrade headroom-ai
 	zim_home="${ZIM_HOME:-$HOME/.zim}"
 	ZIM_HOME="$zim_home" zsh "$zim_home/zimfw.zsh" update
 	ZIM_HOME="$zim_home" zsh "$zim_home/zimfw.zsh" install

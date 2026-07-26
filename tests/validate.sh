@@ -52,7 +52,12 @@ jq -e '
 	.lsp.pyright.command == ["pyright-langserver", "--stdio"] and
 	.lsp.typescript.command == ["typescript-language-server", "--stdio"] and
 	.lsp.marksman.command == ["marksman", "server"] and
-	.lsp.terraform.command == ["terraform-ls", "serve"]
+	.lsp.terraform.command == ["terraform-ls", "serve"] and
+	.mcp.headroom.command == ["headroom", "mcp", "serve"] and
+	.mcp.headroom.enabled == true and
+	.mcp.serena.command == ["uvx", "--from", "git+https://github.com/oraios/serena", "serena", "start-mcp-server", "--project-from-cwd", "--context", "agent", "--open-web-dashboard", "False"] and
+	.mcp.serena.enabled == true and
+	(.plugin | index("@dietrichgebert/ponytail")) != null
 ' "$root/dot_config/opencode/opencode.json" >/dev/null
 test "$(jq -r '.plugin[]' "$root/dot_config/opencode/tui.json")" = "./clear-tui.ts"
 rg -Fq 'api.keymap.dispatchCommand("session.new")' "$root/dot_config/opencode/clear-tui.ts"
@@ -77,6 +82,8 @@ for source in \
 	"$root/.chezmoiscripts/run_once_before_10-packages.sh.tmpl" \
 	"$root/.chezmoiscripts/run_once_after_10-git-config.sh" \
 	"$root/.chezmoiscripts/run_after_30-mise.sh" \
+	"$root/.chezmoiscripts/run_after_31-rtk.sh" \
+	"$root/.chezmoiscripts/run_after_32-headroom.sh" \
 	"$root/.chezmoiscripts/run_after_35-claude-plugins.sh.tmpl" \
 	"$root/.chezmoiscripts/run_once_after_40-vscode-extensions.sh.tmpl" \
 	"$root/dot_local/bin/executable_dotfiles.tmpl" \
@@ -173,13 +180,21 @@ rg -q 'pyright-langserver' "$tmp/dotfiles-all-lsps"
 rg -q 'typescript-language-server' "$tmp/dotfiles-all-lsps"
 rg -q 'marksman' "$tmp/dotfiles-all-lsps"
 rg -q 'terraform-ls' "$tmp/dotfiles-all-lsps"
+rg -q 'uv tool upgrade headroom-ai' "$tmp/dotfiles-all-lsps"
+rg -q 'uv headroom' "$tmp/dotfiles-all-lsps"
+rg -q 'headroom rtk' "$tmp/dotfiles-all-lsps"
+rg -q 'rtk init --global --hook-only --auto-patch' "$root/.chezmoiscripts/run_after_31-rtk.sh"
+rg -q 'rtk init --global --opencode' "$root/.chezmoiscripts/run_after_31-rtk.sh"
 chezmoi --source "$root" --config "$tmp/chezmoi-all-lsps.toml" execute-template \
-	<"$root/dot_claude/settings.json.tmpl" >"$tmp/claude-settings-all-lsps.json"
-jq -e '.enabledPlugins["claude-md-management@claude-plugins-official"] and .enabledPlugins["pyright-lsp@claude-plugins-official"] and .enabledPlugins["typescript-lsp@claude-plugins-official"]' "$tmp/claude-settings-all-lsps.json" >/dev/null
+	<"$root/dot_claude/private_settings.json.tmpl" >"$tmp/claude-settings-all-lsps.json"
+jq -e '.enabledPlugins["ponytail@ponytail"] and .enabledPlugins["claude-md-management@claude-plugins-official"] and .enabledPlugins["pyright-lsp@claude-plugins-official"] and .enabledPlugins["typescript-lsp@claude-plugins-official"]' "$tmp/claude-settings-all-lsps.json" >/dev/null
+jq -e '.hooks.PreToolUse[0].matcher == "Bash" and .hooks.PreToolUse[0].hooks[0].command == "rtk hook claude"' "$tmp/claude-settings-all-lsps.json" >/dev/null
+jq -e '.extraKnownMarketplaces.ponytail.source.repo == "DietrichGebert/ponytail"' "$tmp/claude-settings-all-lsps.json" >/dev/null
 jq -e '.extraKnownMarketplaces["claude-plugins-official"].source.repo == "anthropics/claude-plugins-official"' "$tmp/claude-settings-all-lsps.json" >/dev/null
 chezmoi --source "$root" --config "$tmp/chezmoi-all-lsps.toml" execute-template \
 	<"$root/.chezmoiscripts/run_after_35-claude-plugins.sh.tmpl" >"$tmp/claude-plugins-all-lsps"
 rg -q 'install_plugin claude-md-management@claude-plugins-official' "$tmp/claude-plugins-all-lsps"
+rg -q 'install_plugin ponytail@ponytail' "$tmp/claude-plugins-all-lsps"
 rg -q 'install_plugin pyright-lsp@claude-plugins-official' "$tmp/claude-plugins-all-lsps"
 rg -q 'install_plugin typescript-lsp@claude-plugins-official' "$tmp/claude-plugins-all-lsps"
 all_lsp_managed="$(chezmoi --source "$root" --config "$tmp/chezmoi-all-lsps.toml" managed)"

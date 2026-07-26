@@ -168,7 +168,7 @@ validate_settings_file() {
 }
 
 validate_settings() {
-	settings_template="$root/dot_claude/settings.json.tmpl"
+	settings_template="$root/dot_claude/private_settings.json.tmpl"
 	settings_json="$root/dot_claude/settings.json"
 	if [ -f "$settings_template" ]; then
 		for mode in minimal all-lsps; do
