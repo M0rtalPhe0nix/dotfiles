@@ -48,6 +48,30 @@ for file in \
 	"$root/dot_config/Code/User/keybindings.json"; do
 	jq empty "$file"
 done
+
+for skill_dir in "$root"/.claude/skills/*; do
+	[ -f "$skill_dir/SKILL.md" ] || continue
+	skill_name="$(basename "$skill_dir")"
+	agent_skill_dir="$root/.agents/skills/$skill_name"
+	if [ ! -f "$agent_skill_dir/SKILL.md" ]; then
+		printf '%s\n' "Claude skill $skill_name is missing from .agents/skills." >&2
+		exit 1
+	fi
+	if [ ! -L "$skill_dir" ] && [ ! -L "$agent_skill_dir" ]; then
+		printf '%s\n' "Skill $skill_name is duplicated instead of linked." >&2
+		exit 1
+	fi
+done
+
+for skill_dir in "$root"/.agents/skills/*; do
+	[ -f "$skill_dir/SKILL.md" ] || continue
+	skill_name="$(basename "$skill_dir")"
+	if [ ! -f "$root/.claude/skills/$skill_name/SKILL.md" ]; then
+		printf '%s\n' "Agent skill $skill_name is missing from .claude/skills." >&2
+		exit 1
+	fi
+done
+
 jq -e '
 	.lsp.pyright.command == ["pyright-langserver", "--stdio"] and
 	.lsp.typescript.command == ["typescript-language-server", "--stdio"] and

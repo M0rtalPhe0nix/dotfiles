@@ -22,7 +22,7 @@ This is the public MIT-licensed `M0rtalPhe0nix/dotfiles` repository. It targets 
 - Add `.tmpl` only when a file contains Chezmoi template expressions.
 - Keep platform-specific target exclusions in `.chezmoiignore`.
 - Keep repository-only files such as tests, manifests, documentation, and canonical skill sources out of the managed target set.
-- Existing reusable skills remain canonical under `.claude/skills` in the source and are exposed as managed symlinks under `~/.claude/skills`.
+- Keep one canonical copy of each reusable skill under `.claude/skills` or `.agents/skills`, mirror it into the other directory with a relative symlink, and expose it as a managed symlink under `~/.claude/skills`.
 - Initialization data must remain public-safe. Git identity and installation choices belong in the local Chezmoi config, not committed files.
 
 ## Operational Invariants
