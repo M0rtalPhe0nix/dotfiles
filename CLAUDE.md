@@ -21,8 +21,8 @@ This is the public MIT-licensed `M0rtalPhe0nix/dotfiles` repository. It targets 
 - Put attributes on the source path component they modify. For example, use `dot_config/zsh/create_private_secrets.zsh`, not `create_private_dot_config/zsh/secrets.zsh`.
 - Add `.tmpl` only when a file contains Chezmoi template expressions.
 - Keep platform-specific target exclusions in `.chezmoiignore`.
-- Keep repository-only files such as tests, manifests, documentation, and canonical skill sources out of the managed target set.
-- Keep one canonical copy of each reusable skill under `.claude/skills` or `.agents/skills`, mirror it into the other directory with a relative symlink, and expose it as a managed symlink under `~/.claude/skills`.
+- Keep repository-only files such as tests, manifests, documentation, and the canonical `capability-catalog/` out of the managed target set.
+- Install reusable capabilities into each consuming repository with `dotfiles capabilities init` and `dotfiles capabilities sync`; Chezmoi must not install or synchronize them globally.
 - Initialization data must remain public-safe. Git identity and installation choices belong in the local Chezmoi config, not committed files.
 
 ## Operational Invariants
@@ -53,7 +53,7 @@ This is the public MIT-licensed `M0rtalPhe0nix/dotfiles` repository. It targets 
 - OpenCode server settings live in `dot_config/opencode/opencode.json`; TUI settings and plugins live alongside them in `dot_config/opencode/tui.json`.
 - Both tools should have high autonomy with explicit guardrails for secrets, destructive commands, and external directories.
 - Validate OpenCode configuration against its published schema; unknown keys can prevent startup.
-- Do not duplicate shared skills into tool-specific directories.
+- Treat `capability-catalog/` as the canonical source for shared skills, agents, and hooks; generated tool-specific files belong only in consuming repositories.
 
 ## Validation
 
@@ -74,7 +74,7 @@ At minimum, changes must pass:
 - Chezmoi rendering into a temporary macOS home.
 - A clean second Chezmoi apply.
 - Debian Docker rendering and shell syntax checks for Linux templates.
-- Shared skill availability under the rendered `~/.claude/skills` path.
+- Capability-catalog validation and repository-local Claude/Codex consumer generation.
 
 Use `git diff --check` before committing. Do not publish changes that have not passed the relevant local tests.
 

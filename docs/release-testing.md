@@ -60,6 +60,8 @@ dotfiles apply
 
 The sentinel proves the pre-bootstrap backup was restored. `dotfiles rollback` deliberately retains installed software. Run the host smoke test again after `dotfiles apply`.
 
+To test global migration safety, seed an unfamiliar symlink under `~/.claude/skills`, apply once, and confirm it is reported but preserved. Run `dotfiles capabilities cleanup-unmanaged-global`, decline once, then explicitly accept and confirm only the listed link is removed. Finally, run `dotfiles rollback` and confirm the link plus any locally modified managed skill, agent, or hook is restored.
+
 ## Manual Platform Checks
 
 On every platform:

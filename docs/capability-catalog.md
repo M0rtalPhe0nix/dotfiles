@@ -15,27 +15,107 @@ Capability identifiers have the portable form `owner/repository/name`.
 Relationships may use that full identifier or a short `name` only when it has a
 single match in the catalog.
 
-From an initialized Git worktree, add a qualified capability from its Git
-catalog and later restore the generated files from the pinned lock with:
+## Repository workflow
+
+Run capability commands anywhere inside a Git worktree; they discover its root
+and never change another repository. The command surface is:
 
 ```sh
+dotfiles capabilities init
 dotfiles capabilities add --catalog GIT_URL owner/repository/name
+dotfiles capabilities remove owner/repository/name
+dotfiles capabilities list [--json]
+dotfiles capabilities recommend owner/repository/name
+dotfiles capabilities snapshot [--catalog GIT_URL]
+dotfiles skills snapshot [--catalog GIT_URL]
+dotfiles capabilities diff
 dotfiles capabilities sync
+dotfiles capabilities update owner/repository/name...
+dotfiles capabilities update --all
+dotfiles capabilities migrate
+dotfiles capabilities validate [--check] [--json] [PATH]
 ```
 
-The manifest records the portable Git URL and explicit root. The lock records
-the resolved source commit and content hash, why each transitive capability is
-present, and the generated target state. Codex skill directories are writable
-copies; Claude Code skill paths are relative symlinks to those copies. These
-generated paths are added to the worktree's local Git exclusions.
+`init` creates a tracked `capabilities.json` manifest and
+`capabilities.lock.json` lock. `add`, `remove`, and `recommend` change explicit
+manifest roots and prune dependencies that are no longer reachable. `list`
+distinguishes requested roots, required or companion dependencies,
+recommendations, and the complete resolved set. Recommendations remain
+informational until `recommend` records one as an explicit root.
+
+The `dotfiles skills` group is a filtered alias over the same engine.
+`dotfiles skills snapshot` expands every skill name present in the catalogs at
+that moment, while `dotfiles capabilities snapshot` expands every current
+capability, including standalone agents and hooks. Both store explicit names,
+not wildcards, so capabilities added to a catalog later do not appear silently.
+
+### Synchronization versus updates
+
+`sync` is a repair and reconciliation operation, not an upgrade. With an
+unchanged manifest it restores the lock exactly. If roots were edited directly
+in the manifest, it resolves the new desired graph from already pinned catalog
+content and leaves unrelated payloads at their locked commits. It can overwrite
+edited generated files and delete unexpected content under owned paths.
+
+`update NAME...` deliberately advances selected roots and their affected
+dependency graph to current catalog content. `update --all` advances the entire
+resolved graph but does not add new manifest roots. Run `diff` first when local
+experiments may be worth saving. `migrate` is the only command that upgrades a
+supported older manifest or lock schema.
+
+## Catalog ownership and generated state
+
+In this repository, `capability-catalog/` is the canonical source for reusable
+skills, agents, hooks, scripts, references, assets, metadata, and upstream
+provenance. Edit canonical payloads there and regenerate `catalog.json` with
+`dotfiles capabilities validate capability-catalog`; do not edit the generated
+index by hand.
+
+Consuming repositories track only the manifest and lock. The manifest records
+portable Git catalog descriptors—an optional normalized `path` locates a catalog
+inside its repository—and explicit roots. The lock records the complete graph,
+source commits, content hashes, installation reasons, companions, targets, and
+owned settings state. Generated targets are listed exactly in the worktree's
+`.git/info/exclude`, not in a broad tracked ignore rule.
+
+Codex skills are writable copies under `.agents/skills`; Claude Code skill paths
+are relative symlinks to those same copies. Editing the Codex copy is the
+supported short-lived experimentation layer, and both tools observe the edit.
+Those edits are disposable: `diff` reports materialized drift, while `sync`
+destructively restores authoritative locked bytes. Promote useful experiments
+back into the canonical catalog before synchronizing.
 
 Agents, scripts, references, assets, and executable hooks are copied into each
 tool's project-local discovery tree. Hook commands resolve their payload from
 `git rev-parse --show-toplevel`, so they remain stable when a tool starts in a
 subdirectory. Capability-owned entries are merged into `.claude/settings.json`
-and `.codex/hooks.json`; unrelated entries remain untouched, including in a
-tracked Codex hook file. Before new or changed hook bytes can be installed, the
-CLI shows the exact content and records approval by hash in Git-local state.
+and `.codex/hooks.json`; unrelated entries remain untouched, including in an
+already tracked settings file. Before new or changed hook bytes can be installed,
+the CLI displays the exact content and SHA-256 hash and requires local approval.
+Approvals are stored in Git-local state, so approval for an old hash never covers
+changed executable content.
+
+The one-time migration removes only global artifacts proven to be managed by
+this dotfiles installation and keeps a rollback backup. Unfamiliar global skill
+symlinks are reported, not removed. `dotfiles capabilities
+cleanup-unmanaged-global` prints each suspicious link and target and requires
+explicit confirmation before removing only that reviewed set.
+
+## Deliberately out of scope
+
+- OpenCode is not a capability target in version 1; its existing managed
+  configuration and RTK integration remain separate.
+- Structured personal or repository-local override layers are not supported.
+  Writable generated copies are experiments, not durable overrides.
+- Forking or promoting an edited generated capability is not automated; move
+  useful changes into a catalog manually.
+- Catalog snapshots are fetched into temporary directories. There is no
+  persistent cache or offline-operation guarantee.
+- Nested, inherited, or monorepo-specific manifests are not supported; one
+  manifest at the Git worktree root owns the repository.
+- Catalog trust policy, noninteractive hook approval for CI, independent
+  per-capability semantic versions, and automatic multi-repository discovery or
+  updates are deferred.
 
 ## Capability metadata
 
@@ -44,6 +124,12 @@ CLI shows the exact content and records approval by hash in Git-local state.
   "schema_version": 1,
   "identifier": "owner/repository/name",
   "description": "What this capability provides",
+  "upstream": {
+    "repository": "upstream-owner/upstream-repository",
+    "source_type": "github",
+    "path": "skills/name/SKILL.md",
+    "content_hash": "0000000000000000000000000000000000000000000000000000000000000000"
+  },
   "dependencies": {
     "required": ["owner/repository/required-name"],
     "recommended": ["optional-name"],
@@ -70,6 +156,9 @@ CLI shows the exact content and records approval by hash in Git-local state.
   }
 }
 ```
+
+`upstream` is optional. When present, it preserves public reusable provenance;
+`ref` may also be recorded when the imported source was pinned to one.
 
 Supported target kinds are `skill`, `agent`, `hook`, `script`, `asset`, and
 `reference`. Sources must exist inside the capability payload. Destinations must

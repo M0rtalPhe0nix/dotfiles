@@ -29,31 +29,6 @@
       "Bash(sudo:*)"
     ]
   },
-  "hooks": {
-    "PostToolUse": [
-      {
-        "matcher": "Write|Edit|MultiEdit",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "~/.claude/hooks/post-edit-fmt.sh",
-            "timeout": 30
-          }
-        ]
-      }
-    ],
-    "PreToolUse": [
-      {
-        "matcher": "Bash",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "rtk hook claude"
-          }
-        ]
-      }
-    ]
-  },
   "enabledPlugins": {
     "ponytail@ponytail": true,
     "claude-md-management@claude-plugins-official": true{{ if or $installPythonLsp $installTypeScriptLsp }},{{ end }}

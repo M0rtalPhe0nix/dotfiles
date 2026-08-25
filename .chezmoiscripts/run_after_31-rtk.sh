@@ -3,7 +3,6 @@ set -eu
 
 command -v rtk >/dev/null 2>&1 || exit 0
 
-rtk init --global --hook-only --auto-patch
 rtk init --global --opencode
 
 settings="$HOME/.claude/settings.json"

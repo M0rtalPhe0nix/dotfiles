@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "catalogs": [
+    {
+      "url": "https://github.com/M0rtalPhe0nix/dotfiles.git",
+      "path": "capability-catalog"
+    }
+  ],
+  "roots": [
+    "M0rtalPhe0nix/dotfiles/batch-grill-me",
+    "M0rtalPhe0nix/dotfiles/claude-md-improver",
+    "M0rtalPhe0nix/dotfiles/code-review",
+    "M0rtalPhe0nix/dotfiles/codebase-design",
+    "M0rtalPhe0nix/dotfiles/compare-dotfiles",
+    "M0rtalPhe0nix/dotfiles/design-an-interface",
+    "M0rtalPhe0nix/dotfiles/domain-modeling",
+    "M0rtalPhe0nix/dotfiles/excalidraw",
+    "M0rtalPhe0nix/dotfiles/grill-feature-diagrams",
+    "M0rtalPhe0nix/dotfiles/grill-me",
+    "M0rtalPhe0nix/dotfiles/grill-with-docs",
+    "M0rtalPhe0nix/dotfiles/grilling",
+    "M0rtalPhe0nix/dotfiles/handoff",
+    "M0rtalPhe0nix/dotfiles/implement",
+    "M0rtalPhe0nix/dotfiles/improve-codebase-architecture",
+    "M0rtalPhe0nix/dotfiles/plugin-creator",
+    "M0rtalPhe0nix/dotfiles/python-format",
+    "M0rtalPhe0nix/dotfiles/qa",
+    "M0rtalPhe0nix/dotfiles/request-refactor-plan",
+    "M0rtalPhe0nix/dotfiles/review-agent",
+    "M0rtalPhe0nix/dotfiles/rtk-guardrail",
+    "M0rtalPhe0nix/dotfiles/setup-matt-pocock-skills",
+    "M0rtalPhe0nix/dotfiles/setup-pre-commit",
+    "M0rtalPhe0nix/dotfiles/skill-creator",
+    "M0rtalPhe0nix/dotfiles/skill-installer",
+    "M0rtalPhe0nix/dotfiles/speckit-diagrams",
+    "M0rtalPhe0nix/dotfiles/tdd",
+    "M0rtalPhe0nix/dotfiles/teach",
+    "M0rtalPhe0nix/dotfiles/to-spec",
+    "M0rtalPhe0nix/dotfiles/to-tickets",
+    "M0rtalPhe0nix/dotfiles/ubiquitous-language",
+    "M0rtalPhe0nix/dotfiles/wayfinder",
+    "M0rtalPhe0nix/dotfiles/writing-great-skills"
+  ]
+}

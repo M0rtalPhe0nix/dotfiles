@@ -25,6 +25,10 @@ while [ "$#" -gt 0 ]; do
 	shift
 done
 
+if [ -z "$catalog" ] && [ -d "$root/capability-catalog" ]; then
+	catalog="$root/capability-catalog"
+fi
+
 tmp="$(mktemp -d)"
 errors="$tmp/errors"
 warnings="$tmp/warnings"
@@ -134,7 +138,7 @@ validate_settings_file() {
 	if ! jq -e '.permissions | (.allow | type == "array") and (.ask | type == "array") and (.deny | type == "array")' "$settings" >/dev/null 2>&1; then
 		error "$relative: invalid permissions structure"
 	fi
-	if ! jq -e '
+	if jq -e 'has("hooks") and (.hooks | has("PostToolUse"))' "$settings" >/dev/null 2>&1 && ! jq -e '
 		.hooks.PostToolUse |
 		type == "array" and length > 0 and
 		all(
@@ -145,7 +149,7 @@ validate_settings_file() {
 		error "$relative: invalid PostToolUse hook structure"
 		return
 	fi
-	jq -r '.hooks.PostToolUse[] | .hooks[] | .command' "$settings" |
+	jq -r '.hooks.PostToolUse[]? | .hooks[]? | .command' "$settings" |
 		while IFS= read -r command; do
 			case "$command" in
 			"~"/.claude/hooks/*) ;;
@@ -200,20 +204,22 @@ EOF
 	fi
 }
 
-for skill_file in "$root"/.claude/skills/*/SKILL.md; do
-	[ -f "$skill_file" ] || continue
-	validate_skill "$skill_file"
-done
+if [ ! -d "$root/capability-catalog" ]; then
+	for skill_file in "$root"/.claude/skills/*/SKILL.md; do
+		[ -f "$skill_file" ] || continue
+		validate_skill "$skill_file"
+	done
 
-for agent in "$root"/dot_claude/agents/*.md; do
-	[ -f "$agent" ] || continue
-	validate_agent "$agent"
-done
+	for agent in "$root"/dot_claude/agents/*.md; do
+		[ -f "$agent" ] || continue
+		validate_agent "$agent"
+	done
 
-for manifest in "$root"/dot_claude/skills/*/dot_claude-plugin/plugin.json; do
-	[ -f "$manifest" ] || continue
-	validate_lsp_plugin "$manifest"
-done
+	for manifest in "$root"/dot_claude/skills/*/dot_claude-plugin/plugin.json; do
+		[ -f "$manifest" ] || continue
+		validate_lsp_plugin "$manifest"
+	done
+fi
 
 validate_settings
 

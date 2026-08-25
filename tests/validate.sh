@@ -9,7 +9,6 @@ shellcheck \
 	"$root/bootstrap.sh" \
 	"$root/capability-catalog/python-format/hook.sh" \
 	"$root/capability-catalog/rtk-guardrail/hook.sh" \
-	"$root/dot_claude/hooks/executable_post-edit-fmt.sh" \
 	"$root/tests/render-macos.sh" \
 	"$root/tests/debian-smoke.sh" \
 	"$root/tests/release-host-smoke.sh" \
@@ -17,7 +16,7 @@ shellcheck \
 	"$root/tests/test-bootstrap-ref.sh" \
 	"$root/tests/test-capabilities-init.sh" \
 	"$root/tests/test-capabilities-sync.sh" \
-	"$root/tests/test-claude-post-edit-hook.sh" \
+	"$root/tests/test-global-capability-migration.sh" \
 	"$root/tests/test-debian-packages.sh" \
 	"$root/tests/test-macos-preferences.sh" \
 	"$root/tests/test-validate-ai-artifacts.sh" \
@@ -28,7 +27,6 @@ shfmt -d \
 	"$root/bootstrap.sh" \
 	"$root/capability-catalog/python-format/hook.sh" \
 	"$root/capability-catalog/rtk-guardrail/hook.sh" \
-	"$root/dot_claude/hooks/executable_post-edit-fmt.sh" \
 	"$root/tests/render-macos.sh" \
 	"$root/tests/debian-smoke.sh" \
 	"$root/tests/release-host-smoke.sh" \
@@ -36,7 +34,7 @@ shfmt -d \
 	"$root/tests/test-bootstrap-ref.sh" \
 	"$root/tests/test-capabilities-init.sh" \
 	"$root/tests/test-capabilities-sync.sh" \
-	"$root/tests/test-claude-post-edit-hook.sh" \
+	"$root/tests/test-global-capability-migration.sh" \
 	"$root/tests/test-debian-packages.sh" \
 	"$root/tests/test-macos-preferences.sh" \
 	"$root/tests/test-validate-ai-artifacts.sh" \
@@ -72,28 +70,12 @@ for file in \
 	jq empty "$file"
 done
 
-for skill_dir in "$root"/.claude/skills/*; do
-	[ -f "$skill_dir/SKILL.md" ] || continue
-	skill_name="$(basename "$skill_dir")"
-	agent_skill_dir="$root/.agents/skills/$skill_name"
-	if [ ! -f "$agent_skill_dir/SKILL.md" ]; then
-		printf '%s\n' "Claude skill $skill_name is missing from .agents/skills." >&2
-		exit 1
-	fi
-	if [ ! -L "$skill_dir" ] && [ ! -L "$agent_skill_dir" ]; then
-		printf '%s\n' "Skill $skill_name is duplicated instead of linked." >&2
-		exit 1
-	fi
-done
-
-for skill_dir in "$root"/.agents/skills/*; do
-	[ -f "$skill_dir/SKILL.md" ] || continue
-	skill_name="$(basename "$skill_dir")"
-	if [ ! -f "$root/.claude/skills/$skill_name/SKILL.md" ]; then
-		printf '%s\n' "Agent skill $skill_name is missing from .claude/skills." >&2
-		exit 1
-	fi
-done
+test ! -e "$root/dot_claude/agents/feature-diagrammer.md"
+test ! -e "$root/dot_claude/hooks/executable_post-edit-fmt.sh"
+if find "$root/dot_claude/skills" -type f -print 2>/dev/null | rg -q .; then
+	printf '%s\n' "Retired global Claude skill sources remain managed by Chezmoi." >&2
+	exit 1
+fi
 
 jq -e '
 	.lsp.pyright.command == ["pyright-langserver", "--stdio"] and
@@ -125,6 +107,7 @@ installClaude = true
 EOF
 for source in \
 	"$root/.chezmoiscripts/run_once_before_00-backup.sh.tmpl" \
+	"$root/.chezmoiscripts/run_once_before_01-remove-global-capabilities.sh.tmpl" \
 	"$root/.chezmoiscripts/run_before_05-corporate-ca.sh.tmpl" \
 	"$root/.chezmoiscripts/run_once_before_10-packages.sh.tmpl" \
 	"$root/.chezmoiscripts/run_once_after_10-git-config.sh" \
@@ -142,11 +125,11 @@ for source in \
 	shfmt -d "$output"
 done
 
-sh "$root/tests/test-claude-post-edit-hook.sh"
 sh "$root/tests/test-bootstrap-preflight.sh"
 sh "$root/tests/test-bootstrap-ref.sh"
 sh "$root/tests/test-capabilities-init.sh"
 sh "$root/tests/test-capabilities-sync.sh"
+sh "$root/tests/test-global-capability-migration.sh"
 sh "$root/tests/test-vscode-extensions.sh"
 sh "$root/tests/test-debian-packages.sh"
 sh "$root/tests/test-macos-preferences.sh"
@@ -232,12 +215,15 @@ rg -q 'terraform-ls' "$tmp/dotfiles-all-lsps"
 rg -q 'uv tool upgrade headroom-ai' "$tmp/dotfiles-all-lsps"
 rg -q 'uv headroom' "$tmp/dotfiles-all-lsps"
 rg -q 'headroom rtk' "$tmp/dotfiles-all-lsps"
-rg -q 'rtk init --global --hook-only --auto-patch' "$root/.chezmoiscripts/run_after_31-rtk.sh"
+if rg -q 'rtk init --global --hook-only|rtk hook claude' "$root/.chezmoiscripts/run_after_31-rtk.sh"; then
+	printf '%s\n' "The retired global Claude RTK hook is still configured." >&2
+	exit 1
+fi
 rg -q 'rtk init --global --opencode' "$root/.chezmoiscripts/run_after_31-rtk.sh"
 chezmoi --source "$root" --config "$tmp/chezmoi-all-lsps.toml" execute-template \
 	<"$root/dot_claude/private_settings.json.tmpl" >"$tmp/claude-settings-all-lsps.json"
 jq -e '.enabledPlugins["ponytail@ponytail"] and .enabledPlugins["claude-md-management@claude-plugins-official"] and .enabledPlugins["pyright-lsp@claude-plugins-official"] and .enabledPlugins["typescript-lsp@claude-plugins-official"]' "$tmp/claude-settings-all-lsps.json" >/dev/null
-jq -e '.hooks.PreToolUse[0].matcher == "Bash" and .hooks.PreToolUse[0].hooks[0].command == "rtk hook claude"' "$tmp/claude-settings-all-lsps.json" >/dev/null
+jq -e 'has("hooks") | not' "$tmp/claude-settings-all-lsps.json" >/dev/null
 jq -e '.extraKnownMarketplaces.ponytail.source.repo == "DietrichGebert/ponytail"' "$tmp/claude-settings-all-lsps.json" >/dev/null
 jq -e '.extraKnownMarketplaces["claude-plugins-official"].source.repo == "anthropics/claude-plugins-official"' "$tmp/claude-settings-all-lsps.json" >/dev/null
 chezmoi --source "$root" --config "$tmp/chezmoi-all-lsps.toml" execute-template \
@@ -247,14 +233,17 @@ rg -q 'install_plugin ponytail@ponytail' "$tmp/claude-plugins-all-lsps"
 rg -q 'install_plugin pyright-lsp@claude-plugins-official' "$tmp/claude-plugins-all-lsps"
 rg -q 'install_plugin typescript-lsp@claude-plugins-official' "$tmp/claude-plugins-all-lsps"
 all_lsp_managed="$(chezmoi --source "$root" --config "$tmp/chezmoi-all-lsps.toml" managed)"
-printf '%s\n' "$all_lsp_managed" | rg -qx '\.claude/skills/marksman-lsp/\.claude-plugin/plugin\.json'
-printf '%s\n' "$all_lsp_managed" | rg -qx '\.claude/skills/terraform-lsp/\.claude-plugin/plugin\.json'
-printf '%s\n' "$all_lsp_managed" | rg -qx '\.claude/skills/claude-md-improver'
-printf '%s\n' "$all_lsp_managed" | rg -qx '\.claude/skills/grilling'
-jq -e '.lspServers.marksman.command == "marksman" and .lspServers.marksman.args == ["server"]' \
-	"$root/dot_claude/skills/marksman-lsp/dot_claude-plugin/plugin.json" >/dev/null
-jq -e '.lspServers["terraform-ls"].command == "terraform-ls" and .lspServers["terraform-ls"].args == ["serve"]' \
-	"$root/dot_claude/skills/terraform-lsp/dot_claude-plugin/plugin.json" >/dev/null
+if printf '%s\n' "$all_lsp_managed" | rg -q '^\.claude/(skills|agents/feature-diagrammer\.md|hooks/post-edit-fmt\.sh)'; then
+	printf '%s\n' "Chezmoi still manages a retired global Claude capability artifact." >&2
+	exit 1
+fi
+
+update_body="$(sed -n '/^update() {/,/^}/p' "$root/dot_local/bin/executable_dotfiles.tmpl")"
+if printf '%s\n' "$update_body" | rg -q 'dotfiles_capabilities|capabilities[[:space:]]+sync'; then
+	printf '%s\n' "dotfiles update must not synchronize repository capabilities." >&2
+	exit 1
+fi
+rg -Fxq 'apply) chezmoi apply ;;' "$root/dot_local/bin/executable_dotfiles.tmpl"
 
 cat >"$tmp/chezmoi-corporate-ca.toml" <<'EOF'
 [data]

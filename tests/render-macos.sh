@@ -39,15 +39,10 @@ test -x "$tmp/home/.local/bin/dotfiles"
 test -x "$tmp/home/.local/bin/github-profile"
 test -x "$tmp/home/.local/bin/git-credential-gh-profile"
 test "$(git config --file "$tmp/home/.config/git/dotfiles.gitconfig" --get core.untrackedCache)" = true
-for skill_file in "$root"/.claude/skills/*/SKILL.md; do
-	skill="$(basename "$(dirname "$skill_file")")"
-	test -f "$tmp/home/.claude/skills/$skill/SKILL.md"
-done
-test -f "$tmp/home/.claude/agents/feature-diagrammer.md"
-test -x "$tmp/home/.claude/hooks/post-edit-fmt.sh"
-test ! -e "$tmp/home/.claude/skills/marksman-lsp"
-test ! -e "$tmp/home/.claude/skills/terraform-lsp"
-jq -e '.hooks.PostToolUse[0].matcher == "Write|Edit|MultiEdit"' "$tmp/home/.claude/settings.json" >/dev/null
+test ! -e "$tmp/home/.claude/skills"
+test ! -e "$tmp/home/.claude/agents/feature-diagrammer.md"
+test ! -e "$tmp/home/.claude/hooks/post-edit-fmt.sh"
+jq -e 'has("hooks") | not' "$tmp/home/.claude/settings.json" >/dev/null
 test -f "$tmp/home/.config/opencode/agent/feature-diagrammer.md"
 test -f "$tmp/home/.config/opencode/clear-tui.ts"
 test "$(jq -r '.plugin[]' "$tmp/home/.config/opencode/tui.json")" = "./clear-tui.ts"

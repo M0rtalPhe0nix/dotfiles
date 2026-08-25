@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 import os
+import stat
 import subprocess
 import sys
 import tempfile
@@ -18,6 +19,7 @@ PORTABLE_CATALOG = {
     "url": "https://github.com/M0rtalPhe0nix/dotfiles.git",
     "path": "capability-catalog",
 }
+CATALOG_COMMIT = "f6447b97b0f75bfdf71c8c8aacb361d7f5bd036b"
 
 
 class PortableCatalogDescriptorTests(unittest.TestCase):
@@ -158,6 +160,102 @@ class RepositoryConsumerContractTests(unittest.TestCase):
         self.assertEqual(manifest["catalogs"], [PORTABLE_CATALOG])
         self.assertEqual(manifest["roots"], expected_roots)
         self.assertTrue(all("*" not in root for root in manifest["roots"]))
+
+    def test_lock_and_materialization_make_the_repository_self_contained(self) -> None:
+        catalog = json.loads((REPOSITORY / "capability-catalog/catalog.json").read_text())
+        indexed = {
+            capability["identifier"]: capability
+            for capability in catalog["capabilities"]
+        }
+        manifest = json.loads((REPOSITORY / "capabilities.json").read_text())
+        lock = json.loads((REPOSITORY / "capabilities.lock.json").read_text())
+
+        self.assertFalse((REPOSITORY / "skills-lock.json").exists())
+        self.assertEqual(
+            lock["catalogs"], [{**PORTABLE_CATALOG, "commit": CATALOG_COMMIT}]
+        )
+        self.assertEqual(
+            {capability["identifier"] for capability in lock["capabilities"]},
+            set(indexed),
+        )
+        for capability in lock["capabilities"]:
+            identifier = capability["identifier"]
+            self.assertEqual(
+                capability["source"], {**PORTABLE_CATALOG, "commit": CATALOG_COMMIT}
+            )
+            self.assertEqual(capability["content_hash"], indexed[identifier]["content_hash"])
+            expected_reason = "root" if identifier in manifest["roots"] else "companion"
+            self.assertEqual(capability["reason"]["kind"], expected_reason)
+            for target in capability["targets"]:
+                destination = REPOSITORY / target["path"]
+                if target["state"] == "relative-symlink":
+                    self.assertTrue(destination.is_symlink(), target["path"])
+                    writable = next(
+                        candidate
+                        for candidate in capability["targets"]
+                        if candidate["state"] == "writable-copy"
+                        and candidate["source"] == target["source"]
+                    )
+                    expected = os.path.relpath(
+                        REPOSITORY / writable["path"], destination.parent
+                    )
+                    self.assertEqual(os.readlink(destination), expected)
+                else:
+                    self.assertTrue(destination.exists(), target["path"])
+                    self.assertFalse(destination.is_symlink(), target["path"])
+                    self.assertTrue(
+                        destination.stat().st_mode & stat.S_IWUSR, target["path"]
+                    )
+                ignored = subprocess.run(
+                    ["git", "check-ignore", "--no-index", "-q", target["path"]],
+                    cwd=REPOSITORY,
+                    check=False,
+                )
+                self.assertEqual(ignored.returncode, 0, target["path"])
+                tracked = subprocess.run(
+                    ["git", "ls-files", "--error-unmatch", "--", target["path"]],
+                    cwd=REPOSITORY,
+                    check=False,
+                    stdout=subprocess.DEVNULL,
+                    stderr=subprocess.DEVNULL,
+                )
+                self.assertNotEqual(tracked.returncode, 0, target["path"])
+
+        for state_file in ("capabilities.json", "capabilities.lock.json"):
+            ignored = subprocess.run(
+                ["git", "check-ignore", "--no-index", "-q", state_file],
+                cwd=REPOSITORY,
+                check=False,
+            )
+            self.assertNotEqual(ignored.returncode, 0, state_file)
+
+        expected_exclusions = {
+            f"/{target['path'].rstrip('/')}"
+            f"{'/' if target['state'] == 'writable-copy' and target.get('directory') else ''}"
+            for capability in lock["capabilities"]
+            for target in capability["targets"]
+        }
+        expected_exclusions.update(
+            f"/{target['settings']['path']}"
+            for capability in lock["capabilities"]
+            for target in capability["targets"]
+            if target.get("settings", {}).get("file_state") == "generated"
+        )
+        actual_exclusions = {
+            line
+            for line in (REPOSITORY / ".git/info/exclude").read_text().splitlines()
+            if line and not line.startswith("#")
+        }
+        self.assertEqual(actual_exclusions, expected_exclusions)
+
+        claude_settings = json.loads(
+            (REPOSITORY / ".claude/settings.json").read_text()
+        )
+        codex_settings = json.loads((REPOSITORY / ".codex/hooks.json").read_text())
+        self.assertEqual(set(claude_settings["hooks"]), {"PostToolUse", "PreToolUse"})
+        self.assertEqual(set(codex_settings["hooks"]), {"PostToolUse", "PreToolUse"})
+        self.assertTrue((REPOSITORY / ".claude/agents/feature-diagrammer.md").is_file())
+        self.assertTrue((REPOSITORY / ".codex/agents/feature-diagrammer.md").is_file())
 
 
 if __name__ == "__main__":

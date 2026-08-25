@@ -20,6 +20,8 @@ cat >"$backup/targets" <<'EOF'
 .config/opencode/clear-tui.ts
 .claude/settings.json
 .claude/skills
+.claude/agents/feature-diagrammer.md
+.claude/hooks/post-edit-fmt.sh
 .config/ghostty/config
 .local/share/dotfiles/corporate-ca.pem
 .local/share/dotfiles/ca-bundle.pem
@@ -31,6 +33,17 @@ Library/Application Support/Code/User/keybindings.json
 .config/Code/User/keybindings.json
 {{ end -}}
 EOF
+cat >"$backup/managed-capabilities" <<'EOF'
+{{ include "global-capabilities.managed" -}}
+EOF
+: >"$backup/suspicious-skill-symlinks"
+for skill in "$HOME"/.claude/skills/*; do
+	[ -L "$skill" ] || continue
+	relative=".claude/skills/${skill##*/}"
+	if ! grep -Fxq "$relative" "$backup/managed-capabilities"; then
+		printf '%s -> %s\n' "$relative" "$(readlink "$skill")" >>"$backup/suspicious-skill-symlinks"
+	fi
+done
 : >"$backup/existing"
 while IFS= read -r target; do
 	if [ -e "$HOME/$target" ] || [ -L "$HOME/$target" ]; then
@@ -45,3 +58,8 @@ else
 fi
 ln -sfn "$backup" "$state/pre-bootstrap/latest"
 printf '%s\n' "Saved pre-bootstrap configuration to $backup"
+if [ -s "$backup/suspicious-skill-symlinks" ]; then
+	printf '%s\n' "Suspicious unmanaged global skill symlinks (report only):"
+	cat "$backup/suspicious-skill-symlinks"
+	printf '%s\n' "Run 'dotfiles capabilities cleanup-unmanaged-global' for optional interactive cleanup."
+fi

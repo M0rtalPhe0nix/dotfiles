@@ -1,0 +1,29 @@
+#!/bin/sh
+set -eu
+
+managed="$(mktemp)"
+trap 'rm -f "$managed"' EXIT INT TERM
+cat >"$managed" <<'EOF'
+{{ include "global-capabilities.managed" -}}
+EOF
+
+removed=0
+while IFS= read -r target; do
+	case "$target" in
+	"" | /* | *..* | *//* | */)
+		printf '%s\n' "Unsafe managed capability target: $target" >&2
+		exit 1
+		;;
+	.claude/skills/* | .claude/agents/feature-diagrammer.md | .claude/hooks/post-edit-fmt.sh) ;;
+	*)
+		printf '%s\n' "Unexpected managed capability target: $target" >&2
+		exit 1
+		;;
+	esac
+	if [ -e "$HOME/$target" ] || [ -L "$HOME/$target" ]; then
+		rm -rf -- "${HOME:?}/$target"
+		removed=$((removed + 1))
+	fi
+done <"$managed"
+
+printf '%s\n' "Removed $removed managed global capability artifacts; rollback data is in the pre-bootstrap backup."

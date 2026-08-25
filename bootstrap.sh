@@ -103,6 +103,8 @@ preflight() {
 .config/opencode/clear-tui.ts
 .claude/settings.json
 .claude/skills
+.claude/agents/feature-diagrammer.md
+.claude/hooks/post-edit-fmt.sh
 .config/ghostty/config
 .local/share/dotfiles/corporate-ca.pem
 .local/share/dotfiles/ca-bundle.pem

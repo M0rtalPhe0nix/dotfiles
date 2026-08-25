@@ -373,6 +373,7 @@ def diff_command() -> int:
 
 def _parser(*, skills_only: bool) -> argparse.ArgumentParser:
     group = "skills" if skills_only else "capabilities"
+    snapshot_kind = "skill" if skills_only else "capability"
     parser = argparse.ArgumentParser(prog=f"dotfiles {group}")
     commands = parser.add_subparsers(dest="command", required=True)
     commands.add_parser("init", help="initialize capability state in the Git worktree")
@@ -401,7 +402,7 @@ def _parser(*, skills_only: bool) -> argparse.ArgumentParser:
     )
     recommend_parser.add_argument("identifier")
     snapshot_parser = commands.add_parser(
-        "snapshot", help=f"request every {group[:-1] if group.endswith('s') else group} currently in the catalogs"
+        "snapshot", help=f"request every {snapshot_kind} currently in the catalogs"
     )
     snapshot_parser.add_argument("--catalog", dest="catalog_url")
     commands.add_parser("diff", help="report drift in materialized capability paths")

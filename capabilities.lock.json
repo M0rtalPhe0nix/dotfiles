@@ -1,0 +1,1138 @@
+{
+  "schema_version": 1,
+  "catalogs": [
+    {
+      "url": "https://github.com/M0rtalPhe0nix/dotfiles.git",
+      "path": "capability-catalog",
+      "commit": "f6447b97b0f75bfdf71c8c8aacb361d7f5bd036b"
+    }
+  ],
+  "capabilities": [
+    {
+      "identifier": "M0rtalPhe0nix/dotfiles/batch-grill-me",
+      "source": {
+        "url": "https://github.com/M0rtalPhe0nix/dotfiles.git",
+        "path": "capability-catalog",
+        "commit": "f6447b97b0f75bfdf71c8c8aacb361d7f5bd036b"
+      },
+      "content_hash": "801d285e0fd1424ac420210e259e996ca397b2f4aba50db211bfd3d1ca285bd5",
+      "reason": {
+        "kind": "root"
+      },
+      "catalog_path": "batch-grill-me",
+      "targets": [
+        {
+          "tool": "claude",
+          "kind": "skill",
+          "source": "skill",
+          "path": ".claude/skills/batch-grill-me",
+          "directory": true,
+          "state": "relative-symlink"
+        },
+        {
+          "tool": "codex",
+          "kind": "skill",
+          "source": "skill",
+          "path": ".agents/skills/batch-grill-me",
+          "directory": true,
+          "state": "writable-copy"
+        }
+      ]
+    },
+    {
+      "identifier": "M0rtalPhe0nix/dotfiles/claude-md-improver",
+      "source": {
+        "url": "https://github.com/M0rtalPhe0nix/dotfiles.git",
+        "path": "capability-catalog",
+        "commit": "f6447b97b0f75bfdf71c8c8aacb361d7f5bd036b"
+      },
+      "content_hash": "da0c84231bbc39a606336d44f664de2b641bae9955bc9153631c81fd70a7ac80",
+      "reason": {
+        "kind": "root"
+      },
+      "catalog_path": "claude-md-improver",
+      "targets": [
+        {
+          "tool": "claude",
+          "kind": "skill",
+          "source": "skill",
+          "path": ".claude/skills/claude-md-improver",
+          "directory": true,
+          "state": "relative-symlink"
+        },
+        {
+          "tool": "codex",
+          "kind": "skill",
+          "source": "skill",
+          "path": ".agents/skills/claude-md-improver",
+          "directory": true,
+          "state": "writable-copy"
+        }
+      ]
+    },
+    {
+      "identifier": "M0rtalPhe0nix/dotfiles/code-review",
+      "source": {
+        "url": "https://github.com/M0rtalPhe0nix/dotfiles.git",
+        "path": "capability-catalog",
+        "commit": "f6447b97b0f75bfdf71c8c8aacb361d7f5bd036b"
+      },
+      "content_hash": "4045352c1d746a3eccb016a1c5bed93475c7d4b2a6f30ba5a59cc3c62ac18e9f",
+      "reason": {
+        "kind": "root"
+      },
+      "catalog_path": "code-review",
+      "targets": [
+        {
+          "tool": "claude",
+          "kind": "skill",
+          "source": "skill",
+          "path": ".claude/skills/code-review",
+          "directory": true,
+          "state": "relative-symlink"
+        },
+        {
+          "tool": "codex",
+          "kind": "skill",
+          "source": "skill",
+          "path": ".agents/skills/code-review",
+          "directory": true,
+          "state": "writable-copy"
+        }
+      ]
+    },
+    {
+      "identifier": "M0rtalPhe0nix/dotfiles/codebase-design",
+      "source": {
+        "url": "https://github.com/M0rtalPhe0nix/dotfiles.git",
+        "path": "capability-catalog",
+        "commit": "f6447b97b0f75bfdf71c8c8aacb361d7f5bd036b"
+      },
+      "content_hash": "2dbf96580d2473f2363de3b1de2772d1457cd6575678329759496a4533c5e750",
+      "reason": {
+        "kind": "root"
+      },
+      "catalog_path": "codebase-design",
+      "targets": [
+        {
+          "tool": "claude",
+          "kind": "skill",
+          "source": "skill",
+          "path": ".claude/skills/codebase-design",
+          "directory": true,
+          "state": "relative-symlink"
+        },
+        {
+          "tool": "codex",
+          "kind": "skill",
+          "source": "skill",
+          "path": ".agents/skills/codebase-design",
+          "directory": true,
+          "state": "writable-copy"
+        }
+      ]
+    },
+    {
+      "identifier": "M0rtalPhe0nix/dotfiles/compare-dotfiles",
+      "source": {
+        "url": "https://github.com/M0rtalPhe0nix/dotfiles.git",
+        "path": "capability-catalog",
+        "commit": "f6447b97b0f75bfdf71c8c8aacb361d7f5bd036b"
+      },
+      "content_hash": "3d209c4edfaa0e889d0bade2e3bb859ce2c598c5387256918f94a34aca6009a5",
+      "reason": {
+        "kind": "root"
+      },
+      "catalog_path": "compare-dotfiles",
+      "targets": [
+        {
+          "tool": "claude",
+          "kind": "skill",
+          "source": "skill",
+          "path": ".claude/skills/compare-dotfiles",
+          "directory": true,
+          "state": "relative-symlink"
+        },
+        {
+          "tool": "codex",
+          "kind": "skill",
+          "source": "skill",
+          "path": ".agents/skills/compare-dotfiles",
+          "directory": true,
+          "state": "writable-copy"
+        }
+      ]
+    },
+    {
+      "identifier": "M0rtalPhe0nix/dotfiles/design-an-interface",
+      "source": {
+        "url": "https://github.com/M0rtalPhe0nix/dotfiles.git",
+        "path": "capability-catalog",
+        "commit": "f6447b97b0f75bfdf71c8c8aacb361d7f5bd036b"
+      },
+      "content_hash": "61ba9e25d5f1ab634f218b24b64b06f197440f908830b0e2f446be6f7b66d773",
+      "reason": {
+        "kind": "root"
+      },
+      "catalog_path": "design-an-interface",
+      "targets": [
+        {
+          "tool": "claude",
+          "kind": "skill",
+          "source": "skill",
+          "path": ".claude/skills/design-an-interface",
+          "directory": true,
+          "state": "relative-symlink"
+        },
+        {
+          "tool": "codex",
+          "kind": "skill",
+          "source": "skill",
+          "path": ".agents/skills/design-an-interface",
+          "directory": true,
+          "state": "writable-copy"
+        }
+      ]
+    },
+    {
+      "identifier": "M0rtalPhe0nix/dotfiles/domain-modeling",
+      "source": {
+        "url": "https://github.com/M0rtalPhe0nix/dotfiles.git",
+        "path": "capability-catalog",
+        "commit": "f6447b97b0f75bfdf71c8c8aacb361d7f5bd036b"
+      },
+      "content_hash": "bf1abf0524e5b59075148d9ee781ba024373b3d1a70bfef54889f568488c0daf",
+      "reason": {
+        "kind": "root"
+      },
+      "catalog_path": "domain-modeling",
+      "targets": [
+        {
+          "tool": "claude",
+          "kind": "skill",
+          "source": "skill",
+          "path": ".claude/skills/domain-modeling",
+          "directory": true,
+          "state": "relative-symlink"
+        },
+        {
+          "tool": "codex",
+          "kind": "skill",
+          "source": "skill",
+          "path": ".agents/skills/domain-modeling",
+          "directory": true,
+          "state": "writable-copy"
+        }
+      ]
+    },
+    {
+      "identifier": "M0rtalPhe0nix/dotfiles/excalidraw",
+      "source": {
+        "url": "https://github.com/M0rtalPhe0nix/dotfiles.git",
+        "path": "capability-catalog",
+        "commit": "f6447b97b0f75bfdf71c8c8aacb361d7f5bd036b"
+      },
+      "content_hash": "466279e24eb6c0e13ce65cdc4019e1e6869fa8558a93bc043d8e46c35784fa51",
+      "reason": {
+        "kind": "root"
+      },
+      "catalog_path": "excalidraw",
+      "targets": [
+        {
+          "tool": "claude",
+          "kind": "skill",
+          "source": "skill",
+          "path": ".claude/skills/excalidraw",
+          "directory": true,
+          "state": "relative-symlink"
+        },
+        {
+          "tool": "codex",
+          "kind": "skill",
+          "source": "skill",
+          "path": ".agents/skills/excalidraw",
+          "directory": true,
+          "state": "writable-copy"
+        }
+      ]
+    },
+    {
+      "identifier": "M0rtalPhe0nix/dotfiles/feature-diagrammer",
+      "source": {
+        "url": "https://github.com/M0rtalPhe0nix/dotfiles.git",
+        "path": "capability-catalog",
+        "commit": "f6447b97b0f75bfdf71c8c8aacb361d7f5bd036b"
+      },
+      "content_hash": "9fc7ae8a9f8d91d3ff9ab18c11ab8aac9ed5b2e14338e5f57d186cfe496d511d",
+      "reason": {
+        "kind": "companion",
+        "by": {
+          "claude": [
+            "M0rtalPhe0nix/dotfiles/grill-feature-diagrams"
+          ],
+          "codex": [
+            "M0rtalPhe0nix/dotfiles/grill-feature-diagrams"
+          ]
+        }
+      },
+      "catalog_path": "feature-diagrammer",
+      "targets": [
+        {
+          "tool": "claude",
+          "kind": "agent",
+          "source": "feature-diagrammer.md",
+          "path": ".claude/agents/feature-diagrammer.md",
+          "directory": false,
+          "state": "writable-copy"
+        },
+        {
+          "tool": "codex",
+          "kind": "agent",
+          "source": "feature-diagrammer-codex.md",
+          "path": ".codex/agents/feature-diagrammer.md",
+          "directory": false,
+          "state": "writable-copy"
+        }
+      ]
+    },
+    {
+      "identifier": "M0rtalPhe0nix/dotfiles/grill-feature-diagrams",
+      "source": {
+        "url": "https://github.com/M0rtalPhe0nix/dotfiles.git",
+        "path": "capability-catalog",
+        "commit": "f6447b97b0f75bfdf71c8c8aacb361d7f5bd036b"
+      },
+      "content_hash": "46843d31c34350029b667028498d64114d007191cddbce70e95f33b452195581",
+      "reason": {
+        "kind": "root"
+      },
+      "catalog_path": "grill-feature-diagrams",
+      "targets": [
+        {
+          "tool": "claude",
+          "kind": "skill",
+          "source": "skill",
+          "path": ".claude/skills/grill-feature-diagrams",
+          "directory": true,
+          "state": "relative-symlink"
+        },
+        {
+          "tool": "codex",
+          "kind": "skill",
+          "source": "skill",
+          "path": ".agents/skills/grill-feature-diagrams",
+          "directory": true,
+          "state": "writable-copy"
+        }
+      ]
+    },
+    {
+      "identifier": "M0rtalPhe0nix/dotfiles/grill-me",
+      "source": {
+        "url": "https://github.com/M0rtalPhe0nix/dotfiles.git",
+        "path": "capability-catalog",
+        "commit": "f6447b97b0f75bfdf71c8c8aacb361d7f5bd036b"
+      },
+      "content_hash": "4f85d7ed224c1dbe83d8f033138f2bd2e2499a4a4d7ebabbfd1b0cd65fd47e94",
+      "reason": {
+        "kind": "root"
+      },
+      "catalog_path": "grill-me",
+      "targets": [
+        {
+          "tool": "claude",
+          "kind": "skill",
+          "source": "skill",
+          "path": ".claude/skills/grill-me",
+          "directory": true,
+          "state": "relative-symlink"
+        },
+        {
+          "tool": "codex",
+          "kind": "skill",
+          "source": "skill",
+          "path": ".agents/skills/grill-me",
+          "directory": true,
+          "state": "writable-copy"
+        }
+      ]
+    },
+    {
+      "identifier": "M0rtalPhe0nix/dotfiles/grill-with-docs",
+      "source": {
+        "url": "https://github.com/M0rtalPhe0nix/dotfiles.git",
+        "path": "capability-catalog",
+        "commit": "f6447b97b0f75bfdf71c8c8aacb361d7f5bd036b"
+      },
+      "content_hash": "e05f68fc8a34429ce3061216f3addd268620d0383f8005ec30ceaa7c442c6afe",
+      "reason": {
+        "kind": "root"
+      },
+      "catalog_path": "grill-with-docs",
+      "targets": [
+        {
+          "tool": "claude",
+          "kind": "skill",
+          "source": "skill",
+          "path": ".claude/skills/grill-with-docs",
+          "directory": true,
+          "state": "relative-symlink"
+        },
+        {
+          "tool": "codex",
+          "kind": "skill",
+          "source": "skill",
+          "path": ".agents/skills/grill-with-docs",
+          "directory": true,
+          "state": "writable-copy"
+        }
+      ]
+    },
+    {
+      "identifier": "M0rtalPhe0nix/dotfiles/grilling",
+      "source": {
+        "url": "https://github.com/M0rtalPhe0nix/dotfiles.git",
+        "path": "capability-catalog",
+        "commit": "f6447b97b0f75bfdf71c8c8aacb361d7f5bd036b"
+      },
+      "content_hash": "abab785c08fcdb1c52c91cffa2484cda028210c4cabc12125ad3347bb7e5dd8c",
+      "reason": {
+        "kind": "root"
+      },
+      "catalog_path": "grilling",
+      "targets": [
+        {
+          "tool": "claude",
+          "kind": "skill",
+          "source": "skill",
+          "path": ".claude/skills/grilling",
+          "directory": true,
+          "state": "relative-symlink"
+        },
+        {
+          "tool": "codex",
+          "kind": "skill",
+          "source": "skill",
+          "path": ".agents/skills/grilling",
+          "directory": true,
+          "state": "writable-copy"
+        }
+      ]
+    },
+    {
+      "identifier": "M0rtalPhe0nix/dotfiles/handoff",
+      "source": {
+        "url": "https://github.com/M0rtalPhe0nix/dotfiles.git",
+        "path": "capability-catalog",
+        "commit": "f6447b97b0f75bfdf71c8c8aacb361d7f5bd036b"
+      },
+      "content_hash": "53ec052f37af7cf6f46d86ba4f79eed66d7cdf89cccbe921177100725dc07197",
+      "reason": {
+        "kind": "root"
+      },
+      "catalog_path": "handoff",
+      "targets": [
+        {
+          "tool": "claude",
+          "kind": "skill",
+          "source": "skill",
+          "path": ".claude/skills/handoff",
+          "directory": true,
+          "state": "relative-symlink"
+        },
+        {
+          "tool": "codex",
+          "kind": "skill",
+          "source": "skill",
+          "path": ".agents/skills/handoff",
+          "directory": true,
+          "state": "writable-copy"
+        }
+      ]
+    },
+    {
+      "identifier": "M0rtalPhe0nix/dotfiles/implement",
+      "source": {
+        "url": "https://github.com/M0rtalPhe0nix/dotfiles.git",
+        "path": "capability-catalog",
+        "commit": "f6447b97b0f75bfdf71c8c8aacb361d7f5bd036b"
+      },
+      "content_hash": "4637ca777ba1d686cc6e7583dab4261787c2b884fafc10be8f6273cc7d8c506d",
+      "reason": {
+        "kind": "root"
+      },
+      "catalog_path": "implement",
+      "targets": [
+        {
+          "tool": "claude",
+          "kind": "skill",
+          "source": "skill",
+          "path": ".claude/skills/implement",
+          "directory": true,
+          "state": "relative-symlink"
+        },
+        {
+          "tool": "codex",
+          "kind": "skill",
+          "source": "skill",
+          "path": ".agents/skills/implement",
+          "directory": true,
+          "state": "writable-copy"
+        }
+      ]
+    },
+    {
+      "identifier": "M0rtalPhe0nix/dotfiles/improve-codebase-architecture",
+      "source": {
+        "url": "https://github.com/M0rtalPhe0nix/dotfiles.git",
+        "path": "capability-catalog",
+        "commit": "f6447b97b0f75bfdf71c8c8aacb361d7f5bd036b"
+      },
+      "content_hash": "2ac8c81d6283c251104a2bce0ec8225b03aa37ff123e3f377f23a978273c9b93",
+      "reason": {
+        "kind": "root"
+      },
+      "catalog_path": "improve-codebase-architecture",
+      "targets": [
+        {
+          "tool": "claude",
+          "kind": "skill",
+          "source": "skill",
+          "path": ".claude/skills/improve-codebase-architecture",
+          "directory": true,
+          "state": "relative-symlink"
+        },
+        {
+          "tool": "codex",
+          "kind": "skill",
+          "source": "skill",
+          "path": ".agents/skills/improve-codebase-architecture",
+          "directory": true,
+          "state": "writable-copy"
+        }
+      ]
+    },
+    {
+      "identifier": "M0rtalPhe0nix/dotfiles/plugin-creator",
+      "source": {
+        "url": "https://github.com/M0rtalPhe0nix/dotfiles.git",
+        "path": "capability-catalog",
+        "commit": "f6447b97b0f75bfdf71c8c8aacb361d7f5bd036b"
+      },
+      "content_hash": "054a9e775e9747a1656ccb37d08a0150a1f978ac585f84f0e8f0b474b839ace0",
+      "reason": {
+        "kind": "root"
+      },
+      "catalog_path": "plugin-creator",
+      "targets": [
+        {
+          "tool": "claude",
+          "kind": "skill",
+          "source": "skill",
+          "path": ".claude/skills/plugin-creator",
+          "directory": true,
+          "state": "relative-symlink"
+        },
+        {
+          "tool": "codex",
+          "kind": "skill",
+          "source": "skill",
+          "path": ".agents/skills/plugin-creator",
+          "directory": true,
+          "state": "writable-copy"
+        }
+      ]
+    },
+    {
+      "identifier": "M0rtalPhe0nix/dotfiles/python-format",
+      "source": {
+        "url": "https://github.com/M0rtalPhe0nix/dotfiles.git",
+        "path": "capability-catalog",
+        "commit": "f6447b97b0f75bfdf71c8c8aacb361d7f5bd036b"
+      },
+      "content_hash": "539722a644db318a05e171c25a72d8b4bd3da46feca12c2b3ec87ab73c37294c",
+      "reason": {
+        "kind": "root"
+      },
+      "catalog_path": "python-format",
+      "targets": [
+        {
+          "tool": "claude",
+          "kind": "hook",
+          "source": "hook.sh",
+          "path": ".claude/hooks/python-format.sh",
+          "directory": false,
+          "state": "writable-copy",
+          "content_hash": "88b985afd6b5d99c299c06a0466804d272c9a048c864472b4b19e717110508f6",
+          "settings": {
+            "path": ".claude/settings.json",
+            "event": "PostToolUse",
+            "entry": {
+              "matcher": "Write|Edit|MultiEdit",
+              "hooks": [
+                {
+                  "type": "command",
+                  "command": "\"$(git rev-parse --show-toplevel)/.claude/hooks/python-format.sh\""
+                }
+              ]
+            },
+            "owned": true,
+            "file_state": "generated"
+          }
+        },
+        {
+          "tool": "codex",
+          "kind": "hook",
+          "source": "hook.sh",
+          "path": ".codex/hooks/python-format.sh",
+          "directory": false,
+          "state": "writable-copy",
+          "content_hash": "88b985afd6b5d99c299c06a0466804d272c9a048c864472b4b19e717110508f6",
+          "settings": {
+            "path": ".codex/hooks.json",
+            "event": "PostToolUse",
+            "entry": {
+              "matcher": "apply_patch|Edit|Write",
+              "hooks": [
+                {
+                  "type": "command",
+                  "command": "\"$(git rev-parse --show-toplevel)/.codex/hooks/python-format.sh\""
+                }
+              ]
+            },
+            "owned": true,
+            "file_state": "generated"
+          }
+        }
+      ]
+    },
+    {
+      "identifier": "M0rtalPhe0nix/dotfiles/qa",
+      "source": {
+        "url": "https://github.com/M0rtalPhe0nix/dotfiles.git",
+        "path": "capability-catalog",
+        "commit": "f6447b97b0f75bfdf71c8c8aacb361d7f5bd036b"
+      },
+      "content_hash": "2f410f24f405d049be455240ad2e268d31e63c52f9fd86644c30d339c5fa1c12",
+      "reason": {
+        "kind": "root"
+      },
+      "catalog_path": "qa",
+      "targets": [
+        {
+          "tool": "claude",
+          "kind": "skill",
+          "source": "skill",
+          "path": ".claude/skills/qa",
+          "directory": true,
+          "state": "relative-symlink"
+        },
+        {
+          "tool": "codex",
+          "kind": "skill",
+          "source": "skill",
+          "path": ".agents/skills/qa",
+          "directory": true,
+          "state": "writable-copy"
+        }
+      ]
+    },
+    {
+      "identifier": "M0rtalPhe0nix/dotfiles/request-refactor-plan",
+      "source": {
+        "url": "https://github.com/M0rtalPhe0nix/dotfiles.git",
+        "path": "capability-catalog",
+        "commit": "f6447b97b0f75bfdf71c8c8aacb361d7f5bd036b"
+      },
+      "content_hash": "189d699dd275a5afe698988ae8b3ed4d74d64af56c53024a410992c45d421b66",
+      "reason": {
+        "kind": "root"
+      },
+      "catalog_path": "request-refactor-plan",
+      "targets": [
+        {
+          "tool": "claude",
+          "kind": "skill",
+          "source": "skill",
+          "path": ".claude/skills/request-refactor-plan",
+          "directory": true,
+          "state": "relative-symlink"
+        },
+        {
+          "tool": "codex",
+          "kind": "skill",
+          "source": "skill",
+          "path": ".agents/skills/request-refactor-plan",
+          "directory": true,
+          "state": "writable-copy"
+        }
+      ]
+    },
+    {
+      "identifier": "M0rtalPhe0nix/dotfiles/review-agent",
+      "source": {
+        "url": "https://github.com/M0rtalPhe0nix/dotfiles.git",
+        "path": "capability-catalog",
+        "commit": "f6447b97b0f75bfdf71c8c8aacb361d7f5bd036b"
+      },
+      "content_hash": "f71c491f5f49880c1ff5dfc6d1bce97aa53d7e9c401e6a7c42fdf8de040a8cfa",
+      "reason": {
+        "kind": "root"
+      },
+      "catalog_path": "review-agent",
+      "targets": [
+        {
+          "tool": "claude",
+          "kind": "skill",
+          "source": "skill",
+          "path": ".claude/skills/review-agent",
+          "directory": true,
+          "state": "relative-symlink"
+        },
+        {
+          "tool": "codex",
+          "kind": "skill",
+          "source": "skill",
+          "path": ".agents/skills/review-agent",
+          "directory": true,
+          "state": "writable-copy"
+        }
+      ]
+    },
+    {
+      "identifier": "M0rtalPhe0nix/dotfiles/rtk-guardrail",
+      "source": {
+        "url": "https://github.com/M0rtalPhe0nix/dotfiles.git",
+        "path": "capability-catalog",
+        "commit": "f6447b97b0f75bfdf71c8c8aacb361d7f5bd036b"
+      },
+      "content_hash": "ab8edee16d3df15f0a36066334eddbcbeddf09d4cc1a0827f05cf50acd4c3055",
+      "reason": {
+        "kind": "root"
+      },
+      "catalog_path": "rtk-guardrail",
+      "targets": [
+        {
+          "tool": "claude",
+          "kind": "hook",
+          "source": "hook.sh",
+          "path": ".claude/hooks/rtk-guardrail.sh",
+          "directory": false,
+          "state": "writable-copy",
+          "content_hash": "4a33c68d9fc8e7bb173b65a6f9fae32403141662463b8197284a0ea00be42934",
+          "settings": {
+            "path": ".claude/settings.json",
+            "event": "PreToolUse",
+            "entry": {
+              "matcher": "Bash",
+              "hooks": [
+                {
+                  "type": "command",
+                  "command": "\"$(git rev-parse --show-toplevel)/.claude/hooks/rtk-guardrail.sh\""
+                }
+              ]
+            },
+            "owned": true,
+            "file_state": "generated"
+          }
+        },
+        {
+          "tool": "codex",
+          "kind": "hook",
+          "source": "hook.sh",
+          "path": ".codex/hooks/rtk-guardrail.sh",
+          "directory": false,
+          "state": "writable-copy",
+          "content_hash": "4a33c68d9fc8e7bb173b65a6f9fae32403141662463b8197284a0ea00be42934",
+          "settings": {
+            "path": ".codex/hooks.json",
+            "event": "PreToolUse",
+            "entry": {
+              "matcher": "Bash",
+              "hooks": [
+                {
+                  "type": "command",
+                  "command": "\"$(git rev-parse --show-toplevel)/.codex/hooks/rtk-guardrail.sh\""
+                }
+              ]
+            },
+            "owned": true,
+            "file_state": "generated"
+          }
+        }
+      ]
+    },
+    {
+      "identifier": "M0rtalPhe0nix/dotfiles/setup-matt-pocock-skills",
+      "source": {
+        "url": "https://github.com/M0rtalPhe0nix/dotfiles.git",
+        "path": "capability-catalog",
+        "commit": "f6447b97b0f75bfdf71c8c8aacb361d7f5bd036b"
+      },
+      "content_hash": "133f440fbd10a60ca13b58c551aab05e05ddf9515a828af1dde525133e73811a",
+      "reason": {
+        "kind": "root"
+      },
+      "catalog_path": "setup-matt-pocock-skills",
+      "targets": [
+        {
+          "tool": "claude",
+          "kind": "skill",
+          "source": "skill",
+          "path": ".claude/skills/setup-matt-pocock-skills",
+          "directory": true,
+          "state": "relative-symlink"
+        },
+        {
+          "tool": "codex",
+          "kind": "skill",
+          "source": "skill",
+          "path": ".agents/skills/setup-matt-pocock-skills",
+          "directory": true,
+          "state": "writable-copy"
+        }
+      ]
+    },
+    {
+      "identifier": "M0rtalPhe0nix/dotfiles/setup-pre-commit",
+      "source": {
+        "url": "https://github.com/M0rtalPhe0nix/dotfiles.git",
+        "path": "capability-catalog",
+        "commit": "f6447b97b0f75bfdf71c8c8aacb361d7f5bd036b"
+      },
+      "content_hash": "af51eb24bd009d415b9a097510e2fd8f908db391cd6e85ed8016b76babc694da",
+      "reason": {
+        "kind": "root"
+      },
+      "catalog_path": "setup-pre-commit",
+      "targets": [
+        {
+          "tool": "claude",
+          "kind": "skill",
+          "source": "skill",
+          "path": ".claude/skills/setup-pre-commit",
+          "directory": true,
+          "state": "relative-symlink"
+        },
+        {
+          "tool": "codex",
+          "kind": "skill",
+          "source": "skill",
+          "path": ".agents/skills/setup-pre-commit",
+          "directory": true,
+          "state": "writable-copy"
+        }
+      ]
+    },
+    {
+      "identifier": "M0rtalPhe0nix/dotfiles/skill-creator",
+      "source": {
+        "url": "https://github.com/M0rtalPhe0nix/dotfiles.git",
+        "path": "capability-catalog",
+        "commit": "f6447b97b0f75bfdf71c8c8aacb361d7f5bd036b"
+      },
+      "content_hash": "c1ed501efaf4d9e32a4985bff67b07b46f0f5f31cf3ab99752a5ad5c172a9e4e",
+      "reason": {
+        "kind": "root"
+      },
+      "catalog_path": "skill-creator",
+      "targets": [
+        {
+          "tool": "claude",
+          "kind": "skill",
+          "source": "skill",
+          "path": ".claude/skills/skill-creator",
+          "directory": true,
+          "state": "relative-symlink"
+        },
+        {
+          "tool": "codex",
+          "kind": "skill",
+          "source": "skill",
+          "path": ".agents/skills/skill-creator",
+          "directory": true,
+          "state": "writable-copy"
+        }
+      ]
+    },
+    {
+      "identifier": "M0rtalPhe0nix/dotfiles/skill-installer",
+      "source": {
+        "url": "https://github.com/M0rtalPhe0nix/dotfiles.git",
+        "path": "capability-catalog",
+        "commit": "f6447b97b0f75bfdf71c8c8aacb361d7f5bd036b"
+      },
+      "content_hash": "3da553e64b833e07a549e924c9642526d5036e50dc72934ca87d8d1217ed9c29",
+      "reason": {
+        "kind": "root"
+      },
+      "catalog_path": "skill-installer",
+      "targets": [
+        {
+          "tool": "claude",
+          "kind": "skill",
+          "source": "skill",
+          "path": ".claude/skills/skill-installer",
+          "directory": true,
+          "state": "relative-symlink"
+        },
+        {
+          "tool": "codex",
+          "kind": "skill",
+          "source": "skill",
+          "path": ".agents/skills/skill-installer",
+          "directory": true,
+          "state": "writable-copy"
+        }
+      ]
+    },
+    {
+      "identifier": "M0rtalPhe0nix/dotfiles/speckit-diagrams",
+      "source": {
+        "url": "https://github.com/M0rtalPhe0nix/dotfiles.git",
+        "path": "capability-catalog",
+        "commit": "f6447b97b0f75bfdf71c8c8aacb361d7f5bd036b"
+      },
+      "content_hash": "8aec810f0798e70faef86242f23953a920f1bfd92d939702309600306f7ca5dc",
+      "reason": {
+        "kind": "root"
+      },
+      "catalog_path": "speckit-diagrams",
+      "targets": [
+        {
+          "tool": "claude",
+          "kind": "skill",
+          "source": "skill",
+          "path": ".claude/skills/speckit-diagrams",
+          "directory": true,
+          "state": "relative-symlink"
+        },
+        {
+          "tool": "codex",
+          "kind": "skill",
+          "source": "skill",
+          "path": ".agents/skills/speckit-diagrams",
+          "directory": true,
+          "state": "writable-copy"
+        }
+      ]
+    },
+    {
+      "identifier": "M0rtalPhe0nix/dotfiles/tdd",
+      "source": {
+        "url": "https://github.com/M0rtalPhe0nix/dotfiles.git",
+        "path": "capability-catalog",
+        "commit": "f6447b97b0f75bfdf71c8c8aacb361d7f5bd036b"
+      },
+      "content_hash": "9543430012dc596a056f74fbd740965153d694c83b82633b64397dfb084934a3",
+      "reason": {
+        "kind": "root"
+      },
+      "catalog_path": "tdd",
+      "targets": [
+        {
+          "tool": "claude",
+          "kind": "skill",
+          "source": "skill",
+          "path": ".claude/skills/tdd",
+          "directory": true,
+          "state": "relative-symlink"
+        },
+        {
+          "tool": "codex",
+          "kind": "skill",
+          "source": "skill",
+          "path": ".agents/skills/tdd",
+          "directory": true,
+          "state": "writable-copy"
+        }
+      ]
+    },
+    {
+      "identifier": "M0rtalPhe0nix/dotfiles/teach",
+      "source": {
+        "url": "https://github.com/M0rtalPhe0nix/dotfiles.git",
+        "path": "capability-catalog",
+        "commit": "f6447b97b0f75bfdf71c8c8aacb361d7f5bd036b"
+      },
+      "content_hash": "b4eb41e77315cdc9f4363d5e5e7ac205e8b1d65692e6b23ae1dfe91f6a04a37f",
+      "reason": {
+        "kind": "root"
+      },
+      "catalog_path": "teach",
+      "targets": [
+        {
+          "tool": "claude",
+          "kind": "skill",
+          "source": "skill",
+          "path": ".claude/skills/teach",
+          "directory": true,
+          "state": "relative-symlink"
+        },
+        {
+          "tool": "codex",
+          "kind": "skill",
+          "source": "skill",
+          "path": ".agents/skills/teach",
+          "directory": true,
+          "state": "writable-copy"
+        }
+      ]
+    },
+    {
+      "identifier": "M0rtalPhe0nix/dotfiles/to-spec",
+      "source": {
+        "url": "https://github.com/M0rtalPhe0nix/dotfiles.git",
+        "path": "capability-catalog",
+        "commit": "f6447b97b0f75bfdf71c8c8aacb361d7f5bd036b"
+      },
+      "content_hash": "c873a82550427d6d1382c5c07d962979c0095849021f3cb44c12737445eb8f09",
+      "reason": {
+        "kind": "root"
+      },
+      "catalog_path": "to-spec",
+      "targets": [
+        {
+          "tool": "claude",
+          "kind": "skill",
+          "source": "skill",
+          "path": ".claude/skills/to-spec",
+          "directory": true,
+          "state": "relative-symlink"
+        },
+        {
+          "tool": "codex",
+          "kind": "skill",
+          "source": "skill",
+          "path": ".agents/skills/to-spec",
+          "directory": true,
+          "state": "writable-copy"
+        }
+      ]
+    },
+    {
+      "identifier": "M0rtalPhe0nix/dotfiles/to-tickets",
+      "source": {
+        "url": "https://github.com/M0rtalPhe0nix/dotfiles.git",
+        "path": "capability-catalog",
+        "commit": "f6447b97b0f75bfdf71c8c8aacb361d7f5bd036b"
+      },
+      "content_hash": "7f58a9f9b10444e607a3b363dab0245cd497a9db513b3ab64dadb87bf103a89c",
+      "reason": {
+        "kind": "root"
+      },
+      "catalog_path": "to-tickets",
+      "targets": [
+        {
+          "tool": "claude",
+          "kind": "skill",
+          "source": "skill",
+          "path": ".claude/skills/to-tickets",
+          "directory": true,
+          "state": "relative-symlink"
+        },
+        {
+          "tool": "codex",
+          "kind": "skill",
+          "source": "skill",
+          "path": ".agents/skills/to-tickets",
+          "directory": true,
+          "state": "writable-copy"
+        }
+      ]
+    },
+    {
+      "identifier": "M0rtalPhe0nix/dotfiles/ubiquitous-language",
+      "source": {
+        "url": "https://github.com/M0rtalPhe0nix/dotfiles.git",
+        "path": "capability-catalog",
+        "commit": "f6447b97b0f75bfdf71c8c8aacb361d7f5bd036b"
+      },
+      "content_hash": "c6c73fb59e86c8452ef9bcfcfd261235aa7d3b7a0bffe0bb0972187196464421",
+      "reason": {
+        "kind": "root"
+      },
+      "catalog_path": "ubiquitous-language",
+      "targets": [
+        {
+          "tool": "claude",
+          "kind": "skill",
+          "source": "skill",
+          "path": ".claude/skills/ubiquitous-language",
+          "directory": true,
+          "state": "relative-symlink"
+        },
+        {
+          "tool": "codex",
+          "kind": "skill",
+          "source": "skill",
+          "path": ".agents/skills/ubiquitous-language",
+          "directory": true,
+          "state": "writable-copy"
+        }
+      ]
+    },
+    {
+      "identifier": "M0rtalPhe0nix/dotfiles/wayfinder",
+      "source": {
+        "url": "https://github.com/M0rtalPhe0nix/dotfiles.git",
+        "path": "capability-catalog",
+        "commit": "f6447b97b0f75bfdf71c8c8aacb361d7f5bd036b"
+      },
+      "content_hash": "14febbc4e0a8ad9a02411c53490767759eff1bd6c85329f954f53d052316784b",
+      "reason": {
+        "kind": "root"
+      },
+      "catalog_path": "wayfinder",
+      "targets": [
+        {
+          "tool": "claude",
+          "kind": "skill",
+          "source": "skill",
+          "path": ".claude/skills/wayfinder",
+          "directory": true,
+          "state": "relative-symlink"
+        },
+        {
+          "tool": "codex",
+          "kind": "skill",
+          "source": "skill",
+          "path": ".agents/skills/wayfinder",
+          "directory": true,
+          "state": "writable-copy"
+        }
+      ]
+    },
+    {
+      "identifier": "M0rtalPhe0nix/dotfiles/writing-great-skills",
+      "source": {
+        "url": "https://github.com/M0rtalPhe0nix/dotfiles.git",
+        "path": "capability-catalog",
+        "commit": "f6447b97b0f75bfdf71c8c8aacb361d7f5bd036b"
+      },
+      "content_hash": "58d3ec98f2ce0b257e67649c889487ff43dedffacab9ca791591151df87345a1",
+      "reason": {
+        "kind": "root"
+      },
+      "catalog_path": "writing-great-skills",
+      "targets": [
+        {
+          "tool": "claude",
+          "kind": "skill",
+          "source": "skill",
+          "path": ".claude/skills/writing-great-skills",
+          "directory": true,
+          "state": "relative-symlink"
+        },
+        {
+          "tool": "codex",
+          "kind": "skill",
+          "source": "skill",
+          "path": ".agents/skills/writing-great-skills",
+          "directory": true,
+          "state": "writable-copy"
+        }
+      ]
+    }
+  ]
+}

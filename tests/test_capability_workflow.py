@@ -220,6 +220,38 @@ class CapabilityWorkflowTests(unittest.TestCase):
         capability_snapshot = self._run("snapshot")
         self.assertEqual(capability_snapshot.returncode, 0, capability_snapshot.stderr)
 
+    def test_help_lists_the_complete_workflow_and_snapshot_scope(self) -> None:
+        capability_help = self._run("--help")
+
+        self.assertEqual(capability_help.returncode, 0, capability_help.stderr)
+        for command in (
+            "init",
+            "add",
+            "remove",
+            "sync",
+            "update",
+            "migrate",
+            "list",
+            "recommend",
+            "snapshot",
+            "diff",
+            "validate",
+        ):
+            self.assertRegex(capability_help.stdout, rf"(?m)^\s+{command}\s+")
+        self.assertIn(
+            "request every capability currently in the catalogs",
+            capability_help.stdout,
+        )
+        self.assertNotIn("capabilitie ", capability_help.stdout)
+
+        skill_help = self._run("skills", "--help")
+
+        self.assertEqual(skill_help.returncode, 0, skill_help.stderr)
+        self.assertIn(
+            "request every skill currently in the catalogs",
+            skill_help.stdout,
+        )
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -12,7 +12,7 @@ This is the configuration I use. Fork it and make it yours rather than expecting
 - Node, Python, `uv`, `pnpm`, and Ruff through mise, plus an isolated Python 3.13 Headroom installation managed by `uv tool`, optional language servers, and Terraform or OpenTofu.
 - VS Code, Ghostty, MesloLGS Nerd Font, Catppuccin styling, and a baseline of extensions. Existing extensions are retained.
 - Git defaults that leave authentication, signing, and unrelated host configuration alone, plus optional per-repository GitHub profiles.
-- Claude Code and OpenCode with shared skills and practical safety guardrails. Both include Ponytail, Headroom MCP, and RTK command-output compression; OpenCode also includes Serena and a visible `/clear` alias, while Claude uses matching plugins for optional mise-managed language servers.
+- Claude Code, Codex, and OpenCode with practical safety guardrails. Skills, agents, and hooks are selected per repository for Claude Code and Codex; OpenCode keeps its managed configuration and integrations but is not a capability materialization target.
 
 Chezmoi owns configuration and platform differences. Homebrew supplies shared tools on both platforms; apt installs Linux prerequisites and VS Code.
 
@@ -78,11 +78,18 @@ dotfiles diff                   # Preview managed-file changes
 dotfiles apply                  # Apply configuration only; does not upgrade software
 dotfiles capabilities init      # Initialize capability state at the current Git worktree root
 dotfiles capabilities add --catalog GIT_URL OWNER/REPOSITORY/NAME # Add and install a capability
-dotfiles capabilities sync      # Restore generated capability files from the lock
+dotfiles capabilities remove OWNER/REPOSITORY/NAME # Remove an explicit root and orphaned dependencies
+dotfiles capabilities list      # Explain requested, transitive, recommended, and resolved state
+dotfiles capabilities recommend OWNER/REPOSITORY/NAME # Promote a recommendation to an explicit root
+dotfiles capabilities snapshot  # Select every capability currently in the configured catalogs
+dotfiles skills snapshot        # Select only every current skill through the filtered alias
+dotfiles capabilities diff      # Report edits or damage in generated capability paths
+dotfiles capabilities sync      # Destructively restore generated paths from pinned desired state
 dotfiles capabilities update NAME... # Refresh selected roots and their affected dependency graph
 dotfiles capabilities update --all # Refresh the complete resolved graph without adding roots
 dotfiles capabilities migrate   # Explicitly migrate supported older state schemas
 dotfiles capabilities validate PATH # Validate a local catalog and regenerate its index
+dotfiles capabilities cleanup-unmanaged-global # Review suspicious global skill links
 dotfiles doctor                 # Check tools, authentication, fonts, permissions, and drift
 dotfiles update                 # Update managed packages, runtimes, extensions, and Zim modules
 dotfiles rollback               # Restore pre-bootstrap files; keeps installed software
@@ -92,6 +99,10 @@ dotfiles preferences            # Confirm and apply curated macOS preferences
 ```
 
 `dotfiles apply` deliberately does not update software. Use `dotfiles update` when you intend to upgrade packages and runtimes.
+
+The global capability migration backup records the exact skills, agent, and hook proven to be managed by this dotfiles installation. Ordinary apply only reports unfamiliar symlinks under `~/.claude/skills`; it never removes them. `dotfiles capabilities cleanup-unmanaged-global` lists each suspicious link and its target, then requires an explicit confirmation before removing only those listed symlinks. `dotfiles rollback` restores the pre-migration global state and does not uninstall software.
+
+Capability commands operate only on the current Git worktree. See [Portable Capability Catalogs](docs/capability-catalog.md) for desired-state behavior, writable experiments, hook approvals, catalog ownership, and deliberately deferred features.
 
 ### macOS Preferences
 

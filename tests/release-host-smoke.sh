@@ -56,9 +56,9 @@ test "$mode" = 600
 zsh -lic 'command -v o >/dev/null'
 code --list-extensions >/dev/null
 
-for skill_file in "$source_dir"/.claude/skills/*/SKILL.md; do
-	skill="$(basename "$(dirname "$skill_file")")"
-	test -f "$HOME/.claude/skills/$skill/SKILL.md"
-done
+while IFS= read -r retired_target; do
+	test ! -e "$HOME/$retired_target"
+	test ! -L "$HOME/$retired_target"
+done <"$source_dir/global-capabilities.managed"
 
 printf '%s\n' "Release host smoke test passed."

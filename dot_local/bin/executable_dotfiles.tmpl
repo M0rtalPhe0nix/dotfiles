@@ -65,6 +65,50 @@ capabilities() {
 		exec mise exec -- uv run --project "$runtime" --locked python -m dotfiles_capabilities "$@"
 }
 
+cleanup_unmanaged_global_capabilities() {
+	inventory="$source_dir/global-capabilities.managed"
+	if [ ! -f "$inventory" ]; then
+		printf '%s\n' "The managed global capability inventory is missing from $source_dir." >&2
+		return 1
+	fi
+	temporary="$(mktemp -d)"
+	trap 'rm -rf "$temporary"' EXIT HUP INT TERM
+	report="$temporary/report"
+	paths="$temporary/paths"
+	: >"$report"
+	: >"$paths"
+	for skill in "$HOME"/.claude/skills/*; do
+		[ -L "$skill" ] || continue
+		relative=".claude/skills/${skill##*/}"
+		if ! grep -Fxq "$relative" "$inventory"; then
+			printf '%s\n' "$relative" >>"$paths"
+			printf '%s -> %s\n' "$relative" "$(readlink "$skill")" >>"$report"
+		fi
+	done
+	if [ ! -s "$report" ]; then
+		printf '%s\n' "No suspicious unmanaged global skill symlinks were found."
+		return 0
+	fi
+	printf '%s\n' "Suspicious unmanaged global skill symlinks:"
+	cat "$report"
+	printf '%s' "Remove only these symlinks? [y/N] "
+	IFS= read -r confirmation || confirmation=""
+	case "$confirmation" in
+	y | Y | yes | YES)
+		while IFS= read -r relative; do
+			case "$relative" in
+			.claude/skills/*)
+				path="${HOME:?}/$relative"
+				[ -L "$path" ] && rm -- "$path"
+				;;
+			esac
+		done <"$paths"
+		printf '%s\n' "Removed the listed unmanaged skill symlinks."
+		;;
+	*) printf '%s\n' "No unmanaged skill symlinks were removed." ;;
+	esac
+}
+
 doctor() {
 	failed=0
 	for command in brew chezmoi mise gh rg fd fzf bat eza jq yq dust btm zoxide delta tldr shellcheck shfmt starship zsh pnpm ruff uv headroom rtk; do
@@ -328,7 +372,15 @@ case "${1:-}" in
 apply) chezmoi apply ;;
 capabilities)
 	shift
-	capabilities "$@"
+	if [ "${1:-}" = cleanup-unmanaged-global ]; then
+		[ "$#" -eq 1 ] || {
+			printf '%s\n' "usage: dotfiles capabilities cleanup-unmanaged-global" >&2
+			exit 2
+		}
+		cleanup_unmanaged_global_capabilities
+	else
+		capabilities "$@"
+	fi
 	;;
 diff) chezmoi diff ;;
 doctor) doctor ;;
