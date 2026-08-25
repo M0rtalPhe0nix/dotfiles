@@ -1,6 +1,7 @@
 {
   "schema_version": 1,
   "identifier": "M0rtalPhe0nix/dotfiles/implement",
+  "upstream": {"repository": "mattpocock/skills", "source_type": "github", "path": "skills/engineering/implement/SKILL.md", "content_hash": "2139cfedf24791adbc839aaab6019cff158af1e28bfead020ec6e0ce01b3e74d"},
   "description": "Implement a specification or set of tickets with tests and review",
   "dependencies": {
     "required": ["code-review", "tdd"],

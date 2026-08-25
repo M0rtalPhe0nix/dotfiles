@@ -1,6 +1,7 @@
 {
   "schema_version": 1,
   "identifier": "M0rtalPhe0nix/dotfiles/code-review",
+  "upstream": {"repository": "mattpocock/skills", "source_type": "github", "path": "skills/engineering/code-review/SKILL.md", "content_hash": "31d149a480eaa68c11e32f5ee77f0fd0b98a906834d531d881d502352edd0b8e"},
   "description": "Review changes against repository standards and their originating specification",
   "dependencies": {
     "required": [],

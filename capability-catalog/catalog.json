@@ -1,7 +1,7 @@
 {
   "capabilities": [
     {
-      "content_hash": "d66129f8ae11ad3c480e16498953896840a532cf0cb3bc892106a6d97d0eb3d2",
+      "content_hash": "801d285e0fd1424ac420210e259e996ca397b2f4aba50db211bfd3d1ca285bd5",
       "dependencies": {
         "companions": {
           "claude": [],
@@ -28,6 +28,12 @@
             "source": "skill"
           }
         ]
+      },
+      "upstream": {
+        "content_hash": "f448831b8f04518b1527408f1d5024384ad5f543bdbaac6fabb7aa053ad60489",
+        "path": "skills/in-progress/batch-grill-me/SKILL.md",
+        "repository": "mattpocock/skills",
+        "source_type": "github"
       }
     },
     {
@@ -61,7 +67,7 @@
       }
     },
     {
-      "content_hash": "b193b4ae79367023d9d6fec04c59a87a8db9d221b3ad2216bd68e4963c6052e7",
+      "content_hash": "4045352c1d746a3eccb016a1c5bed93475c7d4b2a6f30ba5a59cc3c62ac18e9f",
       "dependencies": {
         "companions": {
           "claude": [],
@@ -90,10 +96,16 @@
             "source": "skill"
           }
         ]
+      },
+      "upstream": {
+        "content_hash": "31d149a480eaa68c11e32f5ee77f0fd0b98a906834d531d881d502352edd0b8e",
+        "path": "skills/engineering/code-review/SKILL.md",
+        "repository": "mattpocock/skills",
+        "source_type": "github"
       }
     },
     {
-      "content_hash": "ca591d3b8d7c2ec3b48c8c7609d47180d5cef7d57915fb6a13b21c69b8b862d5",
+      "content_hash": "2dbf96580d2473f2363de3b1de2772d1457cd6575678329759496a4533c5e750",
       "dependencies": {
         "companions": {
           "claude": [],
@@ -120,6 +132,12 @@
             "source": "skill"
           }
         ]
+      },
+      "upstream": {
+        "content_hash": "6d9d51d8caa01633fd00cf87089c5618c982321f942ac69f62565dc001c6b22f",
+        "path": "skills/engineering/codebase-design/SKILL.md",
+        "repository": "mattpocock/skills",
+        "source_type": "github"
       }
     },
     {
@@ -153,7 +171,7 @@
       }
     },
     {
-      "content_hash": "92c071b33e4327e0b913beb0864a1f01948f08084420e9420dfd26a596be5f0e",
+      "content_hash": "61ba9e25d5f1ab634f218b24b64b06f197440f908830b0e2f446be6f7b66d773",
       "dependencies": {
         "companions": {
           "claude": [],
@@ -180,10 +198,16 @@
             "source": "skill"
           }
         ]
+      },
+      "upstream": {
+        "content_hash": "aef348a9af675b771635623b5aa7790da4d40adc1ee88b58b6fd116eda2047d8",
+        "path": "skills/deprecated/design-an-interface/SKILL.md",
+        "repository": "mattpocock/skills",
+        "source_type": "github"
       }
     },
     {
-      "content_hash": "e9db23a0aee753e40bef57bc5a26db63229525c33dda30b320f4ab30eae3dde4",
+      "content_hash": "bf1abf0524e5b59075148d9ee781ba024373b3d1a70bfef54889f568488c0daf",
       "dependencies": {
         "companions": {
           "claude": [],
@@ -210,6 +234,12 @@
             "source": "skill"
           }
         ]
+      },
+      "upstream": {
+        "content_hash": "363cb0f53b0b431e7c00086ad1f823500b7e1b70b5616ee969c979f0934e9e6e",
+        "path": "skills/engineering/domain-modeling/SKILL.md",
+        "repository": "mattpocock/skills",
+        "source_type": "github"
       }
     },
     {
@@ -344,7 +374,7 @@
       }
     },
     {
-      "content_hash": "2a5e563d72adc1420dfdfcb57e074cbedf19a415a6c218aa809345ccc70854bf",
+      "content_hash": "e05f68fc8a34429ce3061216f3addd268620d0383f8005ec30ceaa7c442c6afe",
       "dependencies": {
         "companions": {
           "claude": [],
@@ -374,6 +404,12 @@
             "source": "skill"
           }
         ]
+      },
+      "upstream": {
+        "content_hash": "9c460cbd94fd3c63cdef967dbdb6e66ca687103cdc380cd37834e4d10b738f78",
+        "path": "skills/engineering/grill-with-docs/SKILL.md",
+        "repository": "mattpocock/skills",
+        "source_type": "github"
       }
     },
     {
@@ -407,7 +443,7 @@
       }
     },
     {
-      "content_hash": "6d12f7a7bae65ba0296e4ec6f33006c1fae09de10a396ecfbd3d99c28aec80b5",
+      "content_hash": "53ec052f37af7cf6f46d86ba4f79eed66d7cdf89cccbe921177100725dc07197",
       "dependencies": {
         "companions": {
           "claude": [],
@@ -434,10 +470,16 @@
             "source": "skill"
           }
         ]
+      },
+      "upstream": {
+        "content_hash": "ad03e8d4ea3cbbff66420eb7ba3cc375b5cbe1821a2449b53e863256cf5b5cde",
+        "path": "skills/productivity/handoff/SKILL.md",
+        "repository": "mattpocock/skills",
+        "source_type": "github"
       }
     },
     {
-      "content_hash": "e6dda43350422547e66e4cd6681013bd43c14946b6d72b6823d33d5b656d0e48",
+      "content_hash": "4637ca777ba1d686cc6e7583dab4261787c2b884fafc10be8f6273cc7d8c506d",
       "dependencies": {
         "companions": {
           "claude": [],
@@ -467,10 +509,16 @@
             "source": "skill"
           }
         ]
+      },
+      "upstream": {
+        "content_hash": "2139cfedf24791adbc839aaab6019cff158af1e28bfead020ec6e0ce01b3e74d",
+        "path": "skills/engineering/implement/SKILL.md",
+        "repository": "mattpocock/skills",
+        "source_type": "github"
       }
     },
     {
-      "content_hash": "4b6e455b2507a2e613ca0b831ce85f065c4e2abdc5560d4dd5f8720d3881b8e6",
+      "content_hash": "2ac8c81d6283c251104a2bce0ec8225b03aa37ff123e3f377f23a978273c9b93",
       "dependencies": {
         "companions": {
           "claude": [],
@@ -501,6 +549,12 @@
             "source": "skill"
           }
         ]
+      },
+      "upstream": {
+        "content_hash": "66e8a50c83c3c724fcfe0769701b665c56cec220cc4f49cc1aee8bdfc07de94a",
+        "path": "skills/engineering/improve-codebase-architecture/SKILL.md",
+        "repository": "mattpocock/skills",
+        "source_type": "github"
       }
     },
     {
@@ -572,7 +626,7 @@
       }
     },
     {
-      "content_hash": "3637d752434efbb94da44dc1a25a395fe50cd765688ea94f828f21fb6b2dae06",
+      "content_hash": "2f410f24f405d049be455240ad2e268d31e63c52f9fd86644c30d339c5fa1c12",
       "dependencies": {
         "companions": {
           "claude": [],
@@ -601,10 +655,16 @@
             "source": "skill"
           }
         ]
+      },
+      "upstream": {
+        "content_hash": "223de2b02aa9ab36cfa4fe93e80e527b56e912e7ae725f9d596f6d2457afab77",
+        "path": "skills/deprecated/qa/SKILL.md",
+        "repository": "mattpocock/skills",
+        "source_type": "github"
       }
     },
     {
-      "content_hash": "7c05834636d5b206b286df60f818ca96374632de8fba0d5dafab5e74fb866596",
+      "content_hash": "189d699dd275a5afe698988ae8b3ed4d74d64af56c53024a410992c45d421b66",
       "dependencies": {
         "companions": {
           "claude": [],
@@ -633,6 +693,12 @@
             "source": "skill"
           }
         ]
+      },
+      "upstream": {
+        "content_hash": "08c06e587d0f979b8731f6a00c67fb8d00e563614daf80bf648d41148e553473",
+        "path": "skills/deprecated/request-refactor-plan/SKILL.md",
+        "repository": "mattpocock/skills",
+        "source_type": "github"
       }
     },
     {
@@ -702,7 +768,7 @@
       }
     },
     {
-      "content_hash": "555063f3e4f5a39c25ab3e96872d41c6201cfd7424d9d4078c60d61898a19452",
+      "content_hash": "133f440fbd10a60ca13b58c551aab05e05ddf9515a828af1dde525133e73811a",
       "dependencies": {
         "companions": {
           "claude": [],
@@ -731,6 +797,48 @@
             "source": "skill"
           }
         ]
+      },
+      "upstream": {
+        "content_hash": "74e894a3509e2676d4cdb771c8eace087092430635e845e02a9cc2f757c552a4",
+        "path": "skills/engineering/setup-matt-pocock-skills/SKILL.md",
+        "repository": "mattpocock/skills",
+        "source_type": "github"
+      }
+    },
+    {
+      "content_hash": "af51eb24bd009d415b9a097510e2fd8f908db391cd6e85ed8016b76babc694da",
+      "dependencies": {
+        "companions": {
+          "claude": [],
+          "codex": []
+        },
+        "recommended": [],
+        "required": []
+      },
+      "description": "Set up Husky, lint-staged, formatting, type checking, and tests at commit time",
+      "identifier": "M0rtalPhe0nix/dotfiles/setup-pre-commit",
+      "path": "setup-pre-commit",
+      "targets": {
+        "claude": [
+          {
+            "destination": ".claude/skills/setup-pre-commit",
+            "kind": "skill",
+            "source": "skill"
+          }
+        ],
+        "codex": [
+          {
+            "destination": ".agents/skills/setup-pre-commit",
+            "kind": "skill",
+            "source": "skill"
+          }
+        ]
+      },
+      "upstream": {
+        "content_hash": "1b140af948d0a6330c4cf52d46ca2e06a0e96fdc34d22ec8888d2b9751b99b62",
+        "path": "skills/misc/setup-pre-commit/SKILL.md",
+        "repository": "mattpocock/skills",
+        "source_type": "github"
       }
     },
     {
@@ -828,7 +936,7 @@
       }
     },
     {
-      "content_hash": "d9d2fa7e98c6bb1bacfe5800bd788757aace6612ec3d36d592b4a2bc18160864",
+      "content_hash": "9543430012dc596a056f74fbd740965153d694c83b82633b64397dfb084934a3",
       "dependencies": {
         "companions": {
           "claude": [],
@@ -855,10 +963,16 @@
             "source": "skill"
           }
         ]
+      },
+      "upstream": {
+        "content_hash": "81eca2a5b53a63f481c0849be7a663a8cd43d5cf53f32b644ec0a2f50cf91aa2",
+        "path": "skills/engineering/tdd/SKILL.md",
+        "repository": "mattpocock/skills",
+        "source_type": "github"
       }
     },
     {
-      "content_hash": "e95bb06acf0e546454c8506afa6bea765abbcf930a88e469e3b11cdd6c76fb36",
+      "content_hash": "b4eb41e77315cdc9f4363d5e5e7ac205e8b1d65692e6b23ae1dfe91f6a04a37f",
       "dependencies": {
         "companions": {
           "claude": [],
@@ -885,10 +999,16 @@
             "source": "skill"
           }
         ]
+      },
+      "upstream": {
+        "content_hash": "68999bb1a241384b2f921f3321d779b7d05eb6089077b70d88cee2aee3d75ccc",
+        "path": "skills/productivity/teach/SKILL.md",
+        "repository": "mattpocock/skills",
+        "source_type": "github"
       }
     },
     {
-      "content_hash": "870288c5ea31d9539722d82978fa011d58590944f52a5973844d55a031b19e7e",
+      "content_hash": "c873a82550427d6d1382c5c07d962979c0095849021f3cb44c12737445eb8f09",
       "dependencies": {
         "companions": {
           "claude": [],
@@ -917,10 +1037,16 @@
             "source": "skill"
           }
         ]
+      },
+      "upstream": {
+        "content_hash": "0f544cd0c099c06f0dd0b7b9ee98b4237218e7e95fd3d3c02e791efbaf74bacb",
+        "path": "skills/engineering/to-spec/SKILL.md",
+        "repository": "mattpocock/skills",
+        "source_type": "github"
       }
     },
     {
-      "content_hash": "f95196bcf157af598feef4578ee6b91978161091722ded75b2d8092d476787c9",
+      "content_hash": "7f58a9f9b10444e607a3b363dab0245cd497a9db513b3ab64dadb87bf103a89c",
       "dependencies": {
         "companions": {
           "claude": [],
@@ -949,10 +1075,16 @@
             "source": "skill"
           }
         ]
+      },
+      "upstream": {
+        "content_hash": "0349eee265e7005e667b4543de849672106c46d545e998f37d3319300bb07751",
+        "path": "skills/engineering/to-tickets/SKILL.md",
+        "repository": "mattpocock/skills",
+        "source_type": "github"
       }
     },
     {
-      "content_hash": "cb2c400ee5be1a582ea7f159d1c499c1818740c0fd954171dc184c0647ff14cd",
+      "content_hash": "c6c73fb59e86c8452ef9bcfcfd261235aa7d3b7a0bffe0bb0972187196464421",
       "dependencies": {
         "companions": {
           "claude": [],
@@ -979,10 +1111,16 @@
             "source": "skill"
           }
         ]
+      },
+      "upstream": {
+        "content_hash": "0395170031b57ea63f2eb22561542894c03e3047430a2f1118a06b411054429b",
+        "path": "skills/deprecated/ubiquitous-language/SKILL.md",
+        "repository": "mattpocock/skills",
+        "source_type": "github"
       }
     },
     {
-      "content_hash": "7c14788670a77fee7dfe18de253ec5468a508a7a9cc1cb4a6e55fd3c2dab1dbd",
+      "content_hash": "14febbc4e0a8ad9a02411c53490767759eff1bd6c85329f954f53d052316784b",
       "dependencies": {
         "companions": {
           "claude": [],
@@ -1014,10 +1152,16 @@
             "source": "skill"
           }
         ]
+      },
+      "upstream": {
+        "content_hash": "c9e18cefd77b6b5b0ee35f59ce2fd96359aa2d2f02e3479e12c873c5402d9d43",
+        "path": "skills/engineering/wayfinder/SKILL.md",
+        "repository": "mattpocock/skills",
+        "source_type": "github"
       }
     },
     {
-      "content_hash": "9aaa40d49082c3558b3d69b757b61dad307d2ab498a8b3310599eb0699360fde",
+      "content_hash": "58d3ec98f2ce0b257e67649c889487ff43dedffacab9ca791591151df87345a1",
       "dependencies": {
         "companions": {
           "claude": [],
@@ -1044,6 +1188,12 @@
             "source": "skill"
           }
         ]
+      },
+      "upstream": {
+        "content_hash": "4deb21855fb4deeeb1b8217b041faff003fd0c915d24a22f636851c520bc9c5c",
+        "path": "skills/productivity/writing-great-skills/SKILL.md",
+        "repository": "mattpocock/skills",
+        "source_type": "github"
       }
     }
   ],

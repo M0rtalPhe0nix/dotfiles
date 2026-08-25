@@ -1,6 +1,7 @@
 {
   "schema_version": 1,
   "identifier": "M0rtalPhe0nix/dotfiles/qa",
+  "upstream": {"repository": "mattpocock/skills", "source_type": "github", "path": "skills/deprecated/qa/SKILL.md", "content_hash": "223de2b02aa9ab36cfa4fe93e80e527b56e912e7ae725f9d596f6d2457afab77"},
   "description": "Run an interactive QA session and file durable behavioral issues",
   "dependencies": {
     "required": [],

@@ -1,6 +1,7 @@
 {
   "schema_version": 1,
   "identifier": "M0rtalPhe0nix/dotfiles/domain-modeling",
+  "upstream": {"repository": "mattpocock/skills", "source_type": "github", "path": "skills/engineering/domain-modeling/SKILL.md", "content_hash": "363cb0f53b0b431e7c00086ad1f823500b7e1b70b5616ee969c979f0934e9e6e"},
   "description": "Build and sharpen project domain language and architectural decisions",
   "dependencies": {
     "required": [],

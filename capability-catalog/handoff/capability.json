@@ -1,6 +1,7 @@
 {
   "schema_version": 1,
   "identifier": "M0rtalPhe0nix/dotfiles/handoff",
+  "upstream": {"repository": "mattpocock/skills", "source_type": "github", "path": "skills/productivity/handoff/SKILL.md", "content_hash": "ad03e8d4ea3cbbff66420eb7ba3cc375b5cbe1821a2449b53e863256cf5b5cde"},
   "description": "Compact a working conversation into a portable handoff document",
   "dependencies": {
     "required": [],

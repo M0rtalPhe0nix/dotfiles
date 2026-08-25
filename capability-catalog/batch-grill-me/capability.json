@@ -1,6 +1,7 @@
 {
   "schema_version": 1,
   "identifier": "M0rtalPhe0nix/dotfiles/batch-grill-me",
+  "upstream": {"repository": "mattpocock/skills", "source_type": "github", "path": "skills/in-progress/batch-grill-me/SKILL.md", "content_hash": "f448831b8f04518b1527408f1d5024384ad5f543bdbaac6fabb7aa053ad60489"},
   "description": "Interview across every currently unblocked decision in rounds",
   "dependencies": {
     "required": [],

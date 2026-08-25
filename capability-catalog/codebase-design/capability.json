@@ -1,6 +1,7 @@
 {
   "schema_version": 1,
   "identifier": "M0rtalPhe0nix/dotfiles/codebase-design",
+  "upstream": {"repository": "mattpocock/skills", "source_type": "github", "path": "skills/engineering/codebase-design/SKILL.md", "content_hash": "6d9d51d8caa01633fd00cf87089c5618c982321f942ac69f62565dc001c6b22f"},
   "description": "Shared deep-module vocabulary and interface-design guidance",
   "dependencies": {
     "required": [],

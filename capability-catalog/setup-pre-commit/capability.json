@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "identifier": "M0rtalPhe0nix/dotfiles/setup-pre-commit",
+  "upstream": {"repository": "mattpocock/skills", "source_type": "github", "path": "skills/misc/setup-pre-commit/SKILL.md", "content_hash": "1b140af948d0a6330c4cf52d46ca2e06a0e96fdc34d22ec8888d2b9751b99b62"},
+  "description": "Set up Husky, lint-staged, formatting, type checking, and tests at commit time",
+  "dependencies": {
+    "required": [],
+    "recommended": [],
+    "companions": {"claude": [], "codex": []}
+  },
+  "targets": {
+    "claude": [{"kind": "skill", "source": "skill", "destination": ".claude/skills/setup-pre-commit"}],
+    "codex": [{"kind": "skill", "source": "skill", "destination": ".agents/skills/setup-pre-commit"}]
+  }
+}

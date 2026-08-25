@@ -1,6 +1,7 @@
 {
   "schema_version": 1,
   "identifier": "M0rtalPhe0nix/dotfiles/setup-matt-pocock-skills",
+  "upstream": {"repository": "mattpocock/skills", "source_type": "github", "path": "skills/engineering/setup-matt-pocock-skills/SKILL.md", "content_hash": "74e894a3509e2676d4cdb771c8eace087092430635e845e02a9cc2f757c552a4"},
   "description": "Configure a repository issue tracker, triage vocabulary, and domain-document layout",
   "dependencies": {
     "required": [],

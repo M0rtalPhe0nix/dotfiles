@@ -1,6 +1,7 @@
 {
   "schema_version": 1,
   "identifier": "M0rtalPhe0nix/dotfiles/teach",
+  "upstream": {"repository": "mattpocock/skills", "source_type": "github", "path": "skills/productivity/teach/SKILL.md", "content_hash": "68999bb1a241384b2f921f3321d779b7d05eb6089077b70d88cee2aee3d75ccc"},
   "description": "Teach a concept through reusable lessons and learning records",
   "dependencies": {
     "required": [],

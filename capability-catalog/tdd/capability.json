@@ -1,6 +1,7 @@
 {
   "schema_version": 1,
   "identifier": "M0rtalPhe0nix/dotfiles/tdd",
+  "upstream": {"repository": "mattpocock/skills", "source_type": "github", "path": "skills/engineering/tdd/SKILL.md", "content_hash": "81eca2a5b53a63f481c0849be7a663a8cd43d5cf53f32b644ec0a2f50cf91aa2"},
   "description": "Develop behavior through small red-green test-first slices",
   "dependencies": {
     "required": [],

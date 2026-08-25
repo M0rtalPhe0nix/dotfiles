@@ -1,6 +1,7 @@
 {
   "schema_version": 1,
   "identifier": "M0rtalPhe0nix/dotfiles/to-tickets",
+  "upstream": {"repository": "mattpocock/skills", "source_type": "github", "path": "skills/engineering/to-tickets/SKILL.md", "content_hash": "0349eee265e7005e667b4543de849672106c46d545e998f37d3319300bb07751"},
   "description": "Break a plan into dependency-aware tracer-bullet tickets",
   "dependencies": {
     "required": [],

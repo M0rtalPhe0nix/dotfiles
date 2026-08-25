@@ -1,6 +1,7 @@
 {
   "schema_version": 1,
   "identifier": "M0rtalPhe0nix/dotfiles/writing-great-skills",
+  "upstream": {"repository": "mattpocock/skills", "source_type": "github", "path": "skills/productivity/writing-great-skills/SKILL.md", "content_hash": "4deb21855fb4deeeb1b8217b041faff003fd0c915d24a22f636851c520bc9c5c"},
   "description": "Reference vocabulary and principles for predictable skills",
   "dependencies": {
     "required": [],

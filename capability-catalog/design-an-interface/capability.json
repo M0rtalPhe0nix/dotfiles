@@ -1,6 +1,7 @@
 {
   "schema_version": 1,
   "identifier": "M0rtalPhe0nix/dotfiles/design-an-interface",
+  "upstream": {"repository": "mattpocock/skills", "source_type": "github", "path": "skills/deprecated/design-an-interface/SKILL.md", "content_hash": "aef348a9af675b771635623b5aa7790da4d40adc1ee88b58b6fd116eda2047d8"},
   "description": "Generate and compare radically different module interface designs",
   "dependencies": {
     "required": [],

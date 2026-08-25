@@ -1,6 +1,7 @@
 {
   "schema_version": 1,
   "identifier": "M0rtalPhe0nix/dotfiles/improve-codebase-architecture",
+  "upstream": {"repository": "mattpocock/skills", "source_type": "github", "path": "skills/engineering/improve-codebase-architecture/SKILL.md", "content_hash": "66e8a50c83c3c724fcfe0769701b665c56cec220cc4f49cc1aee8bdfc07de94a"},
   "description": "Find and explore opportunities to deepen codebase modules",
   "dependencies": {
     "required": ["codebase-design", "domain-modeling", "grilling"],

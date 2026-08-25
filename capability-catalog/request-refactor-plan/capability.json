@@ -1,6 +1,7 @@
 {
   "schema_version": 1,
   "identifier": "M0rtalPhe0nix/dotfiles/request-refactor-plan",
+  "upstream": {"repository": "mattpocock/skills", "source_type": "github", "path": "skills/deprecated/request-refactor-plan/SKILL.md", "content_hash": "08c06e587d0f979b8731f6a00c67fb8d00e563614daf80bf648d41148e553473"},
   "description": "Interview for a safe incremental refactor plan and publish it to the tracker",
   "dependencies": {
     "required": [],

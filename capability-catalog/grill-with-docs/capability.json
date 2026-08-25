@@ -1,6 +1,7 @@
 {
   "schema_version": 1,
   "identifier": "M0rtalPhe0nix/dotfiles/grill-with-docs",
+  "upstream": {"repository": "mattpocock/skills", "source_type": "github", "path": "skills/engineering/grill-with-docs/SKILL.md", "content_hash": "9c460cbd94fd3c63cdef967dbdb6e66ca687103cdc380cd37834e4d10b738f78"},
   "description": "Run a grilling interview while maintaining domain documents",
   "dependencies": {
     "required": ["domain-modeling", "grilling"],

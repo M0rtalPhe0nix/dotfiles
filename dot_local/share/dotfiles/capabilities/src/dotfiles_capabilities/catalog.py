@@ -121,6 +121,11 @@ def load_catalog_index(path: Path) -> dict[str, Any]:
             raise CatalogError(f"{field}.dependencies must be an object")
         if not isinstance(capability.get("targets"), dict):
             raise CatalogError(f"{field}.targets must be an object")
+        if "upstream" in capability:
+            upstream_errors: list[str] = []
+            _validate_upstream(capability["upstream"], f"{field}.upstream", upstream_errors)
+            if upstream_errors:
+                raise CatalogError(upstream_errors[0])
     return document
 
 
@@ -211,11 +216,44 @@ def _portable_path(value: str, *, allow_dot: bool = False) -> bool:
     return allow_dot or value != "."
 
 
+def _validate_upstream(value: Any, field: str, errors: list[str]) -> None:
+    if not isinstance(value, dict):
+        errors.append(f"{field} must be an object")
+        return
+    unknown = sorted(
+        set(value) - {"repository", "source_type", "ref", "path", "content_hash"}
+    )
+    if unknown:
+        errors.append(f"{field} has unsupported fields: {', '.join(unknown)}")
+    repository = value.get("repository")
+    if (
+        not isinstance(repository, str)
+        or not repository
+        or repository.count("/") != 1
+    ):
+        errors.append(f"{field}.repository must identify an owner/repository")
+    if value.get("source_type") != "github":
+        errors.append(f"{field}.source_type must be 'github'")
+    ref = value.get("ref")
+    if ref is not None and (not isinstance(ref, str) or not ref):
+        errors.append(f"{field}.ref must be a non-empty string when present")
+    path = value.get("path")
+    if not isinstance(path, str) or not _portable_path(path):
+        errors.append(f"{field}.path must be a portable relative path")
+    content_hash = value.get("content_hash")
+    if not isinstance(content_hash, str) or not re.fullmatch(
+        r"[0-9a-f]{64}", content_hash
+    ):
+        errors.append(f"{field}.content_hash must be a SHA-256 digest")
+
+
 def _validate_metadata(path: Path, document: dict[str, Any]) -> list[str]:
     errors: list[str] = []
     prefix = str(path)
     if not isinstance(document.get("description"), str) or not document["description"].strip():
         errors.append(f"{prefix}: description must be a non-empty string")
+    if "upstream" in document:
+        _validate_upstream(document["upstream"], f"{prefix}: upstream", errors)
 
     dependencies = document.get("dependencies")
     if not isinstance(dependencies, dict):
@@ -501,6 +539,11 @@ def validate_catalog(
                     "description": document["description"],
                     "dependencies": document["dependencies"],
                     "targets": document["targets"],
+                    **(
+                        {"upstream": document["upstream"]}
+                        if "upstream" in document
+                        else {}
+                    ),
                 }
             )
         index = {

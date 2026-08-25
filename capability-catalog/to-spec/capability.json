@@ -1,6 +1,7 @@
 {
   "schema_version": 1,
   "identifier": "M0rtalPhe0nix/dotfiles/to-spec",
+  "upstream": {"repository": "mattpocock/skills", "source_type": "github", "path": "skills/engineering/to-spec/SKILL.md", "content_hash": "0f544cd0c099c06f0dd0b7b9ee98b4237218e7e95fd3d3c02e791efbaf74bacb"},
   "description": "Synthesize a conversation into a specification on the configured tracker",
   "dependencies": {
     "required": [],

@@ -74,6 +74,7 @@ TOOLING_CAPABILITIES = {
     ),
     "plugin-creator": (["skill-creator"], [], {"claude": [], "codex": []}),
     "review-agent": ([], [], {"claude": [], "codex": []}),
+    "setup-pre-commit": ([], [], {"claude": [], "codex": []}),
     "skill-creator": ([], ["skill-installer"], {"claude": [], "codex": []}),
     "skill-installer": ([], [], {"claude": [], "codex": []}),
     "speckit-diagrams": (["excalidraw"], [], {"claude": [], "codex": []}),
@@ -169,6 +170,31 @@ class TreeHashContractTests(unittest.TestCase):
 
 
 class CatalogValidationContractTests(unittest.TestCase):
+    def test_public_upstream_provenance_is_validated_and_indexed(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            catalog = Path(temporary) / "catalog"
+            shutil.copytree(FIXTURES / "valid", catalog)
+            metadata_path = catalog / "format/capability.json"
+            metadata = json.loads(metadata_path.read_text())
+            metadata["upstream"] = {
+                "repository": "example/portable-skills",
+                "source_type": "github",
+                "path": "skills/format/SKILL.md",
+                "content_hash": "a" * 64,
+            }
+            metadata_path.write_text(json.dumps(metadata), encoding="utf-8")
+
+            result = validate_catalog(catalog, write_index=True)
+
+            self.assertEqual(result.status, "PASS", "\n".join(result.errors))
+            indexed = load_catalog_index(catalog / "catalog.json")
+            formatted = next(
+                item
+                for item in indexed["capabilities"]
+                if item["identifier"] == "acme/portable-ai/format"
+            )
+            self.assertEqual(formatted["upstream"], metadata["upstream"])
+
     def test_tooling_family_is_a_valid_dependency_and_companion_closure(self) -> None:
         result = validate_catalog(FOUNDATIONAL_CATALOG, check_index=True)
 
@@ -251,15 +277,18 @@ class CatalogValidationContractTests(unittest.TestCase):
         self.assertIn("dotfiles skills add --catalog", installer_instructions)
         self.assertIn("Never install into a global", installer_instructions)
 
-    def test_tooling_legacy_skill_paths_are_relative_links(self) -> None:
+    def test_tooling_skills_use_writable_codex_copies_and_claude_mirrors(self) -> None:
         for name in TOOLING_SKILLS:
             canonical = FOUNDATIONAL_CATALOG / name / "skill"
             self.assertTrue((canonical / "SKILL.md").is_file())
-            for discovery_root in (".agents/skills", ".claude/skills"):
-                legacy = REPOSITORY_ROOT / discovery_root / name
-                self.assertTrue(legacy.is_symlink(), str(legacy))
-                self.assertFalse(os.path.isabs(os.readlink(legacy)), str(legacy))
-                self.assertEqual(legacy.resolve(), canonical.resolve())
+            codex = REPOSITORY_ROOT / ".agents/skills" / name
+            claude = REPOSITORY_ROOT / ".claude/skills" / name
+            self.assertTrue(codex.is_dir(), str(codex))
+            self.assertFalse(codex.is_symlink(), str(codex))
+            self.assertEqual(hash_tree(codex), hash_tree(canonical))
+            self.assertTrue(claude.is_symlink(), str(claude))
+            self.assertEqual(os.readlink(claude), f"../../.agents/skills/{name}")
+            self.assertEqual(claude.resolve(), codex.resolve())
 
     def test_workflow_family_is_a_valid_dependency_closure(self) -> None:
         result = validate_catalog(FOUNDATIONAL_CATALOG, check_index=True)
@@ -319,15 +348,18 @@ class CatalogValidationContractTests(unittest.TestCase):
                 ):
                     self.assertNotIn(forbidden, instructions, str(path))
 
-    def test_workflow_legacy_discovery_paths_are_relative_links(self) -> None:
+    def test_workflow_skills_use_writable_codex_copies_and_claude_mirrors(self) -> None:
         for name in WORKFLOW_CAPABILITIES:
             canonical = FOUNDATIONAL_CATALOG / name / "skill"
             self.assertTrue((canonical / "SKILL.md").is_file())
-            for discovery_root in (".agents/skills", ".claude/skills"):
-                legacy = REPOSITORY_ROOT / discovery_root / name
-                self.assertTrue(legacy.is_symlink(), str(legacy))
-                self.assertFalse(os.path.isabs(os.readlink(legacy)), str(legacy))
-                self.assertEqual(legacy.resolve(), canonical.resolve())
+            codex = REPOSITORY_ROOT / ".agents/skills" / name
+            claude = REPOSITORY_ROOT / ".claude/skills" / name
+            self.assertTrue(codex.is_dir(), str(codex))
+            self.assertFalse(codex.is_symlink(), str(codex))
+            self.assertEqual(hash_tree(codex), hash_tree(canonical))
+            self.assertTrue(claude.is_symlink(), str(claude))
+            self.assertEqual(os.readlink(claude), f"../../.agents/skills/{name}")
+            self.assertEqual(claude.resolve(), codex.resolve())
 
     def test_foundational_family_is_a_valid_dependency_closure(self) -> None:
         result = validate_catalog(FOUNDATIONAL_CATALOG, check_index=True)
@@ -378,15 +410,18 @@ class CatalogValidationContractTests(unittest.TestCase):
                 for forbidden in ("~/.claude/skills", "~/.agents/skills", "/Users/"):
                     self.assertNotIn(forbidden, instructions, str(path))
 
-    def test_foundational_legacy_discovery_paths_are_relative_links(self) -> None:
+    def test_foundational_skills_use_writable_codex_copies_and_claude_mirrors(self) -> None:
         for name in FOUNDATIONAL_CAPABILITIES:
             canonical = FOUNDATIONAL_CATALOG / name / "skill"
             self.assertTrue((canonical / "SKILL.md").is_file())
-            for discovery_root in (".agents/skills", ".claude/skills"):
-                legacy = REPOSITORY_ROOT / discovery_root / name
-                self.assertTrue(legacy.is_symlink(), str(legacy))
-                self.assertFalse(os.path.isabs(os.readlink(legacy)), str(legacy))
-                self.assertEqual(legacy.resolve(), canonical.resolve())
+            codex = REPOSITORY_ROOT / ".agents/skills" / name
+            claude = REPOSITORY_ROOT / ".claude/skills" / name
+            self.assertTrue(codex.is_dir(), str(codex))
+            self.assertFalse(codex.is_symlink(), str(codex))
+            self.assertEqual(hash_tree(codex), hash_tree(canonical))
+            self.assertTrue(claude.is_symlink(), str(claude))
+            self.assertEqual(os.readlink(claude), f"../../.agents/skills/{name}")
+            self.assertEqual(claude.resolve(), codex.resolve())
 
     def test_valid_fixture_generates_a_deterministic_index(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:

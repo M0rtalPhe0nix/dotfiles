@@ -1,6 +1,7 @@
 {
   "schema_version": 1,
   "identifier": "M0rtalPhe0nix/dotfiles/ubiquitous-language",
+  "upstream": {"repository": "mattpocock/skills", "source_type": "github", "path": "skills/deprecated/ubiquitous-language/SKILL.md", "content_hash": "0395170031b57ea63f2eb22561542894c03e3047430a2f1118a06b411054429b"},
   "description": "Extract a consistent DDD-style glossary from a conversation",
   "dependencies": {
     "required": [],
