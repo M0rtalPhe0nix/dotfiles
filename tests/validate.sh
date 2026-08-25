@@ -225,6 +225,7 @@ all_lsp_managed="$(chezmoi --source "$root" --config "$tmp/chezmoi-all-lsps.toml
 printf '%s\n' "$all_lsp_managed" | rg -qx '\.claude/skills/marksman-lsp/\.claude-plugin/plugin\.json'
 printf '%s\n' "$all_lsp_managed" | rg -qx '\.claude/skills/terraform-lsp/\.claude-plugin/plugin\.json'
 printf '%s\n' "$all_lsp_managed" | rg -qx '\.claude/skills/claude-md-improver'
+printf '%s\n' "$all_lsp_managed" | rg -qx '\.claude/skills/grilling'
 jq -e '.lspServers.marksman.command == "marksman" and .lspServers.marksman.args == ["server"]' \
 	"$root/dot_claude/skills/marksman-lsp/dot_claude-plugin/plugin.json" >/dev/null
 jq -e '.lspServers["terraform-ls"].command == "terraform-ls" and .lspServers["terraform-ls"].args == ["serve"]' \
