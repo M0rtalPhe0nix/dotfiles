@@ -213,7 +213,7 @@
       }
     },
     {
-      "content_hash": "04b0f46ff7e7c8549b7d58b3ed5e609228acf36ecadc1141f5edb369e30ffd7d",
+      "content_hash": "466279e24eb6c0e13ce65cdc4019e1e6869fa8558a93bc043d8e46c35784fa51",
       "dependencies": {
         "companions": {
           "claude": [],
@@ -734,7 +734,7 @@
       }
     },
     {
-      "content_hash": "755989a0d39d8cec01d130d6da4a4df34f8e59974b8443880c9d0b0d577bf2d8",
+      "content_hash": "c1ed501efaf4d9e32a4985bff67b07b46f0f5f31cf3ab99752a5ad5c172a9e4e",
       "dependencies": {
         "companions": {
           "claude": [],
