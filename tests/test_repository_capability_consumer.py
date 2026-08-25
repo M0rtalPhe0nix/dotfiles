@@ -23,7 +23,7 @@ CATALOG_COMMIT = "f6447b97b0f75bfdf71c8c8aacb361d7f5bd036b"
 
 
 class PortableCatalogDescriptorTests(unittest.TestCase):
-    def test_sync_consumes_a_catalog_in_a_portable_repository_subdirectory(self) -> None:
+    def test_add_consumes_a_catalog_in_a_portable_repository_subdirectory(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)
             source = root / "source"
@@ -73,22 +73,24 @@ class PortableCatalogDescriptorTests(unittest.TestCase):
             self._git(source, "commit", "-qm", "catalog snapshot")
             commit = self._git(source, "rev-parse", "HEAD")
             self._git(project, "init", "-q")
-            (project / "capabilities.json").write_text(
-                json.dumps(
-                    {
-                        "schema_version": 1,
-                        "catalogs": [
-                            {"url": str(source), "path": "capability-catalog"}
-                        ],
-                        "roots": ["acme/portable/example"],
-                    }
-                ),
-                encoding="utf-8",
+            initialized = self._run("init", cwd=project)
+            self.assertEqual(initialized.returncode, 0, initialized.stderr)
+            synchronized = self._run(
+                "add",
+                "--catalog",
+                str(source),
+                "--catalog-path",
+                "capability-catalog",
+                "acme/portable/example",
+                cwd=project,
             )
 
-            synchronized = self._run("sync", cwd=project)
-
             self.assertEqual(synchronized.returncode, 0, synchronized.stderr)
+            manifest = json.loads((project / "capabilities.json").read_text())
+            self.assertEqual(
+                manifest["catalogs"],
+                [{"url": str(source), "path": "capability-catalog"}],
+            )
             lock = json.loads((project / "capabilities.lock.json").read_text())
             self.assertEqual(
                 lock["catalogs"],

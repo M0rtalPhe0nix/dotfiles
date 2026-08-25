@@ -166,7 +166,38 @@ def validate_catalog_command(
     return 1 if result.errors else 0
 
 
-def add(identifier: str, catalog_url: str) -> int:
+def _catalog_entry(catalog_url: str, catalog_path: str) -> dict[str, str]:
+    descriptor = {"url": catalog_url}
+    if catalog_path != ".":
+        descriptor["path"] = catalog_path
+    return descriptor
+
+
+def _require_skill_identifiers(
+    manifest: dict[str, Any],
+    lock: dict[str, Any] | None,
+    identifiers: list[str],
+) -> None:
+    inventory = {
+        item["identifier"]: item for item in capability_inventory(manifest, lock)
+    }
+    for identifier in identifiers:
+        item = inventory.get(identifier)
+        if item is None:
+            raise CapabilityError(f"unknown capability {identifier!r}")
+        if item["kind"] != "skill":
+            raise CapabilityError(
+                f"{identifier} is not a skill; use 'dotfiles capabilities'"
+            )
+
+
+def add(
+    identifier: str,
+    catalog_url: str,
+    catalog_path: str,
+    *,
+    skills_only: bool,
+) -> int:
     root = _project_root()
     manifest_path = root / MANIFEST_NAME
     lock_path = root / LOCK_NAME
@@ -174,15 +205,28 @@ def add(identifier: str, catalog_url: str) -> int:
         raise CapabilityError("capability state is not initialized; run 'capabilities init'")
     manifest = _load_and_validate(manifest_path, "manifest")
     lock = _load_and_validate(lock_path, "lock") if lock_path.exists() else None
+    descriptor = _catalog_entry(catalog_url, catalog_path)
+    if skills_only:
+        preview = json.loads(json.dumps(manifest))
+        if descriptor not in preview["catalogs"]:
+            preview["catalogs"].append(descriptor)
+        _require_skill_identifiers(preview, lock, [identifier])
     print(f"Plan: request {identifier} and synchronize its required capabilities")
     add_capability(
-        root, manifest, identifier, catalog_url, _write_json, lock, _approve_hook
+        root,
+        manifest,
+        identifier,
+        catalog_url,
+        _write_json,
+        lock,
+        _approve_hook,
+        catalog_path=catalog_path,
     )
     print(f"Result: added {identifier} and synchronized capabilities in {root}")
     return 0
 
 
-def remove(identifier: str) -> int:
+def remove(identifier: str, *, skills_only: bool) -> int:
     root = _project_root()
     manifest_path = root / MANIFEST_NAME
     lock_path = root / LOCK_NAME
@@ -190,6 +234,8 @@ def remove(identifier: str) -> int:
         raise CapabilityError("capability state is not initialized; run 'capabilities init'")
     manifest = _load_and_validate(manifest_path, "manifest")
     lock = _load_and_validate(lock_path, "lock") if lock_path.exists() else None
+    if skills_only:
+        _require_skill_identifiers(manifest, lock, [identifier])
     print(f"Plan: remove requested capability {identifier} and prune unreachable dependencies")
     remove_capability(root, manifest, lock, identifier, _write_json, _approve_hook)
     print(f"Result: removed {identifier} and synchronized capabilities in {root}")
@@ -210,7 +256,9 @@ def sync() -> int:
     return 0
 
 
-def update(identifiers: list[str], *, update_all: bool) -> int:
+def update(
+    identifiers: list[str], *, update_all: bool, skills_only: bool
+) -> int:
     root = _project_root()
     manifest_path = root / MANIFEST_NAME
     lock_path = root / LOCK_NAME
@@ -219,7 +267,23 @@ def update(identifiers: list[str], *, update_all: bool) -> int:
     manifest = _load_and_validate(manifest_path, "manifest")
     lock = _load_and_validate(lock_path, "lock") if lock_path.exists() else None
     selection = None if update_all else identifiers
-    label = "the entire resolved graph" if update_all else ", ".join(identifiers)
+    if skills_only:
+        inventory = capability_inventory(manifest, lock)
+        if update_all:
+            selection = [
+                item["identifier"]
+                for item in inventory
+                if item["requested"] and item["kind"] == "skill"
+            ]
+        else:
+            _require_skill_identifiers(manifest, lock, identifiers)
+    label = (
+        "all explicitly requested skills"
+        if skills_only and update_all
+        else "the entire resolved graph"
+        if update_all
+        else ", ".join(identifiers)
+    )
     print(f"Plan: update {label} from current catalog content")
     update_capabilities(
         root, manifest, lock, selection, _write_json, _approve_hook
@@ -314,7 +378,7 @@ def list_command(*, skills_only: bool, machine_readable: bool) -> int:
     return 0
 
 
-def recommend(identifier: str) -> int:
+def recommend(identifier: str, *, skills_only: bool) -> int:
     root = _project_root()
     manifest_path = root / MANIFEST_NAME
     lock_path = root / LOCK_NAME
@@ -322,6 +386,8 @@ def recommend(identifier: str) -> int:
         raise CapabilityError("capability state is not initialized; run 'capabilities init'")
     manifest = _load_and_validate(manifest_path, "manifest")
     lock = _load_and_validate(lock_path, "lock") if lock_path.exists() else None
+    if skills_only:
+        _require_skill_identifiers(manifest, lock, [identifier])
     print(f"Plan: promote recommended capability {identifier} to an explicit root")
     select_recommendation(
         root, manifest, lock, identifier, _write_json, _approve_hook
@@ -330,16 +396,25 @@ def recommend(identifier: str) -> int:
     return 0
 
 
-def snapshot(*, skills_only: bool, catalog_url: str | None) -> int:
+def snapshot(
+    *, skills_only: bool, catalog_url: str | None, catalog_path: str
+) -> int:
     root = _project_root()
     manifest_path = root / MANIFEST_NAME
     lock_path = root / LOCK_NAME
     if not manifest_path.is_file():
         raise CapabilityError("capability state is not initialized; run 'capabilities init'")
     manifest = _load_and_validate(manifest_path, "manifest")
-    if catalog_url is not None and {"url": catalog_url} not in manifest["catalogs"]:
+    if catalog_url is None and catalog_path != ".":
+        raise CapabilityError("--catalog-path requires --catalog")
+    descriptor = (
+        _catalog_entry(catalog_url, catalog_path)
+        if catalog_url is not None
+        else None
+    )
+    if descriptor is not None and descriptor not in manifest["catalogs"]:
         manifest = json.loads(json.dumps(manifest))
-        manifest["catalogs"].append({"url": catalog_url})
+        manifest["catalogs"].append(descriptor)
     lock = _load_and_validate(lock_path, "lock") if lock_path.exists() else None
     label = "skills" if skills_only else "capabilities"
     print(f"Plan: snapshot every current catalog {label} as explicit roots")
@@ -382,6 +457,11 @@ def _parser(*, skills_only: bool) -> argparse.ArgumentParser:
     )
     add_parser.add_argument("identifier")
     add_parser.add_argument("--catalog", required=True, dest="catalog_url")
+    add_parser.add_argument(
+        "--catalog-path",
+        default=".",
+        help="normalized path to the catalog inside its Git repository",
+    )
     remove_parser = commands.add_parser(
         "remove", help="remove an explicit root and prune unreachable dependencies"
     )
@@ -405,6 +485,11 @@ def _parser(*, skills_only: bool) -> argparse.ArgumentParser:
         "snapshot", help=f"request every {snapshot_kind} currently in the catalogs"
     )
     snapshot_parser.add_argument("--catalog", dest="catalog_url")
+    snapshot_parser.add_argument(
+        "--catalog-path",
+        default=".",
+        help="normalized path to the catalog inside its Git repository",
+    )
     commands.add_parser("diff", help="report drift in materialized capability paths")
     validate = commands.add_parser(
         "validate", help="validate capability metadata and regenerate its catalog index"
@@ -432,9 +517,14 @@ def main(arguments: list[str] | None = None) -> int:
         if namespace.command == "init":
             return initialize()
         if namespace.command == "add":
-            return add(namespace.identifier, namespace.catalog_url)
+            return add(
+                namespace.identifier,
+                namespace.catalog_url,
+                namespace.catalog_path,
+                skills_only=skills_only,
+            )
         if namespace.command == "remove":
-            return remove(namespace.identifier)
+            return remove(namespace.identifier, skills_only=skills_only)
         if namespace.command == "sync":
             return sync()
         if namespace.command == "update":
@@ -442,7 +532,11 @@ def main(arguments: list[str] | None = None) -> int:
                 parser.error("update requires root names or --all")
             if namespace.update_all and namespace.identifiers:
                 parser.error("update --all does not accept root names")
-            return update(namespace.identifiers, update_all=namespace.update_all)
+            return update(
+                namespace.identifiers,
+                update_all=namespace.update_all,
+                skills_only=skills_only,
+            )
         if namespace.command == "migrate":
             return migrate()
         if namespace.command == "list":
@@ -451,11 +545,12 @@ def main(arguments: list[str] | None = None) -> int:
                 machine_readable=namespace.machine_readable,
             )
         if namespace.command == "recommend":
-            return recommend(namespace.identifier)
+            return recommend(namespace.identifier, skills_only=skills_only)
         if namespace.command == "snapshot":
             return snapshot(
                 skills_only=skills_only,
                 catalog_url=namespace.catalog_url,
+                catalog_path=namespace.catalog_path,
             )
         if namespace.command == "diff":
             return diff_command()

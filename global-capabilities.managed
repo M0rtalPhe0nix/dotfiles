@@ -15,7 +15,6 @@
 .claude/skills/handoff
 .claude/skills/implement
 .claude/skills/improve-codebase-architecture
-.claude/skills/marksman-lsp
 .claude/skills/plugin-creator
 .claude/skills/qa
 .claude/skills/request-refactor-plan
@@ -27,7 +26,6 @@
 .claude/skills/speckit-diagrams
 .claude/skills/tdd
 .claude/skills/teach
-.claude/skills/terraform-lsp
 .claude/skills/to-spec
 .claude/skills/to-tickets
 .claude/skills/ubiquitous-language

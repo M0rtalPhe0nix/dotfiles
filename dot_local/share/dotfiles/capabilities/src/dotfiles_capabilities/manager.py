@@ -1299,9 +1299,13 @@ def add_capability(
     write_json: Any,
     lock: dict[str, Any] | None = None,
     approve_hook: Any = None,
+    *,
+    catalog_path: str = ".",
 ) -> None:
     desired = json.loads(json.dumps(manifest))
     descriptor = {"url": catalog_url}
+    if catalog_path != ".":
+        descriptor["path"] = catalog_path
     if descriptor not in desired["catalogs"]:
         desired["catalogs"].append(descriptor)
     if identifier not in desired["roots"]:

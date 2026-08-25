@@ -1,3 +1,11 @@
+{{- $installMarkdownLsp := false -}}
+{{- if hasKey . "installMarkdownLsp" -}}
+{{-   $installMarkdownLsp = .installMarkdownLsp -}}
+{{- end -}}
+{{- $installTerraformLsp := false -}}
+{{- if hasKey . "installTerraformLsp" -}}
+{{-   $installTerraformLsp = .installTerraformLsp -}}
+{{- end -}}
 README.md
 docs/**
 AGENTS.md
@@ -8,6 +16,8 @@ Brewfile
 packages-debian.txt
 extensions.txt
 tests/**
+capabilities.json
+capabilities.lock.json
 capability-catalog
 capability-catalog/**
 global-capabilities.managed
@@ -18,8 +28,20 @@ create_private_dot_config
 create_private_dot_config/**
 symlink_dot_claude
 symlink_dot_claude/**
+{{ if or $installMarkdownLsp $installTerraformLsp }}
+.claude/skills/*
+{{ if $installMarkdownLsp }}
+!.claude/skills/marksman-lsp
+!.claude/skills/marksman-lsp/**
+{{ end }}
+{{ if $installTerraformLsp }}
+!.claude/skills/terraform-lsp
+!.claude/skills/terraform-lsp/**
+{{ end }}
+{{ else }}
 .claude/skills
 .claude/skills/**
+{{ end }}
 .claude/agents
 .claude/agents/**
 .claude/hooks

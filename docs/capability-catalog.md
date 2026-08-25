@@ -22,12 +22,12 @@ and never change another repository. The command surface is:
 
 ```sh
 dotfiles capabilities init
-dotfiles capabilities add --catalog GIT_URL owner/repository/name
+dotfiles capabilities add --catalog GIT_URL [--catalog-path PATH] owner/repository/name
 dotfiles capabilities remove owner/repository/name
 dotfiles capabilities list [--json]
 dotfiles capabilities recommend owner/repository/name
-dotfiles capabilities snapshot [--catalog GIT_URL]
-dotfiles skills snapshot [--catalog GIT_URL]
+dotfiles capabilities snapshot [--catalog GIT_URL] [--catalog-path PATH]
+dotfiles skills snapshot [--catalog GIT_URL] [--catalog-path PATH]
 dotfiles capabilities diff
 dotfiles capabilities sync
 dotfiles capabilities update owner/repository/name...
@@ -43,9 +43,12 @@ distinguishes requested roots, required or companion dependencies,
 recommendations, and the complete resolved set. Recommendations remain
 informational until `recommend` records one as an explicit root.
 
-The `dotfiles skills` group is a filtered alias over the same engine.
-`dotfiles skills snapshot` expands every skill name present in the catalogs at
-that moment, while `dotfiles capabilities snapshot` expands every current
+The `dotfiles skills` group is a filtered alias over the same engine. It rejects
+non-skill identifiers for add, remove, update, and recommendation selection;
+`skills update --all` advances only explicitly requested skill roots and their
+affected dependency graphs. `dotfiles skills snapshot` expands every skill name
+present in the catalogs at that moment, while `dotfiles capabilities snapshot`
+expands every current
 capability, including standalone agents and hooks. Both store explicit names,
 not wildcards, so capabilities added to a catalog later do not appear silently.
 

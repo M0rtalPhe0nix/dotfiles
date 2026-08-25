@@ -46,7 +46,8 @@ ruff check "$root/dot_local/share/dotfiles/capabilities/src" \
 	"$root/tests/test_capability_catalog.py" \
 	"$root/tests/test_capability_hooks.py" \
 	"$root/tests/test_capability_update.py" \
-	"$root/tests/test_capability_workflow.py"
+	"$root/tests/test_capability_workflow.py" \
+	"$root/tests/test_repository_capability_consumer.py"
 
 PYTHONPATH="$root/dot_local/share/dotfiles/capabilities/src${PYTHONPATH:+:$PYTHONPATH}" \
 	python3 "$root/tests/test_capability_catalog.py"
@@ -56,6 +57,8 @@ PYTHONPATH="$root/dot_local/share/dotfiles/capabilities/src${PYTHONPATH:+:$PYTHO
 	python3 "$root/tests/test_capability_update.py"
 PYTHONPATH="$root/dot_local/share/dotfiles/capabilities/src${PYTHONPATH:+:$PYTHONPATH}" \
 	python3 "$root/tests/test_capability_workflow.py"
+PYTHONPATH="$root/dot_local/share/dotfiles/capabilities/src${PYTHONPATH:+:$PYTHONPATH}" \
+	python3 "$root/tests/test_repository_capability_consumer.py"
 
 test "$(sed -n '1p' "$root/.chezmoiscripts/run_once_after_20-zimfw.sh")" = '#!/usr/bin/env zsh'
 
@@ -72,10 +75,16 @@ done
 
 test ! -e "$root/dot_claude/agents/feature-diagrammer.md"
 test ! -e "$root/dot_claude/hooks/executable_post-edit-fmt.sh"
-if find "$root/dot_claude/skills" -type f -print 2>/dev/null | rg -q .; then
+if find "$root/dot_claude/skills" -type f -print 2>/dev/null |
+	rg -v '/(marksman-lsp|terraform-lsp)/dot_claude-plugin/plugin\.json$' |
+	rg -q .; then
 	printf '%s\n' "Retired global Claude skill sources remain managed by Chezmoi." >&2
 	exit 1
 fi
+jq -e '.lspServers.marksman.command == "marksman" and .lspServers.marksman.args == ["server"]' \
+	"$root/dot_claude/skills/marksman-lsp/dot_claude-plugin/plugin.json" >/dev/null
+jq -e '.lspServers["terraform-ls"].command == "terraform-ls" and .lspServers["terraform-ls"].args == ["serve"]' \
+	"$root/dot_claude/skills/terraform-lsp/dot_claude-plugin/plugin.json" >/dev/null
 
 jq -e '
 	.lsp.pyright.command == ["pyright-langserver", "--stdio"] and
@@ -233,7 +242,16 @@ rg -q 'install_plugin ponytail@ponytail' "$tmp/claude-plugins-all-lsps"
 rg -q 'install_plugin pyright-lsp@claude-plugins-official' "$tmp/claude-plugins-all-lsps"
 rg -q 'install_plugin typescript-lsp@claude-plugins-official' "$tmp/claude-plugins-all-lsps"
 all_lsp_managed="$(chezmoi --source "$root" --config "$tmp/chezmoi-all-lsps.toml" managed)"
-if printf '%s\n' "$all_lsp_managed" | rg -q '^\.claude/(skills|agents/feature-diagrammer\.md|hooks/post-edit-fmt\.sh)'; then
+if printf '%s\n' "$all_lsp_managed" | rg -qx 'capabilities(\.lock)?\.json'; then
+	printf '%s\n' "Repository capability state is incorrectly managed as a home target." >&2
+	exit 1
+fi
+printf '%s\n' "$all_lsp_managed" | rg -qx '\.claude/skills/marksman-lsp/\.claude-plugin/plugin\.json'
+printf '%s\n' "$all_lsp_managed" | rg -qx '\.claude/skills/terraform-lsp/\.claude-plugin/plugin\.json'
+if printf '%s\n' "$all_lsp_managed" |
+	rg '^\.claude/(skills/|agents/feature-diagrammer\.md|hooks/post-edit-fmt\.sh)' |
+	rg -v '^\.claude/skills/(marksman-lsp|terraform-lsp)(/\.claude-plugin(/plugin\.json)?)?$' |
+	rg -q .; then
 	printf '%s\n' "Chezmoi still manages a retired global Claude capability artifact." >&2
 	exit 1
 fi

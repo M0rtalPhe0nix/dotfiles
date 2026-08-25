@@ -95,6 +95,42 @@ class CapabilityWorkflowTests(unittest.TestCase):
         self._git(self.catalog, "commit", "-qm", message)
         return self._git(self.catalog, "rev-parse", "HEAD")
 
+    def _agent_capability(self, name: str, *, body: str) -> None:
+        payload = self.catalog / name
+        payload.mkdir(parents=True, exist_ok=True)
+        (payload / "agent.md").write_text(body, encoding="utf-8")
+        (payload / "capability.json").write_text(
+            json.dumps(
+                {
+                    "schema_version": 1,
+                    "identifier": f"acme/workflow/{name}",
+                    "description": f"{name} capability",
+                    "dependencies": {
+                        "required": [],
+                        "recommended": [],
+                        "companions": {"claude": [], "codex": []},
+                    },
+                    "targets": {
+                        "claude": [
+                            {
+                                "kind": "agent",
+                                "source": "agent.md",
+                                "destination": f".claude/agents/{name}.md",
+                            }
+                        ],
+                        "codex": [
+                            {
+                                "kind": "agent",
+                                "source": "agent.md",
+                                "destination": f".codex/agents/{name}.md",
+                            }
+                        ],
+                    },
+                }
+            ),
+            encoding="utf-8",
+        )
+
     def _run(
         self, *arguments: str, project: Path | None = None
     ) -> subprocess.CompletedProcess[str]:
@@ -251,6 +287,82 @@ class CapabilityWorkflowTests(unittest.TestCase):
             "request every skill currently in the catalogs",
             skill_help.stdout,
         )
+
+    def test_skills_alias_rejects_non_skill_mutations_and_filters_update_all(self) -> None:
+        self._agent_capability("review-agent", body="agent v1\n")
+        feature_metadata = json.loads(
+            (self.catalog / "feature/capability.json").read_text(encoding="utf-8")
+        )
+        feature_metadata["dependencies"]["recommended"] = ["review-agent"]
+        (self.catalog / "feature/capability.json").write_text(
+            json.dumps(feature_metadata), encoding="utf-8"
+        )
+        self._catalog_commit("add standalone agent")
+
+        rejected_add = self._run(
+            "skills",
+            "add",
+            "--catalog",
+            str(self.catalog),
+            "acme/workflow/review-agent",
+        )
+        self.assertEqual(rejected_add.returncode, 1)
+        self.assertIn("not a skill", rejected_add.stderr)
+
+        self.assertEqual(
+            self._run(
+                "add",
+                "--catalog",
+                str(self.catalog),
+                "acme/workflow/review-agent",
+            ).returncode,
+            0,
+        )
+        self.assertEqual(
+            self._run(
+                "add",
+                "--catalog",
+                str(self.catalog),
+                "acme/workflow/feature",
+            ).returncode,
+            0,
+        )
+
+        for command in ("remove", "update"):
+            rejected = self._run(
+                "skills", command, "acme/workflow/review-agent"
+            )
+            self.assertEqual(rejected.returncode, 1)
+            self.assertIn("not a skill", rejected.stderr)
+
+        (self.catalog / "review-agent/agent.md").write_text(
+            "agent v2\n", encoding="utf-8"
+        )
+        (self.catalog / "feature/skill/SKILL.md").write_text(
+            "feature v2\n", encoding="utf-8"
+        )
+        self._catalog_commit("update skill and standalone agent")
+
+        updated = self._run("skills", "update", "--all")
+        self.assertEqual(updated.returncode, 0, updated.stderr)
+        self.assertEqual(
+            (self.project / ".agents/skills/feature/SKILL.md").read_text(),
+            "feature v2\n",
+        )
+        self.assertEqual(
+            (self.project / ".codex/agents/review-agent.md").read_text(),
+            "agent v1\n",
+        )
+
+        self.assertEqual(
+            self._run("remove", "acme/workflow/review-agent").returncode,
+            0,
+        )
+        rejected_recommend = self._run(
+            "skills", "recommend", "acme/workflow/review-agent"
+        )
+        self.assertEqual(rejected_recommend.returncode, 1)
+        self.assertIn("not a skill", rejected_recommend.stderr)
 
 
 if __name__ == "__main__":

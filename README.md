@@ -77,7 +77,7 @@ DOTFILES_SKIP_CLAUDE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.
 dotfiles diff                   # Preview managed-file changes
 dotfiles apply                  # Apply configuration only; does not upgrade software
 dotfiles capabilities init      # Initialize capability state at the current Git worktree root
-dotfiles capabilities add --catalog GIT_URL OWNER/REPOSITORY/NAME # Add and install a capability
+dotfiles capabilities add --catalog GIT_URL [--catalog-path PATH] OWNER/REPOSITORY/NAME # Add and install a capability
 dotfiles capabilities remove OWNER/REPOSITORY/NAME # Remove an explicit root and orphaned dependencies
 dotfiles capabilities list      # Explain requested, transitive, recommended, and resolved state
 dotfiles capabilities recommend OWNER/REPOSITORY/NAME # Promote a recommendation to an explicit root
