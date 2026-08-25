@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "identifier": "M0rtalPhe0nix/dotfiles/tdd",
+  "description": "Develop behavior through small red-green test-first slices",
+  "dependencies": {
+    "required": [],
+    "recommended": [],
+    "companions": {"claude": [], "codex": []}
+  },
+  "targets": {
+    "claude": [{"kind": "skill", "source": "skill", "destination": ".claude/skills/tdd"}],
+    "codex": [{"kind": "skill", "source": "skill", "destination": ".agents/skills/tdd"}]
+  }
+}

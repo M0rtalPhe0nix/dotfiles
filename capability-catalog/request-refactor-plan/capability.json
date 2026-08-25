@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "identifier": "M0rtalPhe0nix/dotfiles/request-refactor-plan",
+  "description": "Interview for a safe incremental refactor plan and publish it to the tracker",
+  "dependencies": {
+    "required": [],
+    "recommended": ["setup-matt-pocock-skills"],
+    "companions": {"claude": [], "codex": []}
+  },
+  "targets": {
+    "claude": [{"kind": "skill", "source": "skill", "destination": ".claude/skills/request-refactor-plan"}],
+    "codex": [{"kind": "skill", "source": "skill", "destination": ".agents/skills/request-refactor-plan"}]
+  }
+}

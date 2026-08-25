@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "identifier": "M0rtalPhe0nix/dotfiles/to-spec",
+  "description": "Synthesize a conversation into a specification on the configured tracker",
+  "dependencies": {
+    "required": [],
+    "recommended": ["setup-matt-pocock-skills"],
+    "companions": {"claude": [], "codex": []}
+  },
+  "targets": {
+    "claude": [{"kind": "skill", "source": "skill", "destination": ".claude/skills/to-spec"}],
+    "codex": [{"kind": "skill", "source": "skill", "destination": ".agents/skills/to-spec"}]
+  }
+}

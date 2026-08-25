@@ -1,0 +1,67 @@
+{
+  "capabilities": [
+    {
+      "content_hash": "bceb328a0b332c9a143654ce0d5e23e252e673fb461ebb4ce14b188641798a21",
+      "dependencies": {
+        "companions": {
+          "claude": [],
+          "codex": []
+        },
+        "recommended": [],
+        "required": []
+      },
+      "description": "Format changed Python files",
+      "identifier": "acme/portable-ai/format",
+      "path": "format",
+      "targets": {
+        "claude": [
+          {
+            "destination": ".claude/skills/format/SKILL.md",
+            "kind": "skill",
+            "source": "SKILL.md"
+          }
+        ],
+        "codex": [
+          {
+            "destination": ".agents/skills/format/SKILL.md",
+            "kind": "skill",
+            "source": "SKILL.md"
+          }
+        ]
+      }
+    },
+    {
+      "content_hash": "71f9e6bd02ec02218945c2fe42a580dcfb00adfec42ec835afefef586aeabd6e",
+      "dependencies": {
+        "companions": {
+          "claude": [],
+          "codex": []
+        },
+        "recommended": [],
+        "required": [
+          "format"
+        ]
+      },
+      "description": "Review formatted changes",
+      "identifier": "acme/portable-ai/review",
+      "path": "review",
+      "targets": {
+        "claude": [
+          {
+            "destination": ".claude/skills/review/SKILL.md",
+            "kind": "skill",
+            "source": "SKILL.md"
+          }
+        ],
+        "codex": [
+          {
+            "destination": ".agents/skills/review/SKILL.md",
+            "kind": "skill",
+            "source": "SKILL.md"
+          }
+        ]
+      }
+    }
+  ],
+  "schema_version": 1
+}

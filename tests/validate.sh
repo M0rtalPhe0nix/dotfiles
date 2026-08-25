@@ -7,12 +7,16 @@ trap 'rm -rf "$tmp"' EXIT INT TERM
 
 shellcheck \
 	"$root/bootstrap.sh" \
+	"$root/capability-catalog/python-format/hook.sh" \
+	"$root/capability-catalog/rtk-guardrail/hook.sh" \
 	"$root/dot_claude/hooks/executable_post-edit-fmt.sh" \
 	"$root/tests/render-macos.sh" \
 	"$root/tests/debian-smoke.sh" \
 	"$root/tests/release-host-smoke.sh" \
 	"$root/tests/test-bootstrap-preflight.sh" \
 	"$root/tests/test-bootstrap-ref.sh" \
+	"$root/tests/test-capabilities-init.sh" \
+	"$root/tests/test-capabilities-sync.sh" \
 	"$root/tests/test-claude-post-edit-hook.sh" \
 	"$root/tests/test-debian-packages.sh" \
 	"$root/tests/test-macos-preferences.sh" \
@@ -22,12 +26,16 @@ shellcheck \
 	"$root/tests/validate.sh"
 shfmt -d \
 	"$root/bootstrap.sh" \
+	"$root/capability-catalog/python-format/hook.sh" \
+	"$root/capability-catalog/rtk-guardrail/hook.sh" \
 	"$root/dot_claude/hooks/executable_post-edit-fmt.sh" \
 	"$root/tests/render-macos.sh" \
 	"$root/tests/debian-smoke.sh" \
 	"$root/tests/release-host-smoke.sh" \
 	"$root/tests/test-bootstrap-preflight.sh" \
 	"$root/tests/test-bootstrap-ref.sh" \
+	"$root/tests/test-capabilities-init.sh" \
+	"$root/tests/test-capabilities-sync.sh" \
 	"$root/tests/test-claude-post-edit-hook.sh" \
 	"$root/tests/test-debian-packages.sh" \
 	"$root/tests/test-macos-preferences.sh" \
@@ -35,6 +43,21 @@ shfmt -d \
 	"$root/tests/test-vscode-extensions.sh" \
 	"$root/tests/validate-ai-artifacts.sh" \
 	"$root/tests/validate.sh"
+
+ruff check "$root/dot_local/share/dotfiles/capabilities/src" \
+	"$root/tests/test_capability_catalog.py" \
+	"$root/tests/test_capability_hooks.py" \
+	"$root/tests/test_capability_update.py" \
+	"$root/tests/test_capability_workflow.py"
+
+PYTHONPATH="$root/dot_local/share/dotfiles/capabilities/src${PYTHONPATH:+:$PYTHONPATH}" \
+	python3 "$root/tests/test_capability_catalog.py"
+PYTHONPATH="$root/dot_local/share/dotfiles/capabilities/src${PYTHONPATH:+:$PYTHONPATH}" \
+	python3 "$root/tests/test_capability_hooks.py"
+PYTHONPATH="$root/dot_local/share/dotfiles/capabilities/src${PYTHONPATH:+:$PYTHONPATH}" \
+	python3 "$root/tests/test_capability_update.py"
+PYTHONPATH="$root/dot_local/share/dotfiles/capabilities/src${PYTHONPATH:+:$PYTHONPATH}" \
+	python3 "$root/tests/test_capability_workflow.py"
 
 test "$(sed -n '1p' "$root/.chezmoiscripts/run_once_after_20-zimfw.sh")" = '#!/usr/bin/env zsh'
 
@@ -122,6 +145,8 @@ done
 sh "$root/tests/test-claude-post-edit-hook.sh"
 sh "$root/tests/test-bootstrap-preflight.sh"
 sh "$root/tests/test-bootstrap-ref.sh"
+sh "$root/tests/test-capabilities-init.sh"
+sh "$root/tests/test-capabilities-sync.sh"
 sh "$root/tests/test-vscode-extensions.sh"
 sh "$root/tests/test-debian-packages.sh"
 sh "$root/tests/test-macos-preferences.sh"
@@ -244,7 +269,11 @@ chezmoi --source "$root" --config "$tmp/chezmoi-corporate-ca.toml" execute-templ
 	<"$root/.chezmoiscripts/run_before_05-corporate-ca.sh.tmpl" >"$tmp/corporate-ca.sh"
 shellcheck "$tmp/corporate-ca.sh"
 shfmt -d "$tmp/corporate-ca.sh"
-rg -q 'dotfiles-corporate-ca\.crt' "$tmp/corporate-ca.sh"
+if [ "$(uname -s)" = Darwin ]; then
+	rg -q 'security add-trusted-cert' "$tmp/corporate-ca.sh"
+else
+	rg -q 'dotfiles-corporate-ca\.crt' "$tmp/corporate-ca.sh"
+fi
 chezmoi --source "$root" --config "$tmp/chezmoi-corporate-ca.toml" execute-template \
 	<"$root/dot_zshrc.tmpl" >"$tmp/zshrc-corporate-ca"
 rg -q '^export PIP_CERT=' "$tmp/zshrc-corporate-ca"

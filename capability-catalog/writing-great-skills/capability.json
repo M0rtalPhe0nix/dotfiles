@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "identifier": "M0rtalPhe0nix/dotfiles/writing-great-skills",
+  "description": "Reference vocabulary and principles for predictable skills",
+  "dependencies": {
+    "required": [],
+    "recommended": [],
+    "companions": {"claude": [], "codex": []}
+  },
+  "targets": {
+    "claude": [{"kind": "skill", "source": "skill", "destination": ".claude/skills/writing-great-skills"}],
+    "codex": [{"kind": "skill", "source": "skill", "destination": ".agents/skills/writing-great-skills"}]
+  }
+}

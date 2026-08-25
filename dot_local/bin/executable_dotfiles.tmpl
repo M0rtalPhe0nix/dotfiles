@@ -48,7 +48,21 @@ update_ghostty() {
 {{ end -}}
 
 usage() {
-	printf '%s\n' "usage: dotfiles {apply|diff|doctor|extensions|preferences|update|rollback}"
+	printf '%s\n' "usage: dotfiles {apply|capabilities|diff|doctor|extensions|preferences|skills|update|rollback}"
+}
+
+capabilities() {
+	runtime="${XDG_DATA_HOME:-$HOME/.local/share}/dotfiles/capabilities"
+	if [ ! -f "$runtime/pyproject.toml" ] || [ ! -f "$runtime/uv.lock" ]; then
+		printf '%s\n' "The managed dotfiles capability runtime is missing. Run 'dotfiles apply' to restore it." >&2
+		return 1
+	fi
+	if ! command -v mise >/dev/null 2>&1; then
+		printf '%s\n' "mise is required to run dotfiles capabilities." >&2
+		return 1
+	fi
+	PYTHONPATH="$runtime/src${PYTHONPATH:+:$PYTHONPATH}" \
+		exec mise exec -- uv run --project "$runtime" --locked python -m dotfiles_capabilities "$@"
 }
 
 doctor() {
@@ -61,6 +75,26 @@ doctor() {
 			failed=1
 		fi
 	done
+	capability_runtime="${XDG_DATA_HOME:-$HOME/.local/share}/dotfiles/capabilities"
+	capability_catalog="$source_dir/capability-catalog"
+	if [ ! -f "$capability_runtime/pyproject.toml" ] || [ ! -f "$capability_runtime/uv.lock" ] || ! command -v mise >/dev/null 2>&1; then
+		printf '%s\n' "FAIL capability catalog validator is unavailable"
+		failed=1
+	elif ! PYTHONPATH="$capability_runtime/src${PYTHONPATH:+:$PYTHONPATH}" \
+		mise exec -- uv run --project "$capability_runtime" --locked \
+		python -m dotfiles_capabilities validate --help >/dev/null; then
+		printf '%s\n' "FAIL capability catalog validator is unavailable"
+		failed=1
+	elif [ -d "$capability_catalog" ] && ! PYTHONPATH="$capability_runtime/src${PYTHONPATH:+:$PYTHONPATH}" \
+		mise exec -- uv run --project "$capability_runtime" --locked \
+		python -m dotfiles_capabilities validate --check "$capability_catalog" >/dev/null; then
+		printf '%s\n' "FAIL capability catalog validation"
+		failed=1
+	elif [ -d "$capability_catalog" ]; then
+		printf '%s\n' "ok   capability catalog validation"
+	else
+		printf '%s\n' "ok   capability catalog validator (no catalog present)"
+	fi
 	{{ if eq $infraTool "terraform" -}}
 	command -v terraform >/dev/null 2>&1 || {
 		printf '%s\n' "FAIL terraform 1.5.7 is missing"
@@ -292,6 +326,10 @@ rollback() {
 
 case "${1:-}" in
 apply) chezmoi apply ;;
+capabilities)
+	shift
+	capabilities "$@"
+	;;
 diff) chezmoi diff ;;
 doctor) doctor ;;
 extensions)
@@ -299,6 +337,10 @@ extensions)
 	save_extensions "$@"
 	;;
 preferences) preferences ;;
+skills)
+	shift
+	capabilities skills "$@"
+	;;
 update) update ;;
 rollback) rollback ;;
 *)

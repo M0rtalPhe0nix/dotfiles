@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "identifier": "M0rtalPhe0nix/dotfiles/code-review",
+  "description": "Review changes against repository standards and their originating specification",
+  "dependencies": {
+    "required": [],
+    "recommended": ["setup-matt-pocock-skills"],
+    "companions": {"claude": [], "codex": []}
+  },
+  "targets": {
+    "claude": [{"kind": "skill", "source": "skill", "destination": ".claude/skills/code-review"}],
+    "codex": [{"kind": "skill", "source": "skill", "destination": ".agents/skills/code-review"}]
+  }
+}

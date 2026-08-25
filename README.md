@@ -76,6 +76,13 @@ DOTFILES_SKIP_CLAUDE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.
 ```sh
 dotfiles diff                   # Preview managed-file changes
 dotfiles apply                  # Apply configuration only; does not upgrade software
+dotfiles capabilities init      # Initialize capability state at the current Git worktree root
+dotfiles capabilities add --catalog GIT_URL OWNER/REPOSITORY/NAME # Add and install a capability
+dotfiles capabilities sync      # Restore generated capability files from the lock
+dotfiles capabilities update NAME... # Refresh selected roots and their affected dependency graph
+dotfiles capabilities update --all # Refresh the complete resolved graph without adding roots
+dotfiles capabilities migrate   # Explicitly migrate supported older state schemas
+dotfiles capabilities validate PATH # Validate a local catalog and regenerate its index
 dotfiles doctor                 # Check tools, authentication, fonts, permissions, and drift
 dotfiles update                 # Update managed packages, runtimes, extensions, and Zim modules
 dotfiles rollback               # Restore pre-bootstrap files; keeps installed software

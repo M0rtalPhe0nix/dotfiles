@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "identifier": "acme/portable-ai/cycle-b",
+  "description": "Second cycle node",
+  "dependencies": {
+    "required": ["cycle-a"],
+    "recommended": [],
+    "companions": {"claude": [], "codex": []}
+  },
+  "targets": {
+    "claude": [{"kind": "asset", "source": "payload.txt", "destination": ".claude/cycle-b.txt"}],
+    "codex": [{"kind": "asset", "source": "payload.txt", "destination": ".agents/cycle-b.txt"}]
+  }
+}

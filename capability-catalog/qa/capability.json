@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "identifier": "M0rtalPhe0nix/dotfiles/qa",
+  "description": "Run an interactive QA session and file durable behavioral issues",
+  "dependencies": {
+    "required": [],
+    "recommended": ["setup-matt-pocock-skills"],
+    "companions": {"claude": [], "codex": []}
+  },
+  "targets": {
+    "claude": [{"kind": "skill", "source": "skill", "destination": ".claude/skills/qa"}],
+    "codex": [{"kind": "skill", "source": "skill", "destination": ".agents/skills/qa"}]
+  }
+}

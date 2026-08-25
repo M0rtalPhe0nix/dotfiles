@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "identifier": "M0rtalPhe0nix/dotfiles/improve-codebase-architecture",
+  "description": "Find and explore opportunities to deepen codebase modules",
+  "dependencies": {
+    "required": ["codebase-design", "domain-modeling", "grilling"],
+    "recommended": [],
+    "companions": {"claude": [], "codex": []}
+  },
+  "targets": {
+    "claude": [{"kind": "skill", "source": "skill", "destination": ".claude/skills/improve-codebase-architecture"}],
+    "codex": [{"kind": "skill", "source": "skill", "destination": ".agents/skills/improve-codebase-architecture"}]
+  }
+}

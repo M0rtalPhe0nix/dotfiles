@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "identifier": "M0rtalPhe0nix/dotfiles/implement",
+  "description": "Implement a specification or set of tickets with tests and review",
+  "dependencies": {
+    "required": ["code-review", "tdd"],
+    "recommended": [],
+    "companions": {"claude": [], "codex": []}
+  },
+  "targets": {
+    "claude": [{"kind": "skill", "source": "skill", "destination": ".claude/skills/implement"}],
+    "codex": [{"kind": "skill", "source": "skill", "destination": ".agents/skills/implement"}]
+  }
+}

@@ -1,0 +1,9 @@
+[project]
+name = "dotfiles-capabilities"
+version = "0.1.0"
+description = "Repository-local AI capability management for the dotfiles CLI"
+requires-python = ">=3.11"
+dependencies = []
+
+[tool.uv]
+package = false

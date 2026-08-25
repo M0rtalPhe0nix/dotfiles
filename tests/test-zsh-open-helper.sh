@@ -24,7 +24,7 @@ chmod +x "$tmp/open-bin/open"
 
 (
   export HOME="$home" XDG_CONFIG_HOME="$home/.config" ZDOTDIR="$home" PATH="$tmp/open-bin" OPEN_LOG="$tmp/open.log"
-  unhash -m '*'
+  unhash -m '*' 2>/dev/null || true
   mkdir() { /bin/mkdir "$@"; }
   chmod() { /bin/chmod "$@"; }
   touch() { /usr/bin/touch "$@"; }
@@ -44,7 +44,7 @@ chmod +x "$tmp/xdg-bin/xdg-open"
 
 (
   export HOME="$home" XDG_CONFIG_HOME="$home/.config" ZDOTDIR="$home" PATH="$tmp/xdg-bin" OPEN_LOG="$tmp/xdg-open.log"
-  unhash -m '*'
+  unhash -m '*' 2>/dev/null || true
   mkdir() { /bin/mkdir "$@"; }
   chmod() { /bin/chmod "$@"; }
   touch() { /usr/bin/touch "$@"; }
@@ -61,7 +61,7 @@ chmod +x "$tmp/command-bin/o"
 
 (
   export HOME="$home" XDG_CONFIG_HOME="$home/.config" ZDOTDIR="$home" PATH="$tmp/command-bin"
-  unhash -m '*'
+  unhash -m '*' 2>/dev/null || true
   mkdir() { /bin/mkdir "$@"; }
   chmod() { /bin/chmod "$@"; }
   touch() { /usr/bin/touch "$@"; }
@@ -71,13 +71,13 @@ chmod +x "$tmp/command-bin/o"
 
 (
   export HOME="$home" XDG_CONFIG_HOME="$home/.config" ZDOTDIR="$home" PATH="$tmp/no-opener-bin"
-  unhash -m '*'
+  unhash -m '*' 2>/dev/null || true
   mkdir() { /bin/mkdir "$@"; }
   chmod() { /bin/chmod "$@"; }
   touch() { /usr/bin/touch "$@"; }
   source "$home/.zshrc"
-  status=0
-  o >"$tmp/no-opener.stdout" 2>"$tmp/no-opener.stderr" || status=$?
-  (( status == 127 ))
+  opener_status=0
+  o >"$tmp/no-opener.stdout" 2>"$tmp/no-opener.stderr" || opener_status=$?
+  (( opener_status == 127 ))
   [[ "$(<"$tmp/no-opener.stderr")" == 'o: no supported opener available (expected open or xdg-open).' ]]
 )

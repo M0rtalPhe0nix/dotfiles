@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "identifier": "M0rtalPhe0nix/dotfiles/design-an-interface",
+  "description": "Generate and compare radically different module interface designs",
+  "dependencies": {
+    "required": [],
+    "recommended": [],
+    "companions": {"claude": [], "codex": []}
+  },
+  "targets": {
+    "claude": [{"kind": "skill", "source": "skill", "destination": ".claude/skills/design-an-interface"}],
+    "codex": [{"kind": "skill", "source": "skill", "destination": ".agents/skills/design-an-interface"}]
+  }
+}

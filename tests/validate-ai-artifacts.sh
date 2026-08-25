@@ -1,8 +1,10 @@
 #!/bin/sh
 set -eu
 
-root="$(CDPATH='' cd -- "$(dirname "$0")/.." && pwd)"
+script_root="$(CDPATH='' cd -- "$(dirname "$0")/.." && pwd)"
+root="$script_root"
 json=false
+catalog=""
 
 while [ "$#" -gt 0 ]; do
 	case "$1" in
@@ -11,8 +13,12 @@ while [ "$#" -gt 0 ]; do
 		shift
 		root="$1"
 		;;
+	--catalog)
+		shift
+		catalog="$1"
+		;;
 	*)
-		printf '%s\n' "usage: validate-ai-artifacts.sh [--json] [--root PATH]" >&2
+		printf '%s\n' "usage: validate-ai-artifacts.sh [--json] [--root PATH] [--catalog PATH]" >&2
 		exit 2
 		;;
 	esac
@@ -210,6 +216,18 @@ for manifest in "$root"/dot_claude/skills/*/dot_claude-plugin/plugin.json; do
 done
 
 validate_settings
+
+if [ -n "$catalog" ]; then
+	catalog_result="$tmp/catalog.json"
+	PYTHONPATH="$script_root/dot_local/share/dotfiles/capabilities/src${PYTHONPATH:+:$PYTHONPATH}" \
+		python3 -m dotfiles_capabilities validate --check --json "$catalog" >"$catalog_result" || true
+	if ! jq -e '.status and (.errors | type == "array") and (.warnings | type == "array")' "$catalog_result" >/dev/null 2>&1; then
+		error "$catalog: capability catalog validator failed"
+	else
+		jq -r '.errors[]' "$catalog_result" >>"$errors"
+		jq -r '.warnings[]' "$catalog_result" >>"$warnings"
+	fi
+fi
 
 for hook in "$root"/dot_claude/hooks/executable_*; do
 	[ -f "$hook" ] || continue

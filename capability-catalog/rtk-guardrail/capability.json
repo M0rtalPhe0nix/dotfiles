@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "identifier": "M0rtalPhe0nix/dotfiles/rtk-guardrail",
+  "description": "Apply RTK command-output guardrails to repository-local shell calls",
+  "dependencies": {
+    "required": [],
+    "recommended": [],
+    "companions": {"claude": [], "codex": []}
+  },
+  "targets": {
+    "claude": [
+      {
+        "kind": "hook",
+        "source": "hook.sh",
+        "destination": ".claude/hooks/rtk-guardrail.sh",
+        "executable": true,
+        "event": "PreToolUse",
+        "matcher": "Bash"
+      }
+    ],
+    "codex": [
+      {
+        "kind": "hook",
+        "source": "hook.sh",
+        "destination": ".codex/hooks/rtk-guardrail.sh",
+        "executable": true,
+        "event": "PreToolUse",
+        "matcher": "Bash"
+      }
+    ]
+  }
+}

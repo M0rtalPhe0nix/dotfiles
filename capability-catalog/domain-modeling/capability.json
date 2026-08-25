@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "identifier": "M0rtalPhe0nix/dotfiles/domain-modeling",
+  "description": "Build and sharpen project domain language and architectural decisions",
+  "dependencies": {
+    "required": [],
+    "recommended": [],
+    "companions": {"claude": [], "codex": []}
+  },
+  "targets": {
+    "claude": [{"kind": "skill", "source": "skill", "destination": ".claude/skills/domain-modeling"}],
+    "codex": [{"kind": "skill", "source": "skill", "destination": ".agents/skills/domain-modeling"}]
+  }
+}

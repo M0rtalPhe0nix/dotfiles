@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "identifier": "M0rtalPhe0nix/dotfiles/batch-grill-me",
+  "description": "Interview across every currently unblocked decision in rounds",
+  "dependencies": {
+    "required": [],
+    "recommended": [],
+    "companions": {"claude": [], "codex": []}
+  },
+  "targets": {
+    "claude": [{"kind": "skill", "source": "skill", "destination": ".claude/skills/batch-grill-me"}],
+    "codex": [{"kind": "skill", "source": "skill", "destination": ".agents/skills/batch-grill-me"}]
+  }
+}

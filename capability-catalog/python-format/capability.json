@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "identifier": "M0rtalPhe0nix/dotfiles/python-format",
+  "description": "Format changed Python files after repository-local edits",
+  "dependencies": {
+    "required": [],
+    "recommended": [],
+    "companions": {"claude": [], "codex": []}
+  },
+  "targets": {
+    "claude": [
+      {
+        "kind": "hook",
+        "source": "hook.sh",
+        "destination": ".claude/hooks/python-format.sh",
+        "executable": true,
+        "event": "PostToolUse",
+        "matcher": "Write|Edit|MultiEdit"
+      }
+    ],
+    "codex": [
+      {
+        "kind": "hook",
+        "source": "hook.sh",
+        "destination": ".codex/hooks/python-format.sh",
+        "executable": true,
+        "event": "PostToolUse",
+        "matcher": "apply_patch|Edit|Write"
+      }
+    ]
+  }
+}

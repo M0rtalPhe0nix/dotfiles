@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "identifier": "M0rtalPhe0nix/dotfiles/grill-with-docs",
+  "description": "Run a grilling interview while maintaining domain documents",
+  "dependencies": {
+    "required": ["domain-modeling", "grilling"],
+    "recommended": [],
+    "companions": {"claude": [], "codex": []}
+  },
+  "targets": {
+    "claude": [{"kind": "skill", "source": "skill", "destination": ".claude/skills/grill-with-docs"}],
+    "codex": [{"kind": "skill", "source": "skill", "destination": ".agents/skills/grill-with-docs"}]
+  }
+}

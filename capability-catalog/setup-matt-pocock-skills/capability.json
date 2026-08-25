@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "identifier": "M0rtalPhe0nix/dotfiles/setup-matt-pocock-skills",
+  "description": "Configure a repository issue tracker, triage vocabulary, and domain-document layout",
+  "dependencies": {
+    "required": [],
+    "recommended": ["domain-modeling"],
+    "companions": {"claude": [], "codex": []}
+  },
+  "targets": {
+    "claude": [{"kind": "skill", "source": "skill", "destination": ".claude/skills/setup-matt-pocock-skills"}],
+    "codex": [{"kind": "skill", "source": "skill", "destination": ".agents/skills/setup-matt-pocock-skills"}]
+  }
+}

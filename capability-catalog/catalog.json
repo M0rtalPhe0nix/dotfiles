@@ -1,0 +1,1051 @@
+{
+  "capabilities": [
+    {
+      "content_hash": "d66129f8ae11ad3c480e16498953896840a532cf0cb3bc892106a6d97d0eb3d2",
+      "dependencies": {
+        "companions": {
+          "claude": [],
+          "codex": []
+        },
+        "recommended": [],
+        "required": []
+      },
+      "description": "Interview across every currently unblocked decision in rounds",
+      "identifier": "M0rtalPhe0nix/dotfiles/batch-grill-me",
+      "path": "batch-grill-me",
+      "targets": {
+        "claude": [
+          {
+            "destination": ".claude/skills/batch-grill-me",
+            "kind": "skill",
+            "source": "skill"
+          }
+        ],
+        "codex": [
+          {
+            "destination": ".agents/skills/batch-grill-me",
+            "kind": "skill",
+            "source": "skill"
+          }
+        ]
+      }
+    },
+    {
+      "content_hash": "da0c84231bbc39a606336d44f664de2b641bae9955bc9153631c81fd70a7ac80",
+      "dependencies": {
+        "companions": {
+          "claude": [],
+          "codex": []
+        },
+        "recommended": [],
+        "required": []
+      },
+      "description": "Audit and improve project instruction memory",
+      "identifier": "M0rtalPhe0nix/dotfiles/claude-md-improver",
+      "path": "claude-md-improver",
+      "targets": {
+        "claude": [
+          {
+            "destination": ".claude/skills/claude-md-improver",
+            "kind": "skill",
+            "source": "skill"
+          }
+        ],
+        "codex": [
+          {
+            "destination": ".agents/skills/claude-md-improver",
+            "kind": "skill",
+            "source": "skill"
+          }
+        ]
+      }
+    },
+    {
+      "content_hash": "b193b4ae79367023d9d6fec04c59a87a8db9d221b3ad2216bd68e4963c6052e7",
+      "dependencies": {
+        "companions": {
+          "claude": [],
+          "codex": []
+        },
+        "recommended": [
+          "setup-matt-pocock-skills"
+        ],
+        "required": []
+      },
+      "description": "Review changes against repository standards and their originating specification",
+      "identifier": "M0rtalPhe0nix/dotfiles/code-review",
+      "path": "code-review",
+      "targets": {
+        "claude": [
+          {
+            "destination": ".claude/skills/code-review",
+            "kind": "skill",
+            "source": "skill"
+          }
+        ],
+        "codex": [
+          {
+            "destination": ".agents/skills/code-review",
+            "kind": "skill",
+            "source": "skill"
+          }
+        ]
+      }
+    },
+    {
+      "content_hash": "ca591d3b8d7c2ec3b48c8c7609d47180d5cef7d57915fb6a13b21c69b8b862d5",
+      "dependencies": {
+        "companions": {
+          "claude": [],
+          "codex": []
+        },
+        "recommended": [],
+        "required": []
+      },
+      "description": "Shared deep-module vocabulary and interface-design guidance",
+      "identifier": "M0rtalPhe0nix/dotfiles/codebase-design",
+      "path": "codebase-design",
+      "targets": {
+        "claude": [
+          {
+            "destination": ".claude/skills/codebase-design",
+            "kind": "skill",
+            "source": "skill"
+          }
+        ],
+        "codex": [
+          {
+            "destination": ".agents/skills/codebase-design",
+            "kind": "skill",
+            "source": "skill"
+          }
+        ]
+      }
+    },
+    {
+      "content_hash": "3d209c4edfaa0e889d0bade2e3bb859ce2c598c5387256918f94a34aca6009a5",
+      "dependencies": {
+        "companions": {
+          "claude": [],
+          "codex": []
+        },
+        "recommended": [],
+        "required": []
+      },
+      "description": "Compare public dotfiles repositories and produce an improvement backlog",
+      "identifier": "M0rtalPhe0nix/dotfiles/compare-dotfiles",
+      "path": "compare-dotfiles",
+      "targets": {
+        "claude": [
+          {
+            "destination": ".claude/skills/compare-dotfiles",
+            "kind": "skill",
+            "source": "skill"
+          }
+        ],
+        "codex": [
+          {
+            "destination": ".agents/skills/compare-dotfiles",
+            "kind": "skill",
+            "source": "skill"
+          }
+        ]
+      }
+    },
+    {
+      "content_hash": "92c071b33e4327e0b913beb0864a1f01948f08084420e9420dfd26a596be5f0e",
+      "dependencies": {
+        "companions": {
+          "claude": [],
+          "codex": []
+        },
+        "recommended": [],
+        "required": []
+      },
+      "description": "Generate and compare radically different module interface designs",
+      "identifier": "M0rtalPhe0nix/dotfiles/design-an-interface",
+      "path": "design-an-interface",
+      "targets": {
+        "claude": [
+          {
+            "destination": ".claude/skills/design-an-interface",
+            "kind": "skill",
+            "source": "skill"
+          }
+        ],
+        "codex": [
+          {
+            "destination": ".agents/skills/design-an-interface",
+            "kind": "skill",
+            "source": "skill"
+          }
+        ]
+      }
+    },
+    {
+      "content_hash": "e9db23a0aee753e40bef57bc5a26db63229525c33dda30b320f4ab30eae3dde4",
+      "dependencies": {
+        "companions": {
+          "claude": [],
+          "codex": []
+        },
+        "recommended": [],
+        "required": []
+      },
+      "description": "Build and sharpen project domain language and architectural decisions",
+      "identifier": "M0rtalPhe0nix/dotfiles/domain-modeling",
+      "path": "domain-modeling",
+      "targets": {
+        "claude": [
+          {
+            "destination": ".claude/skills/domain-modeling",
+            "kind": "skill",
+            "source": "skill"
+          }
+        ],
+        "codex": [
+          {
+            "destination": ".agents/skills/domain-modeling",
+            "kind": "skill",
+            "source": "skill"
+          }
+        ]
+      }
+    },
+    {
+      "content_hash": "04b0f46ff7e7c8549b7d58b3ed5e609228acf36ecadc1141f5edb369e30ffd7d",
+      "dependencies": {
+        "companions": {
+          "claude": [],
+          "codex": []
+        },
+        "recommended": [],
+        "required": []
+      },
+      "description": "Create, edit, preview, and validate editable Excalidraw diagrams",
+      "identifier": "M0rtalPhe0nix/dotfiles/excalidraw",
+      "path": "excalidraw",
+      "targets": {
+        "claude": [
+          {
+            "destination": ".claude/skills/excalidraw",
+            "kind": "skill",
+            "source": "skill"
+          }
+        ],
+        "codex": [
+          {
+            "destination": ".agents/skills/excalidraw",
+            "kind": "skill",
+            "source": "skill"
+          }
+        ]
+      }
+    },
+    {
+      "content_hash": "9fc7ae8a9f8d91d3ff9ab18c11ab8aac9ed5b2e14338e5f57d186cfe496d511d",
+      "dependencies": {
+        "companions": {
+          "claude": [],
+          "codex": []
+        },
+        "recommended": [],
+        "required": [
+          "excalidraw"
+        ]
+      },
+      "description": "Produce and validate an approved portfolio of editable feature diagrams",
+      "identifier": "M0rtalPhe0nix/dotfiles/feature-diagrammer",
+      "path": "feature-diagrammer",
+      "targets": {
+        "claude": [
+          {
+            "destination": ".claude/agents/feature-diagrammer.md",
+            "kind": "agent",
+            "source": "feature-diagrammer.md"
+          }
+        ],
+        "codex": [
+          {
+            "destination": ".codex/agents/feature-diagrammer.md",
+            "kind": "agent",
+            "source": "feature-diagrammer-codex.md"
+          }
+        ]
+      }
+    },
+    {
+      "content_hash": "46843d31c34350029b667028498d64114d007191cddbce70e95f33b452195581",
+      "dependencies": {
+        "companions": {
+          "claude": [
+            "feature-diagrammer"
+          ],
+          "codex": [
+            "feature-diagrammer"
+          ]
+        },
+        "recommended": [],
+        "required": [
+          "excalidraw",
+          "grill-me"
+        ]
+      },
+      "description": "Elicit and visualize a feature as an approved Excalidraw portfolio",
+      "identifier": "M0rtalPhe0nix/dotfiles/grill-feature-diagrams",
+      "path": "grill-feature-diagrams",
+      "targets": {
+        "claude": [
+          {
+            "destination": ".claude/skills/grill-feature-diagrams",
+            "kind": "skill",
+            "source": "skill"
+          }
+        ],
+        "codex": [
+          {
+            "destination": ".agents/skills/grill-feature-diagrams",
+            "kind": "skill",
+            "source": "skill"
+          }
+        ]
+      }
+    },
+    {
+      "content_hash": "4f85d7ed224c1dbe83d8f033138f2bd2e2499a4a4d7ebabbfd1b0cd65fd47e94",
+      "dependencies": {
+        "companions": {
+          "claude": [],
+          "codex": []
+        },
+        "recommended": [],
+        "required": [
+          "grilling"
+        ]
+      },
+      "description": "Route a user request into the foundational grilling interview",
+      "identifier": "M0rtalPhe0nix/dotfiles/grill-me",
+      "path": "grill-me",
+      "targets": {
+        "claude": [
+          {
+            "destination": ".claude/skills/grill-me",
+            "kind": "skill",
+            "source": "skill"
+          }
+        ],
+        "codex": [
+          {
+            "destination": ".agents/skills/grill-me",
+            "kind": "skill",
+            "source": "skill"
+          }
+        ]
+      }
+    },
+    {
+      "content_hash": "2a5e563d72adc1420dfdfcb57e074cbedf19a415a6c218aa809345ccc70854bf",
+      "dependencies": {
+        "companions": {
+          "claude": [],
+          "codex": []
+        },
+        "recommended": [],
+        "required": [
+          "domain-modeling",
+          "grilling"
+        ]
+      },
+      "description": "Run a grilling interview while maintaining domain documents",
+      "identifier": "M0rtalPhe0nix/dotfiles/grill-with-docs",
+      "path": "grill-with-docs",
+      "targets": {
+        "claude": [
+          {
+            "destination": ".claude/skills/grill-with-docs",
+            "kind": "skill",
+            "source": "skill"
+          }
+        ],
+        "codex": [
+          {
+            "destination": ".agents/skills/grill-with-docs",
+            "kind": "skill",
+            "source": "skill"
+          }
+        ]
+      }
+    },
+    {
+      "content_hash": "abab785c08fcdb1c52c91cffa2484cda028210c4cabc12125ad3347bb7e5dd8c",
+      "dependencies": {
+        "companions": {
+          "claude": [],
+          "codex": []
+        },
+        "recommended": [],
+        "required": []
+      },
+      "description": "Stress-test a plan, decision, or idea through a rigorous interview",
+      "identifier": "M0rtalPhe0nix/dotfiles/grilling",
+      "path": "grilling",
+      "targets": {
+        "claude": [
+          {
+            "destination": ".claude/skills/grilling",
+            "kind": "skill",
+            "source": "skill"
+          }
+        ],
+        "codex": [
+          {
+            "destination": ".agents/skills/grilling",
+            "kind": "skill",
+            "source": "skill"
+          }
+        ]
+      }
+    },
+    {
+      "content_hash": "6d12f7a7bae65ba0296e4ec6f33006c1fae09de10a396ecfbd3d99c28aec80b5",
+      "dependencies": {
+        "companions": {
+          "claude": [],
+          "codex": []
+        },
+        "recommended": [],
+        "required": []
+      },
+      "description": "Compact a working conversation into a portable handoff document",
+      "identifier": "M0rtalPhe0nix/dotfiles/handoff",
+      "path": "handoff",
+      "targets": {
+        "claude": [
+          {
+            "destination": ".claude/skills/handoff",
+            "kind": "skill",
+            "source": "skill"
+          }
+        ],
+        "codex": [
+          {
+            "destination": ".agents/skills/handoff",
+            "kind": "skill",
+            "source": "skill"
+          }
+        ]
+      }
+    },
+    {
+      "content_hash": "e6dda43350422547e66e4cd6681013bd43c14946b6d72b6823d33d5b656d0e48",
+      "dependencies": {
+        "companions": {
+          "claude": [],
+          "codex": []
+        },
+        "recommended": [],
+        "required": [
+          "code-review",
+          "tdd"
+        ]
+      },
+      "description": "Implement a specification or set of tickets with tests and review",
+      "identifier": "M0rtalPhe0nix/dotfiles/implement",
+      "path": "implement",
+      "targets": {
+        "claude": [
+          {
+            "destination": ".claude/skills/implement",
+            "kind": "skill",
+            "source": "skill"
+          }
+        ],
+        "codex": [
+          {
+            "destination": ".agents/skills/implement",
+            "kind": "skill",
+            "source": "skill"
+          }
+        ]
+      }
+    },
+    {
+      "content_hash": "4b6e455b2507a2e613ca0b831ce85f065c4e2abdc5560d4dd5f8720d3881b8e6",
+      "dependencies": {
+        "companions": {
+          "claude": [],
+          "codex": []
+        },
+        "recommended": [],
+        "required": [
+          "codebase-design",
+          "domain-modeling",
+          "grilling"
+        ]
+      },
+      "description": "Find and explore opportunities to deepen codebase modules",
+      "identifier": "M0rtalPhe0nix/dotfiles/improve-codebase-architecture",
+      "path": "improve-codebase-architecture",
+      "targets": {
+        "claude": [
+          {
+            "destination": ".claude/skills/improve-codebase-architecture",
+            "kind": "skill",
+            "source": "skill"
+          }
+        ],
+        "codex": [
+          {
+            "destination": ".agents/skills/improve-codebase-architecture",
+            "kind": "skill",
+            "source": "skill"
+          }
+        ]
+      }
+    },
+    {
+      "content_hash": "054a9e775e9747a1656ccb37d08a0150a1f978ac585f84f0e8f0b474b839ace0",
+      "dependencies": {
+        "companions": {
+          "claude": [],
+          "codex": []
+        },
+        "recommended": [],
+        "required": [
+          "skill-creator"
+        ]
+      },
+      "description": "Create and validate local Codex plugin and marketplace scaffolds",
+      "identifier": "M0rtalPhe0nix/dotfiles/plugin-creator",
+      "path": "plugin-creator",
+      "targets": {
+        "claude": [
+          {
+            "destination": ".claude/skills/plugin-creator",
+            "kind": "skill",
+            "source": "skill"
+          }
+        ],
+        "codex": [
+          {
+            "destination": ".agents/skills/plugin-creator",
+            "kind": "skill",
+            "source": "skill"
+          }
+        ]
+      }
+    },
+    {
+      "content_hash": "539722a644db318a05e171c25a72d8b4bd3da46feca12c2b3ec87ab73c37294c",
+      "dependencies": {
+        "companions": {
+          "claude": [],
+          "codex": []
+        },
+        "recommended": [],
+        "required": []
+      },
+      "description": "Format changed Python files after repository-local edits",
+      "identifier": "M0rtalPhe0nix/dotfiles/python-format",
+      "path": "python-format",
+      "targets": {
+        "claude": [
+          {
+            "destination": ".claude/hooks/python-format.sh",
+            "event": "PostToolUse",
+            "executable": true,
+            "kind": "hook",
+            "matcher": "Write|Edit|MultiEdit",
+            "source": "hook.sh"
+          }
+        ],
+        "codex": [
+          {
+            "destination": ".codex/hooks/python-format.sh",
+            "event": "PostToolUse",
+            "executable": true,
+            "kind": "hook",
+            "matcher": "apply_patch|Edit|Write",
+            "source": "hook.sh"
+          }
+        ]
+      }
+    },
+    {
+      "content_hash": "3637d752434efbb94da44dc1a25a395fe50cd765688ea94f828f21fb6b2dae06",
+      "dependencies": {
+        "companions": {
+          "claude": [],
+          "codex": []
+        },
+        "recommended": [
+          "setup-matt-pocock-skills"
+        ],
+        "required": []
+      },
+      "description": "Run an interactive QA session and file durable behavioral issues",
+      "identifier": "M0rtalPhe0nix/dotfiles/qa",
+      "path": "qa",
+      "targets": {
+        "claude": [
+          {
+            "destination": ".claude/skills/qa",
+            "kind": "skill",
+            "source": "skill"
+          }
+        ],
+        "codex": [
+          {
+            "destination": ".agents/skills/qa",
+            "kind": "skill",
+            "source": "skill"
+          }
+        ]
+      }
+    },
+    {
+      "content_hash": "7c05834636d5b206b286df60f818ca96374632de8fba0d5dafab5e74fb866596",
+      "dependencies": {
+        "companions": {
+          "claude": [],
+          "codex": []
+        },
+        "recommended": [
+          "setup-matt-pocock-skills"
+        ],
+        "required": []
+      },
+      "description": "Interview for a safe incremental refactor plan and publish it to the tracker",
+      "identifier": "M0rtalPhe0nix/dotfiles/request-refactor-plan",
+      "path": "request-refactor-plan",
+      "targets": {
+        "claude": [
+          {
+            "destination": ".claude/skills/request-refactor-plan",
+            "kind": "skill",
+            "source": "skill"
+          }
+        ],
+        "codex": [
+          {
+            "destination": ".agents/skills/request-refactor-plan",
+            "kind": "skill",
+            "source": "skill"
+          }
+        ]
+      }
+    },
+    {
+      "content_hash": "f71c491f5f49880c1ff5dfc6d1bce97aa53d7e9c401e6a7c42fdf8de040a8cfa",
+      "dependencies": {
+        "companions": {
+          "claude": [],
+          "codex": []
+        },
+        "recommended": [],
+        "required": []
+      },
+      "description": "Perform focused code review and report actionable findings",
+      "identifier": "M0rtalPhe0nix/dotfiles/review-agent",
+      "path": "review-agent",
+      "targets": {
+        "claude": [
+          {
+            "destination": ".claude/skills/review-agent",
+            "kind": "skill",
+            "source": "skill"
+          }
+        ],
+        "codex": [
+          {
+            "destination": ".agents/skills/review-agent",
+            "kind": "skill",
+            "source": "skill"
+          }
+        ]
+      }
+    },
+    {
+      "content_hash": "ab8edee16d3df15f0a36066334eddbcbeddf09d4cc1a0827f05cf50acd4c3055",
+      "dependencies": {
+        "companions": {
+          "claude": [],
+          "codex": []
+        },
+        "recommended": [],
+        "required": []
+      },
+      "description": "Apply RTK command-output guardrails to repository-local shell calls",
+      "identifier": "M0rtalPhe0nix/dotfiles/rtk-guardrail",
+      "path": "rtk-guardrail",
+      "targets": {
+        "claude": [
+          {
+            "destination": ".claude/hooks/rtk-guardrail.sh",
+            "event": "PreToolUse",
+            "executable": true,
+            "kind": "hook",
+            "matcher": "Bash",
+            "source": "hook.sh"
+          }
+        ],
+        "codex": [
+          {
+            "destination": ".codex/hooks/rtk-guardrail.sh",
+            "event": "PreToolUse",
+            "executable": true,
+            "kind": "hook",
+            "matcher": "Bash",
+            "source": "hook.sh"
+          }
+        ]
+      }
+    },
+    {
+      "content_hash": "555063f3e4f5a39c25ab3e96872d41c6201cfd7424d9d4078c60d61898a19452",
+      "dependencies": {
+        "companions": {
+          "claude": [],
+          "codex": []
+        },
+        "recommended": [
+          "domain-modeling"
+        ],
+        "required": []
+      },
+      "description": "Configure a repository issue tracker, triage vocabulary, and domain-document layout",
+      "identifier": "M0rtalPhe0nix/dotfiles/setup-matt-pocock-skills",
+      "path": "setup-matt-pocock-skills",
+      "targets": {
+        "claude": [
+          {
+            "destination": ".claude/skills/setup-matt-pocock-skills",
+            "kind": "skill",
+            "source": "skill"
+          }
+        ],
+        "codex": [
+          {
+            "destination": ".agents/skills/setup-matt-pocock-skills",
+            "kind": "skill",
+            "source": "skill"
+          }
+        ]
+      }
+    },
+    {
+      "content_hash": "755989a0d39d8cec01d130d6da4a4df34f8e59974b8443880c9d0b0d577bf2d8",
+      "dependencies": {
+        "companions": {
+          "claude": [],
+          "codex": []
+        },
+        "recommended": [
+          "skill-installer"
+        ],
+        "required": []
+      },
+      "description": "Create or update portable agent skills with complete payloads",
+      "identifier": "M0rtalPhe0nix/dotfiles/skill-creator",
+      "path": "skill-creator",
+      "targets": {
+        "claude": [
+          {
+            "destination": ".claude/skills/skill-creator",
+            "kind": "skill",
+            "source": "skill"
+          }
+        ],
+        "codex": [
+          {
+            "destination": ".agents/skills/skill-creator",
+            "kind": "skill",
+            "source": "skill"
+          }
+        ]
+      }
+    },
+    {
+      "content_hash": "3da553e64b833e07a549e924c9642526d5036e50dc72934ca87d8d1217ed9c29",
+      "dependencies": {
+        "companions": {
+          "claude": [],
+          "codex": []
+        },
+        "recommended": [],
+        "required": []
+      },
+      "description": "Manage repository-local skills through the dotfiles capability workflow",
+      "identifier": "M0rtalPhe0nix/dotfiles/skill-installer",
+      "path": "skill-installer",
+      "targets": {
+        "claude": [
+          {
+            "destination": ".claude/skills/skill-installer",
+            "kind": "skill",
+            "source": "skill"
+          }
+        ],
+        "codex": [
+          {
+            "destination": ".agents/skills/skill-installer",
+            "kind": "skill",
+            "source": "skill"
+          }
+        ]
+      }
+    },
+    {
+      "content_hash": "8aec810f0798e70faef86242f23953a920f1bfd92d939702309600306f7ca5dc",
+      "dependencies": {
+        "companions": {
+          "claude": [],
+          "codex": []
+        },
+        "recommended": [],
+        "required": [
+          "excalidraw"
+        ]
+      },
+      "description": "Turn Spec Kit artifacts into editable Excalidraw diagrams",
+      "identifier": "M0rtalPhe0nix/dotfiles/speckit-diagrams",
+      "path": "speckit-diagrams",
+      "targets": {
+        "claude": [
+          {
+            "destination": ".claude/skills/speckit-diagrams",
+            "kind": "skill",
+            "source": "skill"
+          }
+        ],
+        "codex": [
+          {
+            "destination": ".agents/skills/speckit-diagrams",
+            "kind": "skill",
+            "source": "skill"
+          }
+        ]
+      }
+    },
+    {
+      "content_hash": "d9d2fa7e98c6bb1bacfe5800bd788757aace6612ec3d36d592b4a2bc18160864",
+      "dependencies": {
+        "companions": {
+          "claude": [],
+          "codex": []
+        },
+        "recommended": [],
+        "required": []
+      },
+      "description": "Develop behavior through small red-green test-first slices",
+      "identifier": "M0rtalPhe0nix/dotfiles/tdd",
+      "path": "tdd",
+      "targets": {
+        "claude": [
+          {
+            "destination": ".claude/skills/tdd",
+            "kind": "skill",
+            "source": "skill"
+          }
+        ],
+        "codex": [
+          {
+            "destination": ".agents/skills/tdd",
+            "kind": "skill",
+            "source": "skill"
+          }
+        ]
+      }
+    },
+    {
+      "content_hash": "e95bb06acf0e546454c8506afa6bea765abbcf930a88e469e3b11cdd6c76fb36",
+      "dependencies": {
+        "companions": {
+          "claude": [],
+          "codex": []
+        },
+        "recommended": [],
+        "required": []
+      },
+      "description": "Teach a concept through reusable lessons and learning records",
+      "identifier": "M0rtalPhe0nix/dotfiles/teach",
+      "path": "teach",
+      "targets": {
+        "claude": [
+          {
+            "destination": ".claude/skills/teach",
+            "kind": "skill",
+            "source": "skill"
+          }
+        ],
+        "codex": [
+          {
+            "destination": ".agents/skills/teach",
+            "kind": "skill",
+            "source": "skill"
+          }
+        ]
+      }
+    },
+    {
+      "content_hash": "870288c5ea31d9539722d82978fa011d58590944f52a5973844d55a031b19e7e",
+      "dependencies": {
+        "companions": {
+          "claude": [],
+          "codex": []
+        },
+        "recommended": [
+          "setup-matt-pocock-skills"
+        ],
+        "required": []
+      },
+      "description": "Synthesize a conversation into a specification on the configured tracker",
+      "identifier": "M0rtalPhe0nix/dotfiles/to-spec",
+      "path": "to-spec",
+      "targets": {
+        "claude": [
+          {
+            "destination": ".claude/skills/to-spec",
+            "kind": "skill",
+            "source": "skill"
+          }
+        ],
+        "codex": [
+          {
+            "destination": ".agents/skills/to-spec",
+            "kind": "skill",
+            "source": "skill"
+          }
+        ]
+      }
+    },
+    {
+      "content_hash": "f95196bcf157af598feef4578ee6b91978161091722ded75b2d8092d476787c9",
+      "dependencies": {
+        "companions": {
+          "claude": [],
+          "codex": []
+        },
+        "recommended": [
+          "setup-matt-pocock-skills"
+        ],
+        "required": []
+      },
+      "description": "Break a plan into dependency-aware tracer-bullet tickets",
+      "identifier": "M0rtalPhe0nix/dotfiles/to-tickets",
+      "path": "to-tickets",
+      "targets": {
+        "claude": [
+          {
+            "destination": ".claude/skills/to-tickets",
+            "kind": "skill",
+            "source": "skill"
+          }
+        ],
+        "codex": [
+          {
+            "destination": ".agents/skills/to-tickets",
+            "kind": "skill",
+            "source": "skill"
+          }
+        ]
+      }
+    },
+    {
+      "content_hash": "cb2c400ee5be1a582ea7f159d1c499c1818740c0fd954171dc184c0647ff14cd",
+      "dependencies": {
+        "companions": {
+          "claude": [],
+          "codex": []
+        },
+        "recommended": [],
+        "required": []
+      },
+      "description": "Extract a consistent DDD-style glossary from a conversation",
+      "identifier": "M0rtalPhe0nix/dotfiles/ubiquitous-language",
+      "path": "ubiquitous-language",
+      "targets": {
+        "claude": [
+          {
+            "destination": ".claude/skills/ubiquitous-language",
+            "kind": "skill",
+            "source": "skill"
+          }
+        ],
+        "codex": [
+          {
+            "destination": ".agents/skills/ubiquitous-language",
+            "kind": "skill",
+            "source": "skill"
+          }
+        ]
+      }
+    },
+    {
+      "content_hash": "7c14788670a77fee7dfe18de253ec5468a508a7a9cc1cb4a6e55fd3c2dab1dbd",
+      "dependencies": {
+        "companions": {
+          "claude": [],
+          "codex": []
+        },
+        "recommended": [
+          "setup-matt-pocock-skills"
+        ],
+        "required": [
+          "domain-modeling",
+          "grilling"
+        ]
+      },
+      "description": "Map and resolve a large effort through dependency-aware decision tickets",
+      "identifier": "M0rtalPhe0nix/dotfiles/wayfinder",
+      "path": "wayfinder",
+      "targets": {
+        "claude": [
+          {
+            "destination": ".claude/skills/wayfinder",
+            "kind": "skill",
+            "source": "skill"
+          }
+        ],
+        "codex": [
+          {
+            "destination": ".agents/skills/wayfinder",
+            "kind": "skill",
+            "source": "skill"
+          }
+        ]
+      }
+    },
+    {
+      "content_hash": "9aaa40d49082c3558b3d69b757b61dad307d2ab498a8b3310599eb0699360fde",
+      "dependencies": {
+        "companions": {
+          "claude": [],
+          "codex": []
+        },
+        "recommended": [],
+        "required": []
+      },
+      "description": "Reference vocabulary and principles for predictable skills",
+      "identifier": "M0rtalPhe0nix/dotfiles/writing-great-skills",
+      "path": "writing-great-skills",
+      "targets": {
+        "claude": [
+          {
+            "destination": ".claude/skills/writing-great-skills",
+            "kind": "skill",
+            "source": "skill"
+          }
+        ],
+        "codex": [
+          {
+            "destination": ".agents/skills/writing-great-skills",
+            "kind": "skill",
+            "source": "skill"
+          }
+        ]
+      }
+    }
+  ],
+  "schema_version": 1
+}

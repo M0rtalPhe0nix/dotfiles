@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "identifier": "acme/portable-ai/missing",
+  "description": "References a missing dependency",
+  "dependencies": {
+    "required": ["acme/portable-ai/not-there"],
+    "recommended": [],
+    "companions": {"claude": [], "codex": []}
+  },
+  "targets": {
+    "claude": [{"kind": "asset", "source": "payload.txt", "destination": ".claude/missing.txt"}],
+    "codex": [{"kind": "asset", "source": "payload.txt", "destination": "/tmp/not-portable"}]
+  }
+}

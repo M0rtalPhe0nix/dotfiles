@@ -16,6 +16,8 @@ Brewfile
 packages-debian.txt
 extensions.txt
 tests/**
+capability-catalog
+capability-catalog/**
 opencode.json
 create_dot_config
 create_dot_config/**

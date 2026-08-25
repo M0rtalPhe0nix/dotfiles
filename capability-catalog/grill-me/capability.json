@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "identifier": "M0rtalPhe0nix/dotfiles/grill-me",
+  "description": "Route a user request into the foundational grilling interview",
+  "dependencies": {
+    "required": ["grilling"],
+    "recommended": [],
+    "companions": {"claude": [], "codex": []}
+  },
+  "targets": {
+    "claude": [{"kind": "skill", "source": "skill", "destination": ".claude/skills/grill-me"}],
+    "codex": [{"kind": "skill", "source": "skill", "destination": ".agents/skills/grill-me"}]
+  }
+}

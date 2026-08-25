@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "identifier": "M0rtalPhe0nix/dotfiles/handoff",
+  "description": "Compact a working conversation into a portable handoff document",
+  "dependencies": {
+    "required": [],
+    "recommended": [],
+    "companions": {"claude": [], "codex": []}
+  },
+  "targets": {
+    "claude": [{"kind": "skill", "source": "skill", "destination": ".claude/skills/handoff"}],
+    "codex": [{"kind": "skill", "source": "skill", "destination": ".agents/skills/handoff"}]
+  }
+}

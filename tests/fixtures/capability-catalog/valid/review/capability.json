@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "identifier": "acme/portable-ai/review",
+  "description": "Review formatted changes",
+  "dependencies": {
+    "required": ["format"],
+    "recommended": [],
+    "companions": {
+      "claude": [],
+      "codex": []
+    }
+  },
+  "targets": {
+    "claude": [
+      {
+        "kind": "skill",
+        "source": "SKILL.md",
+        "destination": ".claude/skills/review/SKILL.md"
+      }
+    ],
+    "codex": [
+      {
+        "kind": "skill",
+        "source": "SKILL.md",
+        "destination": ".agents/skills/review/SKILL.md"
+      }
+    ]
+  }
+}
